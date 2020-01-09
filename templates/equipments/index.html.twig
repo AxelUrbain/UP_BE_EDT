@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+
+    <h1 class="text-center">Gestion des équipements</h1>
+
+    <div class="container">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Nom</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for equipments in equipments %}
+                <tr>
+                    <td>{{ equipments.name }}</td>
+                    <td>
+                        <a class="btn btn-primary" href="{{ path('equipments_edit', {'id': equipments.id}) }}">Modifier</a>
+                        <form style="display: inline-block" method="post" action="{{ path('equipments_delete', {'id': equipments.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ equipments.id) }}">
+                            <button class="btn btn-danger">Supprimer</button>
+                        </form>
+
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">Aucun équipement enregistré..</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <a class="btn btn-outline-primary" href="{{ path('equipments_new') }}">Ajouter un équipement</a>
+    </div>
+
+{% endblock %}

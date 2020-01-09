@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+
+    <h1 class="text-center">Gestion des salles</h1>
+
+    <div class="container">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Capacité</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for classroom in classrooms %}
+                <tr>
+                    <td>{{ classroom.name }}</td>
+                    <td>{{ classroom.Capacity }}</td>
+                    <td>
+                        <a class="btn btn-primary" href="{{ path('classroom_edit', {'id': classroom.id}) }}">Modifier</a>
+                        <form style="display: inline-block" method="post" action="{{ path('classroom_delete', {'id': classroom.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ classroom.id) }}">
+                            <button class="btn btn-danger">Supprimer</button>
+                        </form>
+
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">Aucune salle enregistré..</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <a class="btn btn-outline-primary" href="{{ path('classroom_new') }}">Ajouter une salle</a>
+    </div>
+
+{% endblock %}

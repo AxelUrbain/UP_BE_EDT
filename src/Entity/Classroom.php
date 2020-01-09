@@ -29,9 +29,10 @@ class Classroom
     private $Capacity;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Equipments", mappedBy="classroom")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Equipments", mappedBy="classrooms")
      */
     private $equipments;
+
 
     public function __construct()
     {
@@ -94,4 +95,5 @@ class Classroom
 
         return $this;
     }
+
 }

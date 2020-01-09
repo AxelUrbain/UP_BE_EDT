@@ -26,11 +26,13 @@ class Equipments
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Classroom", inversedBy="equipments")
      */
-    private $classroom;
+    private $classrooms;
+
 
     public function __construct()
     {
         $this->classroom = new ArrayCollection();
+        $this->classrooms = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -50,18 +52,24 @@ class Equipments
         return $this;
     }
 
+    public function __toString()
+    {
+        // TODO: Implement __toString() method.
+        return $this->getName();
+    }
+
     /**
      * @return Collection|Classroom[]
      */
-    public function getClassroom(): Collection
+    public function getClassrooms(): Collection
     {
-        return $this->classroom;
+        return $this->classrooms;
     }
 
     public function addClassroom(Classroom $classroom): self
     {
-        if (!$this->classroom->contains($classroom)) {
-            $this->classroom[] = $classroom;
+        if (!$this->classrooms->contains($classroom)) {
+            $this->classrooms[] = $classroom;
         }
 
         return $this;
@@ -69,8 +77,8 @@ class Equipments
 
     public function removeClassroom(Classroom $classroom): self
     {
-        if ($this->classroom->contains($classroom)) {
-            $this->classroom->removeElement($classroom);
+        if ($this->classrooms->contains($classroom)) {
+            $this->classrooms->removeElement($classroom);
         }
 
         return $this;
