@@ -17,3 +17,4 @@
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
 ./symfony.exe
+symfony_windows_amd64.exe
