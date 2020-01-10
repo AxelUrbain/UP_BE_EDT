@@ -13,6 +13,7 @@ class EquipmentsType extends AbstractType
     {
         $builder
             ->add('name')
+            ->add('classrooms')
         ;
     }
 

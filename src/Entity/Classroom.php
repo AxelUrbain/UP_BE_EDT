@@ -5,6 +5,8 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinTable;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ClassroomRepository")
@@ -32,7 +34,6 @@ class Classroom
      * @ORM\ManyToMany(targetEntity="App\Entity\Equipments", mappedBy="classrooms")
      */
     private $equipments;
-
 
     public function __construct()
     {
@@ -66,6 +67,12 @@ class Classroom
         $this->Capacity = $Capacity;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        // TODO: Implement __toString() method.
+        return $this->getName();
     }
 
     /**
