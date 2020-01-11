@@ -16,19 +16,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class EquipmentsController extends AbstractController
 {
     /**
-     * @Route("/", name="equipments_index", methods={"GET"})
+     * @Route("/", name="equipments_index", methods={"GET","POST"})
      */
-    public function index(EquipmentsRepository $equipmentsRepository): Response
-    {
-        return $this->render('equipments/index.html.twig', [
-            'equipments' => $equipmentsRepository->findAll(),
-        ]);
-    }
-
-    /**
-     * @Route("/new", name="equipments_new", methods={"GET","POST"})
-     */
-    public function new(Request $request): Response
+    public function index(EquipmentsRepository $equipmentsRepository, Request $request): Response
     {
         $equipment = new Equipments();
         $form = $this->createForm(EquipmentsType::class, $equipment);
@@ -42,7 +32,8 @@ class EquipmentsController extends AbstractController
             return $this->redirectToRoute('equipments_index');
         }
 
-        return $this->render('equipments/new.html.twig', [
+        return $this->render('equipments/index.html.twig', [
+            'equipments' => $equipmentsRepository->findAll(),
             'equipment' => $equipment,
             'form' => $form->createView(),
         ]);
