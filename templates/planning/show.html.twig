@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col vh-100">
+                <table class="planning h-75">
+                    <thead>
+                        <th>
+                            <td>Lundi</td>
+                            <td>Mardi</td>
+                            <td>Mercredi</td>
+                            <td>Jeudi</td>
+                            <td>Vendredi</td>
+                        </th>
+                    </thead>
+                    <tbody>
+                        <tr><td>8h-10h</td>{{ planning.0|raw }}</tr>
+                        <tr><td>10h-12h</td>{{ planning.1|raw }}</tr>
+                        <tr><td>14h-16h</td>{{ planning.2|raw }}</tr>
+                        <tr><td>16h-18h</td>{{ planning.3|raw }}</tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
