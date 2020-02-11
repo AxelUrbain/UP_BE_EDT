@@ -33,6 +33,11 @@ class Annee
      */
     private $promotions;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $anneePromotion;
+
     public function __construct()
     {
         $this->promotions = new ArrayCollection();
@@ -94,6 +99,18 @@ class Annee
                 $promotion->setAnnee(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAnneePromotion(): ?int
+    {
+        return $this->anneePromotion;
+    }
+
+    public function setAnneePromotion(?int $anneePromotion): self
+    {
+        $this->anneePromotion = $anneePromotion;
 
         return $this;
     }
