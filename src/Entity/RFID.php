@@ -31,7 +31,7 @@ class RFID
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $password;
+    private $motDePasse;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Fonction", inversedBy="RFIDs")
@@ -82,14 +82,14 @@ class RFID
         return $this;
     }
 
-    public function getPassword(): ?string
+    public function getMotDePasse(): ?string
     {
-        return $this->password;
+        return $this->motDePasse;
     }
 
-    public function setPassword(?string $password): self
+    public function setMotDePasse(?string $motDePasse): self
     {
-        $this->password = $password;
+        $this->motDePasse = $motDePasse;
 
         return $this;
     }

@@ -80,6 +80,23 @@ class AppFixtures extends Fixture
         for ($i = 0; $i < 150; $i++) {
             $salle = new Salle();
             $salle->setNom(300 + $i);
+            $random = rand(0,100);
+            if ($random <= 12) {
+               $equipement = $this->em->getRepository(Equipement::class)->findOneBy(['nomEquipement' => 'télévision']);
+               $salle->addEquipement($equipement);
+            }
+            if ($random > 12 && $random <= 33) {
+                $equipement = $this->em->getRepository(Equipement::class)->findOneBy(['nomEquipement' => 'retroprojecteur']);
+                $salle->addEquipement($equipement);
+            }
+            if ($random > 33 && $random <= 50) {
+                $equipement = $this->em->getRepository(Equipement::class)->findOneBy(['nomEquipement' => 'boîte à meuhs']);
+                $salle->addEquipement($equipement);
+            }
+            if ($random > 50 && $random <= 75) {
+                $equipement = $this->em->getRepository(Equipement::class)->findOneBy(['nomEquipement' => 'régulateur thermique']);
+                $salle->addEquipement($equipement);
+            }
             $salle->setCapacite($faker->numberBetween(15, 30));
             $manager->persist($salle);
         }
@@ -98,7 +115,7 @@ class AppFixtures extends Fixture
         $admin = new RFID();
         $admin->setNom('admin');
         $admin->setPrenom('admin');
-        $admin->setPassword('admin');
+        $admin->setMotDePasse('admin');
         $fonction = $this->em->getRepository(Fonction::class)->findOneBy(['nomFonction' => 'administrateur']);
         $admin->addFonction($fonction);
         $manager->persist($admin);
@@ -108,7 +125,7 @@ class AppFixtures extends Fixture
         $sco = new RFID();
         $sco->setNom('sco');
         $sco->setPrenom('sco');
-        $sco->setPassword('admin');
+        $sco->setMotDePasse('admin');
         $fonction2 = $this->em->getRepository(Fonction::class)->findOneBy(['nomFonction' => 'scolarité']);
         $sco->addFonction($fonction2);
         $manager->persist($sco);
@@ -118,7 +135,7 @@ class AppFixtures extends Fixture
         $sec = new RFID();
         $sec->setNom('sec');
         $sec->setPrenom('sec');
-        $sec->setPassword('admin');
+        $sec->setMotDePasse('admin');
         $fonction3 = $this->em->getRepository(Fonction::class)->findOneBy(['nomFonction' => 'secrétariat']);
         $sec->addFonction($fonction3);
         $manager->persist($sec);
@@ -131,7 +148,7 @@ class AppFixtures extends Fixture
             $rfid->setPrenom($faker->firstName);
             $fonction4 = $this->em->getRepository(Fonction::class)->findOneBy(['nomFonction' => 'professeur']);
             $rfid->addFonction($fonction4);
-            $rfid->setPassword('admin');
+            $rfid->setMotDePasse('admin');
             $manager->persist($rfid);
         }
         $manager->flush();
@@ -141,13 +158,13 @@ class AppFixtures extends Fixture
             $rfid = new RFID();
             $rfid->setNom($faker->lastName);
             $rfid->setPrenom($faker->firstName);
-            $rfid->setPassword('admin');
+            $rfid->setMotDePasse('admin');
             $fonction5 = $this->em->getRepository(Fonction::class)->findOneBy(['nomFonction' => 'étudiant']);
             $rfid->addFonction($fonction5);
             $manager->persist($rfid);
         }
         $manager->flush();
 
-
+        // UEs
     }
 }
