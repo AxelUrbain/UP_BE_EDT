@@ -156,6 +156,29 @@ class AppFixtures extends Fixture
         $array[] = $statut2;
         $array[] = $statut3;
 
+        $specialites = ['biophysique', 'génie moléculaire', 'physique quantique', 'sociologie', 'psychologie', 'Lettres modernes', 'Latin', 'Grec', 'géologie', 'droit'];
+        $array2 = [];
+
+        $spe1 = $this->em->getRepository(Specialite::class)->findOneBy(['specialite' => $specialites[0]]);
+        $spe2 = $this->em->getRepository(Specialite::class)->findOneBy(['specialite' => $specialites[1]]);
+        $spe3 = $this->em->getRepository(Specialite::class)->findOneBy(['specialite' => $specialites[2]]);
+        $spe4 = $this->em->getRepository(Specialite::class)->findOneBy(['specialite' => $specialites[3]]);
+        $spe5 = $this->em->getRepository(Specialite::class)->findOneBy(['specialite' => $specialites[4]]);
+        $spe6 = $this->em->getRepository(Specialite::class)->findOneBy(['specialite' => $specialites[5]]);
+        $spe7 = $this->em->getRepository(Specialite::class)->findOneBy(['specialite' => $specialites[6]]);
+        $spe8 = $this->em->getRepository(Specialite::class)->findOneBy(['specialite' => $specialites[7]]);
+        $spe9 = $this->em->getRepository(Specialite::class)->findOneBy(['specialite' => $specialites[8]]);
+
+        $array2[] = $spe1;
+        $array2[] = $spe2;
+        $array2[] = $spe3;
+        $array2[] = $spe4;
+        $array2[] = $spe5;
+        $array2[] = $spe6;
+        $array2[] = $spe7;
+        $array2[] = $spe8;
+        $array2[] = $spe9;
+
 
         // PROFs
         for ($i = 0; $i < 60; $i++) {
@@ -169,6 +192,7 @@ class AppFixtures extends Fixture
 
             $prof = new Professeur();
             $prof->setRFID($rfid);
+            $prof->setSpecialite($array2[rand(0, sizeof($array2) - 1)]);
             $prof->setStatut($array[rand(0, sizeof($array) - 1)]);
             $manager->persist($prof);
         }
