@@ -24,7 +24,7 @@
                             <tbody>
                             {% for equipments in equipments %}
                                 <tr>
-                                    <td>{{ equipments.name }}</td>
+                                    <td>{{ equipments.nomEquipement }}</td>
                                     <td>
                                         <a class="btn btn-primary" href="{{ path('equipments_edit', {'id': equipments.id}) }}">Modifier</a>
                                         <form style="display: inline-block" method="post" action="{{ path('equipments_delete', {'id': equipments.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');">

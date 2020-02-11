@@ -10,8 +10,9 @@
             <div class="modal-body">
                 {{ form_start(form) }}
                 <div class="container">
-                    {{ form_row(form.idSalle , {'label':'Nom de la salle'}) }}
+                    {{ form_row(form.nom , {'label':'Nom de la salle'}) }}
                     {{ form_row(form.capacite, {'label':'Capacité'}) }}
+                    {{ form_row(form.equipement, {'label':'Equipements'}) }}
                 </div>
                 <button class="btn btn-outline-primary">Ajouter</button>
                 {{ form_end(form) }}

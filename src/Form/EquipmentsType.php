@@ -13,14 +13,13 @@ class EquipmentsType extends AbstractType
     {
         $builder
             ->add('nomEquipement')
-            ->add('classes')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_classes' => Equipement::class,
+            'data_class' => Equipement::class,
         ]);
     }
 }

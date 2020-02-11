@@ -49,7 +49,7 @@ class Salle
         return $this->id;
     }
 
-    public function getNom(): ?int
+    public function getNom(): ?string
     {
         return $this->nom;
     }

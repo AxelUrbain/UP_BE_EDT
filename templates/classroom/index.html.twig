@@ -21,21 +21,21 @@
                             <tr>
                                 <th>Nom</th>
                                 <th>Capacité</th>
-                                <th>Actions</th>
                                 <th>Equipements</th>
+                                <th>Actions</th>
                             </tr>
                             </thead>
                             <tbody>
                             {% for classroom in classrooms %}
                                 <tr>
-                                    <td>{{ classroom.name }}</td>
-                                    <td>{{ classroom.Capacity }}</td>
+                                    <td>{{ classroom.nom }}</td>
+                                    <td>{{ classroom.capacite }}</td>
                                     <td>
-                                        {% for equipment in classroom.equipments %}
+                                        {% for equipment in classroom.equipement %}
                                             {% if loop.last %}
-                                                {{ equipment.name }}
+                                                {{ equipment.nomEquipement }}
                                             {% else %}
-                                                {{ equipment.name }} |
+                                                {{ equipment.nomEquipement }} |
                                             {% endif %}
                                         {% else %}
                                             Aucun équipement enregistrée..
