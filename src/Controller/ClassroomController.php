@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Salle;
-use App\Form\SalleType;
+use App\Form\ClassroomType;
 use App\Repository\SalleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,7 +21,7 @@ class ClassroomController extends AbstractController
     public function index(SalleRepository $classroomRepository, Request $request): Response
     {
         $classroom = new Salle();
-        $form = $this->createForm(SalleType::class, $classroom);
+        $form = $this->createForm(ClassroomType::class, $classroom);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -54,7 +54,7 @@ class ClassroomController extends AbstractController
      */
     public function edit(Request $request, Salle $classroom): Response
     {
-        $form = $this->createForm(SalleType::class, $classroom);
+        $form = $this->createForm(ClassroomType::class, $classroom);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
