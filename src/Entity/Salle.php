@@ -19,9 +19,9 @@ class Salle
     private $id;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
-    private $idSalle;
+    private $nom;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -49,14 +49,14 @@ class Salle
         return $this->id;
     }
 
-    public function getIdSalle(): ?int
+    public function getNom(): ?int
     {
-        return $this->idSalle;
+        return $this->nom;
     }
 
-    public function setIdSalle(?int $idSalle): self
+    public function setNom(?string $nom): self
     {
-        $this->idSalle = $idSalle;
+        $this->nom = $nom;
 
         return $this;
     }
