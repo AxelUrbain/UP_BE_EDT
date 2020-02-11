@@ -79,7 +79,7 @@ class AppFixtures extends Fixture
         // SALLES
         for ($i = 0; $i < 150; $i++) {
             $salle = new Salle();
-            $salle->setNom(300 + $i +'HA');
+            $salle->setNom('ha');
             $random = rand(0,100);
             if ($random <= 12) {
                $equipement = $this->em->getRepository(Equipement::class)->findOneBy(['nomEquipement' => 'télévision']);
