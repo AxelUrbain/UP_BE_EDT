@@ -6,16 +6,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/planning", name="planning")
+ * @Route("/planning")
  */
 class PlanningController extends AbstractController
 {
     /**
-     * @Route("/{semaine}", name="afficherPlanning")
+     * @Route("/{semaine}", name="afficher_planning")
      */
     public function afficherPlanning($semaine = 1)
     {
-        // une semaine va du créneau ($semaine - 1 * 20) + 1 à ($semaine - 1 * 20) + 20 (semaine 1 : 1-20 semaine 3 : 41-60
+        // une semaine va du créneau ($semaine - 1 * 20) + 1 à ($semaine - 1 * 20) + 20 ($semaine 1 : 1-20 $semaine 3 : 41-60
 
         $seances = [
             [
@@ -52,6 +52,13 @@ class PlanningController extends AbstractController
                 "couleur" => "#72a4dd",
                 "professeur" => "Marcel Pagnol",
                 "salle" => "A13-01128"
+            ],
+            [
+                "creneau" => 19,
+                "ue" => "Test",
+                "couleur" => "#ef8d31",
+                "professeur" => "test",
+                "salle" => "test"
             ]
         ];
 
@@ -95,7 +102,8 @@ EOT;
 
         return $this->render('planning/show.html.twig', [
             'controller_name' => 'PlanningController',
-            'planning' => $planning
+            'planning' => $planning,
+            'semaine' => $semaine
         ]);
     }
 }
