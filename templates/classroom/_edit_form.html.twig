@@ -1,0 +1,7 @@
+{{ form_start(form) }}
+<div class="container">
+    {{ form_row(form.name , {'label':'Nom de la salle'}) }}
+    {{ form_row(form.capacity, {'label':'Capacité'}) }}
+</div>
+<button class="btn btn-outline-primary">Ajouter</button>
+{{ form_end(form) }}
