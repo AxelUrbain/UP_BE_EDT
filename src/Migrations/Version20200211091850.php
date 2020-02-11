@@ -23,7 +23,7 @@ final class Version20200211091850 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'oracle', 'Migration can only be executed safely on \'oracle\'.');
 
         $this->addSql('CREATE SEQUENCE salle_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1');
-        $this->addSql('CREATE TABLE salle (id NUMBER(10) NOT NULL, id_salle NUMBER(10) DEFAULT NULL NULL, capacite NUMBER(10) DEFAULT NULL NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE salle (id NUMBER(10) NOT NULL, nom VARCHAR2(255) DEFAULT NULL NULL, capacite NUMBER(10) DEFAULT NULL NULL, PRIMARY KEY(id))');
     }
 
     public function down(Schema $schema) : void
