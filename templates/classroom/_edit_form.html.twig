@@ -3,5 +3,8 @@
     {{ form_row(form.name , {'label':'Nom de la salle'}) }}
     {{ form_row(form.capacity, {'label':'Capacité'}) }}
 </div>
-<button class="btn btn-outline-primary">Ajouter</button>
+<div class="row">
+    <a class="btn btn-outline-info" href="{{ path('classroom_index') }}">retour</a>
+    <button class="btn btn-outline-primary">Modifier</button>
+</div>
 {{ form_end(form) }}

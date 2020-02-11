@@ -17,6 +17,7 @@
                         <th>Nom</th>
                         <th>Capacité</th>
                         <th>Actions</th>
+                        <th>Equipements</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -25,13 +26,23 @@
                             <td>{{ classroom.name }}</td>
                             <td>{{ classroom.Capacity }}</td>
                             <td>
+                                {% for equipment in classroom.equipments %}
+                                    {% if loop.last %}
+                                        {{ equipment.name }}
+                                    {% else %}
+                                        {{ equipment.name }} |
+                                    {% endif %}
+                                {% else %}
+                                    Aucun équipement enregistrée..
+                                {% endfor %}
+                            </td>
+                            <td>
                                 <a class="btn btn-primary" href="{{ path('classroom_edit', {'id': classroom.id}) }}">Modifier</a>
                                 <form style="display: inline-block" method="post" action="{{ path('classroom_delete', {'id': classroom.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');">
                                     <input type="hidden" name="_method" value="DELETE">
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ classroom.id) }}">
                                     <button class="btn btn-danger">Supprimer</button>
                                 </form>
-
                             </td>
                         </tr>
                     {% else %}
