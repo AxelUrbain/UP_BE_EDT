@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Classroom;
-use App\Form\ClassroomType;
-use App\Repository\ClassroomRepository;
+use App\Entity\Salle;
+use App\Form\SalleType;
+use App\Repository\SalleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,10 +18,10 @@ class ClassroomController extends AbstractController
     /**
      * @Route("/", name="classroom_index", methods={"GET","POST"})
      */
-    public function index(ClassroomRepository $classroomRepository, Request $request): Response
+    public function index(SalleRepository $classroomRepository, Request $request): Response
     {
-        $classroom = new Classroom();
-        $form = $this->createForm(ClassroomType::class, $classroom);
+        $classroom = new Salle();
+        $form = $this->createForm(SalleType::class, $classroom);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -42,7 +42,7 @@ class ClassroomController extends AbstractController
     /**
      * @Route("/{id}", name="classroom_show", methods={"GET"})
      */
-    public function show(Classroom $classroom): Response
+    public function show(Salle $classroom): Response
     {
         return $this->render('classroom/show.html.twig', [
             'classroom' => $classroom,
@@ -52,9 +52,9 @@ class ClassroomController extends AbstractController
     /**
      * @Route("/{id}/edit", name="classroom_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Classroom $classroom): Response
+    public function edit(Request $request, Salle $classroom): Response
     {
-        $form = $this->createForm(ClassroomType::class, $classroom);
+        $form = $this->createForm(SalleType::class, $classroom);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -72,7 +72,7 @@ class ClassroomController extends AbstractController
     /**
      * @Route("/{id}", name="classroom_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Classroom $classroom): Response
+    public function delete(Request $request, Salle $classroom): Response
     {
         if ($this->isCsrfTokenValid('delete'.$classroom->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();

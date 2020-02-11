@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Equipments;
+use App\Entity\Equipement;
 use App\Form\EquipmentsType;
-use App\Repository\EquipmentsRepository;
+use App\Repository\EquipementRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,9 +18,9 @@ class EquipmentsController extends AbstractController
     /**
      * @Route("/", name="equipments_index", methods={"GET","POST"})
      */
-    public function index(EquipmentsRepository $equipmentsRepository, Request $request): Response
+    public function index(EquipementRepository $equipmentsRepository, Request $request): Response
     {
-        $equipment = new Equipments();
+        $equipment = new Equipement();
         $form = $this->createForm(EquipmentsType::class, $equipment);
         $form->handleRequest($request);
 
@@ -42,7 +42,7 @@ class EquipmentsController extends AbstractController
     /**
      * @Route("/{id}", name="equipments_show", methods={"GET"})
      */
-    public function show(Equipments $equipment): Response
+    public function show(Equipement $equipment): Response
     {
         return $this->render('equipments/show.html.twig', [
             'equipment' => $equipment,
@@ -52,7 +52,7 @@ class EquipmentsController extends AbstractController
     /**
      * @Route("/{id}/edit", name="equipments_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Equipments $equipment): Response
+    public function edit(Request $request, Equipement $equipment): Response
     {
         $form = $this->createForm(EquipmentsType::class, $equipment);
         $form->handleRequest($request);
@@ -72,7 +72,7 @@ class EquipmentsController extends AbstractController
     /**
      * @Route("/{id}", name="equipments_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Equipments $equipment): Response
+    public function delete(Request $request, Equipement $equipment): Response
     {
         if ($this->isCsrfTokenValid('delete'.$equipment->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
