@@ -64,14 +64,14 @@ class Cours
     private $formations;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\IdEtudiant", mappedBy="cours")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Etudiant", mappedBy="cours")
      */
-    private $idEtudiants;
+    private $etudiants;
 
     public function __construct()
     {
         $this->formations = new ArrayCollection();
-        $this->idEtudiants = new ArrayCollection();
+        $this->etudiants = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -204,28 +204,28 @@ class Cours
     }
 
     /**
-     * @return Collection|IdEtudiant[]
+     * @return Collection|Etudiant[]
      */
-    public function getIdEtudiants(): Collection
+    public function getEtudiants(): Collection
     {
-        return $this->idEtudiants;
+        return $this->etudiants;
     }
 
-    public function addIdEtudiant(IdEtudiant $idEtudiant): self
+    public function addEtudiant(Etudiant $etudiant): self
     {
-        if (!$this->idEtudiants->contains($idEtudiant)) {
-            $this->idEtudiants[] = $idEtudiant;
-            $idEtudiant->addCour($this);
+        if (!$this->etudiants->contains($etudiant)) {
+            $this->etudiants[] = $etudiant;
+            $etudiant->addCour($this);
         }
 
         return $this;
     }
 
-    public function removeIdEtudiant(IdEtudiant $idEtudiant): self
+    public function removeEtudiant(Etudiant $etudiant): self
     {
-        if ($this->idEtudiants->contains($idEtudiant)) {
-            $this->idEtudiants->removeElement($idEtudiant);
-            $idEtudiant->removeCour($this);
+        if ($this->etudiants->contains($etudiant)) {
+            $this->etudiants->removeElement($etudiant);
+            $etudiant->removeCour($this);
         }
 
         return $this;

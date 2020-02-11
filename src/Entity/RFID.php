@@ -44,9 +44,9 @@ class RFID
     private $professeur;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\IdEtudiant", mappedBy="RFID", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Etudiant", mappedBy="RFID", cascade={"persist", "remove"})
      */
-    private $idEtudiant;
+    private $etudiant;
 
     public function __construct()
     {
@@ -138,19 +138,19 @@ class RFID
         return $this;
     }
 
-    public function getIdEtudiant(): ?IdEtudiant
+    public function getEtudiant(): ?Etudiant
     {
-        return $this->idEtudiant;
+        return $this->etudiant;
     }
 
-    public function setIdEtudiant(?IdEtudiant $idEtudiant): self
+    public function setEtudiant(?Etudiant $etudiant): self
     {
-        $this->idEtudiant = $idEtudiant;
+        $this->etudiant = $etudiant;
 
         // set (or unset) the owning side of the relation if necessary
-        $newRFID = null === $idEtudiant ? null : $this;
-        if ($idEtudiant->getRFID() !== $newRFID) {
-            $idEtudiant->setRFID($newRFID);
+        $newRFID = null === $etudiant ? null : $this;
+        if ($etudiant->getRFID() !== $newRFID) {
+            $etudiant->setRFID($newRFID);
         }
 
         return $this;

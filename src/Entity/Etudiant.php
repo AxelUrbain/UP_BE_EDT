@@ -7,9 +7,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\IdEtudiantRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\EtudiantRepository")
  */
-class IdEtudiant
+class Etudiant
 {
     /**
      * @ORM\Id()
@@ -19,22 +19,22 @@ class IdEtudiant
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\RFID", inversedBy="idEtudiant", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\RFID", inversedBy="etudiant", cascade={"persist", "remove"})
      */
     private $RFID;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Promotion", mappedBy="idEtudiant")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Promotion", mappedBy="etudiant")
      */
     private $promotions;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\UE", inversedBy="idEtudiants")
+     * @ORM\ManyToMany(targetEntity="App\Entity\UE", inversedBy="etudiants")
      */
     private $UE;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Cours", inversedBy="idEtudiants")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Cours", inversedBy="etudiants")
      */
     private $cours;
 
@@ -74,7 +74,7 @@ class IdEtudiant
     {
         if (!$this->promotions->contains($promotion)) {
             $this->promotions[] = $promotion;
-            $promotion->addIdEtudiant($this);
+            $promotion->addEtudiant($this);
         }
 
         return $this;
@@ -84,7 +84,7 @@ class IdEtudiant
     {
         if ($this->promotions->contains($promotion)) {
             $this->promotions->removeElement($promotion);
-            $promotion->removeIdEtudiant($this);
+            $promotion->removeEtudiant($this);
         }
 
         return $this;

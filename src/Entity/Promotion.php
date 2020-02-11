@@ -24,9 +24,9 @@ class Promotion
     private $anneeFormation;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\IdEtudiant", inversedBy="promotions")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Etudiant", inversedBy="promotions")
      */
-    private $idEtudiant;
+    private $etudiant;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Formation", inversedBy="promotions")
@@ -40,7 +40,7 @@ class Promotion
 
     public function __construct()
     {
-        $this->idEtudiant = new ArrayCollection();
+        $this->etudiant = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -61,26 +61,26 @@ class Promotion
     }
 
     /**
-     * @return Collection|IdEtudiant[]
+     * @return Collection|Etudiant[]
      */
-    public function getIdEtudiant(): Collection
+    public function getEtudiant(): Collection
     {
-        return $this->idEtudiant;
+        return $this->etudiant;
     }
 
-    public function addIdEtudiant(IdEtudiant $idEtudiant): self
+    public function addEtudiant(Etudiant $etudiant): self
     {
-        if (!$this->idEtudiant->contains($idEtudiant)) {
-            $this->idEtudiant[] = $idEtudiant;
+        if (!$this->etudiant->contains($etudiant)) {
+            $this->etudiant[] = $etudiant;
         }
 
         return $this;
     }
 
-    public function removeIdEtudiant(IdEtudiant $idEtudiant): self
+    public function removeEtudiant(Etudiant $etudiant): self
     {
-        if ($this->idEtudiant->contains($idEtudiant)) {
-            $this->idEtudiant->removeElement($idEtudiant);
+        if ($this->etudiant->contains($etudiant)) {
+            $this->etudiant->removeElement($etudiant);
         }
 
         return $this;

@@ -44,9 +44,9 @@ class UE
     private $cours;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\IdEtudiant", mappedBy="UE")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Etudiant", mappedBy="UE")
      */
-    private $idEtudiants;
+    private $etudiants;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Formation", mappedBy="UE")
@@ -56,7 +56,7 @@ class UE
     public function __construct()
     {
         $this->cours = new ArrayCollection();
-        $this->idEtudiants = new ArrayCollection();
+        $this->etudiants = new ArrayCollection();
         $this->formations = new ArrayCollection();
     }
 
@@ -145,28 +145,28 @@ class UE
     }
 
     /**
-     * @return Collection|IdEtudiant[]
+     * @return Collection|Etudiant[]
      */
-    public function getIdEtudiants(): Collection
+    public function getEtudiants(): Collection
     {
-        return $this->idEtudiants;
+        return $this->etudiants;
     }
 
-    public function addIdEtudiant(IdEtudiant $idEtudiant): self
+    public function addEtudiant(Etudiant $etudiant): self
     {
-        if (!$this->idEtudiants->contains($idEtudiant)) {
-            $this->idEtudiants[] = $idEtudiant;
-            $idEtudiant->addUE($this);
+        if (!$this->etudiants->contains($etudiant)) {
+            $this->etudiants[] = $etudiant;
+            $etudiant->addUE($this);
         }
 
         return $this;
     }
 
-    public function removeIdEtudiant(IdEtudiant $idEtudiant): self
+    public function removeEtudiant(Etudiant $etudiant): self
     {
-        if ($this->idEtudiants->contains($idEtudiant)) {
-            $this->idEtudiants->removeElement($idEtudiant);
-            $idEtudiant->removeUE($this);
+        if ($this->etudiants->contains($etudiant)) {
+            $this->etudiants->removeElement($etudiant);
+            $etudiant->removeUE($this);
         }
 
         return $this;
