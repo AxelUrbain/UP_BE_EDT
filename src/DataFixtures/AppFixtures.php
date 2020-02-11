@@ -5,10 +5,12 @@ namespace App\DataFixtures;
 use App\Entity\Annee;
 use App\Entity\Equipement;
 use App\Entity\Fonction;
+use App\Entity\Professeur;
 use App\Entity\RFID;
 use App\Entity\Salle;
 use App\Entity\Specialite;
 use App\Entity\Statut;
+use App\Entity\UE;
 use App\Repository\FonctionRepository;
 use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -141,6 +143,20 @@ class AppFixtures extends Fixture
         $manager->persist($sec);
         $manager->flush();
 
+
+        // Statuts
+        $types = ['maître de conférences', 'chargé de TD', 'professeur d\'université'];
+        $array = [];
+
+        $statut1 = $this->em->getRepository(Statut::class)->findOneBy(['nomStatut' => $types[0]]);
+        $statut2 = $this->em->getRepository(Statut::class)->findOneBy(['nomStatut' => $types[1]]);
+        $statut3 = $this->em->getRepository(Statut::class)->findOneBy(['nomStatut' => $types[2]]);
+
+        $array[] = $statut1;
+        $array[] = $statut2;
+        $array[] = $statut3;
+
+
         // PROFs
         for ($i = 0; $i < 60; $i++) {
             $rfid = new RFID();
@@ -150,6 +166,11 @@ class AppFixtures extends Fixture
             $rfid->addFonction($fonction4);
             $rfid->setMotDePasse('admin');
             $manager->persist($rfid);
+
+            $prof = new Professeur();
+            $prof->setRFID($rfid);
+            $prof->setStatut($array[rand(0, sizeof($array) - 1)]);
+            $manager->persist($prof);
         }
         $manager->flush();
 
@@ -166,17 +187,20 @@ class AppFixtures extends Fixture
         $manager->flush();
 
         // UEs
+        $spes = ['biophysique', 'génie moléculaire', 'physique quantique', 'sociologie', 'psychologie', 'Lettres modernes', 'Latin', 'Grec', 'géologie', 'droit'];
+        $array = [];
+        for ($i = 0 ; $i < sizeof($spes); $i++) {
+            $array[$i] = $this->em->getRepository(Specialite::class)->findOneBy(['specialite' => $spes[$i]]);
+        };
+
         for ($i = 0; $i < 1500; $i++) {
-            $ue = new RFID();
-            $ue->setNom($faker->lastName);
-            $ue->setPrenom($faker->firstName);
-            $ue->setMotDePasse('admin');
-            $fonction5 = $this->em->getRepository(Fonction::class)->findOneBy(['nomFonction' => 'étudiant']);
-            $rfid->addFonction($fonction5);
-            $manager->persist($rfid);
+            $ue = new UE();
+            $ue->setNomUE($faker->word . ' ' . $faker->word . ' ' . $faker->word );
+            $ue->setCouleur($faker->colorName);
+            $ue->setVolumeHoraire($faker->numberBetween(50,150));
+            $ue->setSpecialite($array[rand(0, sizeof($array) - 1)]);
+            $manager->persist($ue);
         }
         $manager->flush();
-
-
     }
 }
