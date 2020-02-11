@@ -79,7 +79,7 @@ class AppFixtures extends Fixture
         // SALLES
         for ($i = 0; $i < 150; $i++) {
             $salle = new Salle();
-            $salle->setNom(300 + $i);
+            $salle->setNom(300 + $i +'HA');
             $random = rand(0,100);
             if ($random <= 12) {
                $equipement = $this->em->getRepository(Equipement::class)->findOneBy(['nomEquipement' => 'télévision']);
@@ -166,5 +166,17 @@ class AppFixtures extends Fixture
         $manager->flush();
 
         // UEs
+        for ($i = 0; $i < 1500; $i++) {
+            $ue = new RFID();
+            $ue->setNom($faker->lastName);
+            $ue->setPrenom($faker->firstName);
+            $ue->setMotDePasse('admin');
+            $fonction5 = $this->em->getRepository(Fonction::class)->findOneBy(['nomFonction' => 'étudiant']);
+            $rfid->addFonction($fonction5);
+            $manager->persist($rfid);
+        }
+        $manager->flush();
+
+
     }
 }
