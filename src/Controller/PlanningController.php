@@ -11,65 +11,76 @@ use Symfony\Component\Routing\Annotation\Route;
 class PlanningController extends AbstractController
 {
     /**
-     * @Route("/{week}", name="showPlanning")
+     * @Route("/{semaine}", name="afficherPlanning")
      */
-    public function showPlanning()
+    public function afficherPlanning($semaine = 1)
     {
+        // une semaine va du créneau ($semaine - 1 * 20) + 1 à ($semaine - 1 * 20) + 20 (semaine 1 : 1-20 semaine 3 : 41-60
 
-        $week = 1;
-
-        $courses = [
-            1 => [
+        $seances = [
+            [
+                "creneau" => 1,
                 "ue" => "Algorithmie appliquée",
-                "color" => "#72a4dd",
-                "teacher" => "Marcel Pagnol",
-                "room" => "A13-01128"
+                "couleur" => "#72a4dd",
+                "professeur" => "Marcel Pagnol",
+                "salle" => "A13-01128"
             ],
-            3 => [
+            [
+                "creneau" => 3,
                 "ue" => "Algorithmie appliquée",
-                "color" => "#72a4dd",
-                "teacher" => "Marcel Pagnol",
-                "room" => "A13-01128"
+                "couleur" => "#72a4dd",
+                "professeur" => "Marcel Pagnol",
+                "salle" => "A13-01128"
             ],
-            9 => [
+            [
+                "creneau" => 9,
                 "ue" => "Algorithmie appliquée",
-                "color" => "#72a4dd",
-                "teacher" => "Marcel Pagnol",
-                "room" => "A13-01128"
+                "couleur" => "#72a4dd",
+                "professeur" => "Marcel Pagnol",
+                "salle" => "A13-01128"
             ],
-            10 => [
+            [
+                "creneau" => 10,
                 "ue" => "Algorithmie appliquée",
-                "color" => "#72a4dd",
-                "teacher" => "Marcel Pagnol",
-                "room" => "A13-01128"
+                "couleur" => "#72a4dd",
+                "professeur" => "Marcel Pagnol",
+                "salle" => "A13-01128"
+            ],
+            [
+                "creneau" => 10,
+                "ue" => "Algorithmie appliquée",
+                "couleur" => "#72a4dd",
+                "professeur" => "Marcel Pagnol",
+                "salle" => "A13-01128"
             ]
         ];
 
-        $planning = [];
+        $creneaux = array();
 
-        for( $slot = 0 ; $slot < 4 ; $slot++ )
-        {
-            $planning[$slot] = "";
+        foreach($seances as $seance) {
+            $creneaux[(($seance["creneau"] - 1) % 20)] = $seance;
+        }
+        $planning = array();
 
-            for( $day = 0 ; $day < 5 ; $day++)
-            {
-                if( isset($courses[($day * 4) + $slot + 1]) )
-                {
-                    $planning[$slot] .= <<<EOT
-<td style="background-color:{$courses[($day * 4) + $slot + 1]["color"]}">
+        for($heure = 0 ; $heure < 4 ; $heure++) {
+            $planning[$heure] = "";
+
+            for($jour = 0 ; $jour < 5 ; $jour++)  {
+                if(isset($creneaux[($jour * 4) + $heure])) {
+                    $planning[$heure] .= <<<EOT
+<td style="background-color:{$creneaux[($jour * 4) + $heure]["couleur"]}">
     <div class="course">
         <ul>
-            <li>{$courses[($day * 4) + $slot + 1]["ue"]}</li>
-            <li>{$courses[($day * 4) + $slot + 1]["teacher"]}</li>
-            <li>{$courses[($day * 4) + $slot + 1]["room"]}</li>
+            <li>{$creneaux[($jour * 4) + $heure]["ue"]}</li>
+            <li>{$creneaux[($jour * 4) + $heure]["professeur"]}</li>
+            <li>{$creneaux[($jour * 4) + $heure]["salle"]}</li>
         </ul>
     </div>
 </td>
 EOT;
                 }
-                else
-                {
-                    $planning[$slot] .= <<<EOT
+                else {
+                    $planning[$heure] .= <<<EOT
 <td style="background-color:#dfdfdf">
     <div class="course">
         <ul>
@@ -79,8 +90,6 @@ EOT;
 </td>
 EOT;
                 }
-
-
             }
         }
 
