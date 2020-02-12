@@ -29,14 +29,14 @@ class RFID
     private $prenom;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="json")
      */
-    private $password;
+    private $roles = [];
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Fonction", inversedBy="RFIDs")
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $fonction;
+    private $motDePasse;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Professeur", mappedBy="RFID", cascade={"persist", "remove"})
@@ -56,6 +56,22 @@ class RFID
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+        return array_unique($roles);
+    }
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+        return $this;
     }
 
     public function getNom(): ?string
@@ -82,40 +98,14 @@ class RFID
         return $this;
     }
 
-    public function getPassword(): ?string
+    public function getMotDePasse(): ?string
     {
-        return $this->password;
+        return $this->motDePasse;
     }
 
-    public function setPassword(?string $password): self
+    public function setMotDePasse(?string $motDePasse): self
     {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Fonction[]
-     */
-    public function getFonction(): Collection
-    {
-        return $this->fonction;
-    }
-
-    public function addFonction(Fonction $fonction): self
-    {
-        if (!$this->fonction->contains($fonction)) {
-            $this->fonction[] = $fonction;
-        }
-
-        return $this;
-    }
-
-    public function removeFonction(Fonction $fonction): self
-    {
-        if ($this->fonction->contains($fonction)) {
-            $this->fonction->removeElement($fonction);
-        }
+        $this->motDePasse = $motDePasse;
 
         return $this;
     }
@@ -152,7 +142,6 @@ class RFID
         if ($etudiant->getRFID() !== $newRFID) {
             $etudiant->setRFID($newRFID);
         }
-
         return $this;
     }
 }

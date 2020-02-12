@@ -24,7 +24,6 @@ final class Version20200211104131 extends AbstractMigration
 
         $this->addSql('CREATE SEQUENCE heures_sup_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1');
         $this->addSql('CREATE TABLE heures_sup (id NUMBER(10) NOT NULL, annee_paye NUMBER(10) DEFAULT NULL NULL, taux_horaire DOUBLE PRECISION DEFAULT NULL NULL, PRIMARY KEY(id))');
-        $this->addSql('ALTER TABLE FORMATION_UE DROP (ANNEE)');
     }
 
     public function down(Schema $schema) : void

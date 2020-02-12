@@ -17,7 +17,6 @@ class Salle
      * @ORM\Column(type="integer")
      */
     private $id;
-
     /**
      * @ORM\Column(type="string", nullable=true)
      */
