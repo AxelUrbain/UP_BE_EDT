@@ -1,0 +1,31 @@
+.planning {
+    border: 1px solid black;
+    min-height: 600px;
+}
+
+.planning ul {
+    list-style: none;
+    padding: 0;
+}
+
+.planning > thead th {
+    height: 5%;
+}
+
+.planning td, .planning th {
+    border: 1px solid black;
+    height: 22.5%;
+    width: 19%;
+}
+
+.planning > tbody td:first-child, .planning > tbody th:first-child {
+    width: 5%;
+}
+
+.planning > tbody > tr:first-child th {
+    height: 5%;
+}
+
+.planning > tbody > tr:last-child td {
+    height: 5%;
+}
