@@ -44,7 +44,7 @@ class EquipmentsController extends AbstractController
      */
     public function show(Equipement $equipment): Response
     {
-        return $this->render('equipments/show.html.twig', [
+        return $this->render('equipments/afficher.html.twig', [
             'equipment' => $equipment,
         ]);
     }

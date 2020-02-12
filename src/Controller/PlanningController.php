@@ -2,7 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Cours;
+use App\Form\CoursType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -11,7 +16,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class PlanningController extends AbstractController
 {
     /**
-     * @Route("/{semaine}", name="afficher_planning")
+     * @Route("/{semaine}",
+     *     name="afficher_planning",
+     *     requirements={"semaine": "\d+"}
+     * )
      */
     public function afficherPlanning($semaine = 1)
     {
@@ -100,10 +108,51 @@ EOT;
             }
         }
 
-        return $this->render('planning/show.html.twig', [
+
+
+        return $this->render('planning/afficher.html.twig', [
             'controller_name' => 'PlanningController',
             'planning' => $planning,
             'semaine' => $semaine
+        ]);
+    }
+
+    /**
+     * @Route("/ajouter", name="ajouter_seance", methods={"GET"})
+     */
+    public function ajouterSeance(Request $request) {
+        $cours = new Cours();
+
+        $form = $this->createForm(CoursType::class, $cours);
+        $form->add('send', SubmitType::class, ['label' => 'Ajouter']);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+
+            // TODO  traitement des données
+            return $this->redirectToRoute('afficher_planning');
+        }
+
+        return $this->render('planning/_form.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/editer/{id}",
+     *     name="editer_seance",
+     *     methods={"GET"},
+     *     requirements={"id": "\d+"}
+     * )
+     */
+    public function editerSeance() {
+        $cours = new Cours();
+
+        $form = $this->createForm(CoursType::class, $cours);
+        $form->add('send', SubmitType::class, ['label' => 'Ajouter']);
+
+        return $this->render('planning/_form.html.twig', [
+            'form' => $form->createView()
         ]);
     }
 }

@@ -2,25 +2,19 @@
 
 namespace App\Form;
 
-use App\Entity\Salle;
+use App\Entity\Cours;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ClassroomType extends AbstractType
+class CoursType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nomUE')
-            ->add('specialite')
+            ->add('creneau')
+            ->add('UE')
+            ->add('isExam')
         ;
-    }
-
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults([
-            'data_class' => Salle::class,
-        ]);
     }
 }

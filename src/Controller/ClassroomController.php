@@ -35,7 +35,7 @@ class ClassroomController extends AbstractController
         return $this->render('classroom/index.html.twig', [
             'classrooms' => $classroomRepository->findAll(),
             'classroom' => $classroom,
-            'form' => $form->createView(),
+            'form' => $form->createView()
         ]);
     }
 
@@ -44,7 +44,7 @@ class ClassroomController extends AbstractController
      */
     public function show(Salle $classroom): Response
     {
-        return $this->render('classroom/show.html.twig', [
+        return $this->render('classroom/afficher.html.twig', [
             'classroom' => $classroom,
         ]);
     }

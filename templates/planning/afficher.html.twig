@@ -33,26 +33,49 @@
                         </tr>
                         <tr>
                             <th></th>
-                            <td >
+                            <td>
                                 {% if semaine - 2 >= 1 %}<a href=" {{ path('afficher_planning', {semaine: semaine - 2}) }} ">Semaine {{ semaine - 2 }}</a>{% endif %}
                             </td>
-                            <td >
+                            <td>
                                 {% if semaine - 1 >= 1 %}<a href=" {{ path('afficher_planning', {semaine: semaine - 1}) }} ">Semaine {{ semaine - 1 }}</a>{% endif %}
                             </td>
                             <td class="active">
                                 <a href=" {{ path('afficher_planning', {semaine: semaine}) }} ">Semaine {{ semaine  }}</a></td>
-                            <td >
+                            <td>
                                 {% if semaine + 1 <= 30 %}<a href=" {{ path('afficher_planning', {semaine: semaine + 1}) }} ">Semaine {{ semaine + 1 }}</a>{% endif %}
                             </td>
-                            <td >
+                            <td>
                                 {% if semaine + 2 <= 30 %}<a href=" {{ path('afficher_planning', {semaine: semaine + 2}) }} ">Semaine {{ semaine + 2 }}</a>{% endif %}
                             </td>
                         </tr>
                     </tbody>
                 </table>
+                <div class="text-right mt-3">
+                    <button type="button" class="btn btn-primary" id="ajouter">Ajouter</button>
+                </div>
             </div>
         </div>
     </div>
 {% endblock %}
 
 {% block stylesheets %}<link rel="stylesheet" href="{{ asset('assets/css/planning.css') }}">{% endblock %}
+
+{% block javascripts %}
+<script>
+    $(document).ready( function() {
+        $('#ajouter').click( function() {
+            $.get("{{ path('ajouter_seance') }}", function(data) {
+                $('.container')[0].append($(data)[0]);
+                $('#modal').modal('show');
+            });
+        });
+
+        $('.').click( function() {
+            $.get("{{ path('ajouter_seance') }}", function(data) {
+                $('.container')[0].append($(data)[0]);
+                $('#modal').modal('show');
+            });
+        });
+    });
+</script>
+{% endblock %}
