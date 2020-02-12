@@ -1,0 +1,9 @@
+{{ form_start(form) }}
+<div class="container">
+    {{ form_row(form.nomEquipement , {'label':'Nom équipement'}) }}
+</div>
+<div class="row">
+    <a class="btn btn-outline-info" href="{{ path('equipments_index') }}">retour</a>
+    <button class="btn btn-outline-primary">Ajouter</button>
+</div>
+{{ form_end(form) }}
