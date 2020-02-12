@@ -107,22 +107,12 @@ class AppFixtures extends Fixture
         }
         $manager->flush();
 
-        // FONCTIONS(ROLES)
-        $foncs = ['étudiant', 'professeur', 'administrateur', 'scolarité', 'secrétariat'];
-        for ($i = 0; $i < sizeof($foncs); $i++) {
-            $fonctions = new Fonction();
-            $fonctions->setNomFonction($foncs[$i]);
-            $manager->persist($fonctions);
-        }
-        $manager->flush();
-
         // RFIDs ADMIN
         $admin = new RFID();
         $admin->setNom('admin');
         $admin->setPrenom('admin');
         $admin->setMotDePasse('admin');
-        $fonction = $this->em->getRepository(Fonction::class)->findOneBy(['nomFonction' => 'administrateur']);
-        $admin->addFonction($fonction);
+        $admin->setRoles( ['ROLE_ADMIN']);
         $manager->persist($admin);
         $manager->flush();
 
@@ -131,18 +121,16 @@ class AppFixtures extends Fixture
         $sco->setNom('sco');
         $sco->setPrenom('sco');
         $sco->setMotDePasse('admin');
-        $fonction2 = $this->em->getRepository(Fonction::class)->findOneBy(['nomFonction' => 'scolarité']);
-        $sco->addFonction($fonction2);
+        $sco->setRoles(['ROLE_SECRETARIAT']);
         $manager->persist($sco);
         $manager->flush();
 
-        // RFIDs Sécrétariat
+        // RFIDs RH
         $sec = new RFID();
-        $sec->setNom('sec');
-        $sec->setPrenom('sec');
+        $sec->setNom('RH');
+        $sec->setPrenom('RH');
         $sec->setMotDePasse('admin');
-        $fonction3 = $this->em->getRepository(Fonction::class)->findOneBy(['nomFonction' => 'secrétariat']);
-        $sec->addFonction($fonction3);
+        $sec->setRoles(['ROLE_RH']);
         $manager->persist($sec);
         $manager->flush();
 
@@ -188,8 +176,6 @@ class AppFixtures extends Fixture
             $rfid = new RFID();
             $rfid->setNom($faker->lastName);
             $rfid->setPrenom($faker->firstName);
-            $fonction4 = $this->em->getRepository(Fonction::class)->findOneBy(['nomFonction' => 'professeur']);
-            $rfid->addFonction($fonction4);
             $rfid->setMotDePasse('admin');
             $manager->persist($rfid);
 
@@ -207,8 +193,6 @@ class AppFixtures extends Fixture
             $rfid->setNom($faker->lastName);
             $rfid->setPrenom($faker->firstName);
             $rfid->setMotDePasse('admin');
-            $fonction5 = $this->em->getRepository(Fonction::class)->findOneBy(['nomFonction' => 'étudiant']);
-            $rfid->addFonction($fonction5);
             $manager->persist($rfid);
         }
         $manager->flush();
@@ -277,7 +261,11 @@ class AppFixtures extends Fixture
                     $formation->setNbAnnee(2);
                     break;
             }
-            $formation->setProfesseurResponsable($this->em->getRepository(Professeur::class)->findByRandomValue());
+            $prof = $this->em->getRepository(Professeur::class)->findByRandomValue();
+            $rfid = $this->em->getRepository(RFID::class)->findOneBy(['id' => $prof->getRFID()]);
+            $rfid->setRoles(['ROLE_RESPONSABLE']);
+            $formation->setProfesseurResponsable($prof);
+            $manager->persist($rfid);
             $manager->persist($formation);
         }
         $manager->flush();
