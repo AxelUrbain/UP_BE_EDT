@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Classroom{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="card p-5">
+            <div class="card-body">
+                <h1 class="card-title text-center">Modifier salle {{ classroom.nom }}</h1>
+            </div>
+            <div class="row">
+                <div class="col"></div>
+                <div class="col">
+                    {{ include('classroom/_edit_form.html.twig', {'button_label': 'Update'}) }}
+                </div>
+                <div class="col"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
