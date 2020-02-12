@@ -19,22 +19,22 @@ class ProfesseurRepository extends ServiceEntityRepository
         parent::__construct($registry, Professeur::class);
     }
 
-    // /**
-    //  * @return Professeur[] Returns an array of Professeur objects
-    //  */
-    /*
-    public function findByExampleField($value)
+
+    public function findByRandomValue()
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
+        $count = $this->createQueryBuilder('u')
+            ->select('COUNT(u)')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getSingleScalarResult();
+
+
+        return $this->createQueryBuilder('u')
+            ->setFirstResult(rand(0, $count - 1))
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getSingleResult()
+            ;
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?Professeur
