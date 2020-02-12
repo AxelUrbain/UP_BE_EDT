@@ -1,7 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
 
+{% block menu %}
+
+{% endblock %}
+
+{% block body %}
     <div class="jumbotron" style="text-align: center">
         <div class="row">
             <div class="col-md-4 col-lg-4"></div>
@@ -10,20 +14,6 @@
                 <hr>
             </div>
             <div class="col-md-4 col-lg-4"></div>
-        </div>
-    </div>
-    <div class="container" style="text-align: center">
-        <div class="row" style="margin-bottom: 20px">
-            <div class="col-md-6 col-lg-6">
-                <h3>Salles</h3>
-                <a href="{{ path('classroom_index') }}"><i class="fa fa-chalkboard fa-10x"></i></a>
-                <hr>
-            </div>
-            <div class="col-md-6 col-lg-6">
-                <h3>Equipements</h3>
-                <a href="{{ path('equipments_index') }}"><i class="fa fa-desktop fa-10x"></i></a>
-                <hr>
-            </div>
         </div>
     </div>
 {% endblock %}
