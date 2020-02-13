@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <div class="container my-5">
+        <div class="row">
+            <div class="col">
+                <div class="card p-5">
+                    <div class="card-body">
+                        <h1 class="card-title text-center">Gestion des professeurs</h1>
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                                <th>Statut</th>
+                                <th>Spécialité</th>
+                                <th>actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for professeur in professeurs %}
+                                <tr>
+                                    <td>{{ professeur.rfid.nom }}</td>
+                                    <td>{{ professeur.rfid.prenom }}</td>
+                                    <td>{{ professeur.statut.nomStatut }}</td>
+                                    <td>{{ professeur.specialite.specialite }}</td>
+                                    <td>
+                                        <a class="btn btn-primary" href="{{ path('professeur_edit', {'id': professeur.id}) }}">Modifier</a>
+                                        <form style="display: inline-block" method="post" action="{{ path('professeur_delete', {'id': professeur.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');">
+                                            <input type="hidden" name="_method" value="DELETE">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ professeur.id) }}">
+                                            <button class="btn btn-danger">Supprimer</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="2">no records found</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <button class="btn btn-outline-primary" data-toggle="modal" data-target="#newModal">Ajouter un professeur</button>
+                    </div>
+                    {{ include('_pagination.html.twig', {'currentPath': 'professeur_index', 'page': page, 'nbPage': nbPage}) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="{{ path('professeur_new') }}">Create new</a>
+{% endblock %}

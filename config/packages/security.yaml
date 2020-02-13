@@ -1,12 +1,36 @@
 security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    encoders:
+        App\Entity\RFID: plaintext
+
     providers:
-        in_memory: { memory: null }
+        user:
+            entity:
+                class: App\Entity\RFID
+                property: username
+
+        my_provider_in_memory:
+            memory:
+                users:
+                    axel:
+                        password: password
+                        roles: [ROLE_ADMIN]
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
+            provider: user
+            pattern: ^/
+
+            form_login:
+                check_path: login_check
+                login_path: login
+
+            logout:
+                path: app_logout
+                target: home
+
             anonymous: lazy
 
             # activate different ways to authenticate
@@ -15,6 +39,12 @@ security:
             # https://symfony.com/doc/current/security/impersonating_user.html
             # switch_user: true
 
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_ADMIN
+        ROLE_RESPONSABLE: ROLE_PROF
+        ROLE_PROF: [ROLE_USER, ROLE_ETU]
+        ROLE_ETU: ROLE_USER
+        ROLE_SECRETERIAT: ROLE_USER
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:

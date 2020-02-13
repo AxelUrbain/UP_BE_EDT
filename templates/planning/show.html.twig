@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <table class="planning h-75 mx-auto w-100 text-center mt-5">
+                    <thead>
+                    <tr>
+                        <th colspan="6">Emploi du temps</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th></th>
+                            <th scope="col">Lundi</th>
+                            <th scope="col">Mardi</th>
+                            <th scope="col">Mercredi</th>
+                            <th scope="col">Jeudi</th>
+                            <th scope="col">Vendredi</th>
+                        </tr>
+                        <tr>
+                            <th scope="row">8h-10h</th>{{ planning.0|raw }}
+                        </tr>
+                        <tr>
+                            <th scope="row">10h-12h</th>{{ planning.1|raw }}
+                        </tr>
+                        <tr>
+                            <th scope="row">14h-16h</th>{{ planning.2|raw }}
+                        </tr>
+                        <tr>
+                            <th scope="row">16h-18h</th>{{ planning.3|raw }}
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <td >
+                                {% if semaine - 2 >= 1 %}<a href=" {{ path('afficher_planning', {semaine: semaine - 2}) }} ">Semaine {{ semaine - 2 }}</a>{% endif %}
+                            </td>
+                            <td >
+                                {% if semaine - 1 >= 1 %}<a href=" {{ path('afficher_planning', {semaine: semaine - 1}) }} ">Semaine {{ semaine - 1 }}</a>{% endif %}
+                            </td>
+                            <td class="active">
+                                <a href=" {{ path('afficher_planning', {semaine: semaine}) }} ">Semaine {{ semaine  }}</a></td>
+                            <td >
+                                {% if semaine + 1 <= 30 %}<a href=" {{ path('afficher_planning', {semaine: semaine + 1}) }} ">Semaine {{ semaine + 1 }}</a>{% endif %}
+                            </td>
+                            <td >
+                                {% if semaine + 2 <= 30 %}<a href=" {{ path('afficher_planning', {semaine: semaine + 2}) }} ">Semaine {{ semaine + 2 }}</a>{% endif %}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}<link rel="stylesheet" href="{{ asset('assets/css/planning.css') }}">{% endblock %}

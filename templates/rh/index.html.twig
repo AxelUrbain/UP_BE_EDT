@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-12">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#profs" role="tab" aria-controls="home" aria-selected="true">Gestion des profs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#taux" role="tab" aria-controls="profile" aria-selected="false">Gestions du taux horaire</a>
+                    </li>
+                </ul>
+                <div class="card p-5">
+                    <div class="card-body">
+                        <h1 class="card-title text-center">Gestion des RH</h1>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="profs" role="tabpanel" aria-labelledby="home-tab">
+
+                            </div>
+                            <div class="tab-pane fade" id="taux" role="tabpanel" aria-labelledby="profile-tab">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>Année Paye</th>
+                                        <th>Taux Horaire</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for heureSup in heuresSup %}
+                                        <tr>
+                                            <td>{{ heureSup.anneePaye }}</td>
+                                            <td>{{ heureSup.tauxHoraire }}</td>
+                                            <td>
+                                                <a class="btn btn-primary" href="{{ path('rh_edit_heure_sup', {'id': heureSup.id}) }}">Modifier</a>
+                                                <form style="display: inline-block" method="post" action="{{ path('rh_delete_heure_sup', {'id': heureSup.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');">
+                                                    <input type="hidden" name="_method" value="DELETE">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ heureSup.id) }}">
+                                                    <button class="btn btn-danger">Supprimer</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="4">Aucun taux horaire enregistrée..</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#newModal">Ajouter un taux horaire</button>
+                                {{ include('rh/_form_heuresSup.html.twig') }}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

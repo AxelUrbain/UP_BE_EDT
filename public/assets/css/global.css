@@ -1,0 +1,29 @@
+html, body {
+    height: 100%;
+}
+
+.left-menu {
+    background-color: #3ca3f5;
+    height: 100%;
+    min-height: 20px;
+    min-width: 15px;
+    padding-top: 15px;
+}
+
+.full-height {
+    height: auto;
+}
+
+.menu-link {
+    display: inline;
+    padding: 5px;
+}
+
+.left-menu-div a {
+    color: whitesmoke;
+}
+
+.left-menu-div a:hover {
+    color: #0a6ebd;
+    text-decoration: none;
+}
