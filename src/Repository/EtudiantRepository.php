@@ -19,6 +19,22 @@ class EtudiantRepository extends ServiceEntityRepository
         parent::__construct($registry, Etudiant::class);
     }
 
+    public function findByRandomValue()
+    {
+        $count = $this->createQueryBuilder('u')
+            ->select('COUNT(u)')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+
+        return $this->createQueryBuilder('u')
+            ->setFirstResult(rand(0, $count - 1))
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getSingleResult()
+            ;
+    }
+
     // /**
     //  * @return Etudiant[] Returns an array of Etudiant objects
     //  */

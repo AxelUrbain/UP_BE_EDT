@@ -24,11 +24,6 @@ class Promotion
     private $anneeFormation;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Etudiant", inversedBy="promotions")
-     */
-    private $etudiant;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Formation", inversedBy="promotions")
      */
     private $formation;
@@ -38,9 +33,14 @@ class Promotion
      */
     private $annee;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Etudiant", mappedBy="promotion")
+     */
+    private $etudiants;
+
     public function __construct()
     {
-        $this->etudiant = new ArrayCollection();
+        $this->etudiants = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -56,32 +56,6 @@ class Promotion
     public function setAnneeFormation(?int $anneeFormation): self
     {
         $this->anneeFormation = $anneeFormation;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Etudiant[]
-     */
-    public function getEtudiant(): Collection
-    {
-        return $this->etudiant;
-    }
-
-    public function addEtudiant(Etudiant $etudiant): self
-    {
-        if (!$this->etudiant->contains($etudiant)) {
-            $this->etudiant[] = $etudiant;
-        }
-
-        return $this;
-    }
-
-    public function removeEtudiant(Etudiant $etudiant): self
-    {
-        if ($this->etudiant->contains($etudiant)) {
-            $this->etudiant->removeElement($etudiant);
-        }
 
         return $this;
     }
@@ -106,6 +80,37 @@ class Promotion
     public function setAnnee(?Annee $annee): self
     {
         $this->annee = $annee;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Etudiant[]
+     */
+    public function getEtudiants(): Collection
+    {
+        return $this->etudiants;
+    }
+
+    public function addEtudiant(Etudiant $etudiant): self
+    {
+        if (!$this->etudiants->contains($etudiant)) {
+            $this->etudiants[] = $etudiant;
+            $etudiant->setPromotion($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEtudiant(Etudiant $etudiant): self
+    {
+        if ($this->etudiants->contains($etudiant)) {
+            $this->etudiants->removeElement($etudiant);
+            // set the owning side to null (unless already changed)
+            if ($etudiant->getPromotion() === $this) {
+                $etudiant->setPromotion(null);
+            }
+        }
 
         return $this;
     }

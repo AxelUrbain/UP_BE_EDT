@@ -5,9 +5,11 @@ namespace App\DataFixtures;
 use App\Entity\Annee;
 use App\Entity\Cours;
 use App\Entity\Equipement;
+use App\Entity\Etudiant;
 use App\Entity\Fonction;
 use App\Entity\Formation;
 use App\Entity\Professeur;
+use App\Entity\Promotion;
 use App\Entity\RFID;
 use App\Entity\Salle;
 use App\Entity\Specialite;
@@ -199,6 +201,9 @@ class AppFixtures extends Fixture
             $rfid->setPrenom($faker->firstName);
             $rfid->setMotDePasse('admin');
             $manager->persist($rfid);
+            $etudiant = new Etudiant();
+            $etudiant->setRFID($rfid);
+            $manager->persist($etudiant);
         }
         $manager->flush();
 
