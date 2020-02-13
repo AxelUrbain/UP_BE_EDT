@@ -1,6 +1,7 @@
 <div class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
+            {{ form_start(form) }}
             <div class="modal-header">
                 <h5 class="modal-title">Ajouter une séance</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
@@ -8,12 +9,20 @@
                 </button>
             </div>
             <div class="modal-body">
-                {{ form(form) }}
+                {{ form_label(form.UE) }}
+                {{ form_widget(form.UE) }}
+                {{ form_label(form.isExam) }}
+                {{ form_widget(form.isExam) }}
+
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Ajouter</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                {% if edition is defined %}
+                    <a id="supprimer-btn" href="" class="btn btn-danger">Supprimer</a>
+                {% endif %}
+                {{ form_widget(form.sauvegarder) }}
             </div>
+            {{ form_end(form) }}
         </div>
     </div>
 </div>

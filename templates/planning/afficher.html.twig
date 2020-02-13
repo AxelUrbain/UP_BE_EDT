@@ -50,9 +50,6 @@
                         </tr>
                     </tbody>
                 </table>
-                <div class="text-right mt-3">
-                    <button type="button" class="btn btn-primary" id="ajouter">Ajouter</button>
-                </div>
                 <div id="modal"></div>
             </div>
         </div>
@@ -64,21 +61,50 @@
 {% block javascripts %}
 <script>
     $(document).ready( function() {
-        $('#ajouter').click( function() {
-            $.get("{{ path('ajouter_seance') }}", function(data) {
-                $('#modal').html($(data)[0]);
-                $('#modal > .modal').modal('show');
-            });
-        });
 
-        $('.seance').click( function() {
-            var id = $(this).data("id");
-            var url = "{{ path('editer_seance') }}/" + $(this).data("id");
-            $.get(url , function(data) {
-                $('#modal').html($(data)[0]);
-                $('#modal > .modal').modal('show');
+        function initEventListeners() {
+            $('.seance').click( function() {
+                $('.vide').off('click');
+                $('.seance').off('click');
+
+                var url = "{{ path('editer_seance') }}/" + $(this).data("id"),
+                    creneau = parseInt($(this).data('creneau'), 0),
+                    supprUrl = "{{ path('supprimer_seance') }}/" + $(this).data("id")
+                ;
+
+                $.get(url , function(data) {
+                    afficherForm(data, url, creneau);
+                    $('#supprimer-btn').attr('href', supprUrl);
+                });
             });
-        });
+
+            $('.vide').click( function() {
+                $('.vide').off('click');
+                $('.seance').off('click');
+
+                var url = "{{ path('ajouter_seance') }}/" + $(this).data("creneau"),
+                    creneau = parseInt($(this).data('creneau'), 0)
+                ;
+
+                $.get(url , function(data) {
+                    afficherForm(data, url, creneau);
+                });
+            });
+        }
+
+        function afficherForm(data, url, creneau = 0) {
+                $('#modal').html($(data)[0]);
+                $('#modal form').attr('action', url);
+                $('#modal > .modal').modal('show');
+                $('#modal > .modal').on('hidden.bs.modal', function() {
+                    initEventListeners();
+                });
+                if(creneau > 0) {
+                    $('#cours_creneau').val(creneau);
+                }
+        }
+
+        initEventListeners();
     });
 </script>
 {% endblock %}

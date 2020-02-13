@@ -31,6 +31,16 @@ class SalleRepository extends ServiceEntityRepository
         return new Paginator($query);
     }
 
+    public function findSalleLibre(int $creneau) {
+        $qb = $this->createQueryBuilder('s')
+            ->where('s.id NOT IN (SELECT IDENTITY(c.salle) FROM App:Cours c WHERE c.creneau = :creneau)')
+            ->setParameter('creneau', $creneau)
+            ->setMaxResults(1)
+        ;
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
     // /**
     //  * @return Salle[] Returns an array of Salle objects
     //  */

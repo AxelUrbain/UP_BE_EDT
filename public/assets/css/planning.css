@@ -36,14 +36,14 @@
     cursor: auto;
 }
 
-.planning > tbody > tr > .seance {
+.planning > tbody > tr > .creneau {
     cursor: pointer;
 }
 
-.planning > tbody > tr > .seance:hover {
+.planning > tbody > tr > .creneau:hover {
     font-weight: bold;
 }
 
-.planning > tbody > tr > .seance:active {
+.planning > tbody > tr > .creneau:active {
     opacity: 0.85;
 }

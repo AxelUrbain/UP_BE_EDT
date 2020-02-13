@@ -22,8 +22,7 @@ class CoursRepository extends ServiceEntityRepository
     public function findByWeek($semaine) {
         $minCreneau = (($semaine - 1) * 20) + 1;
         $maxCreneau = (($semaine - 1) * 20) + 20;
-        dump($minCreneau);
-        dump($maxCreneau);
+
         $qb = $this->createQueryBuilder('c')
             ->where('c.creneau >= :minCreneau')
             ->setParameter('minCreneau', $minCreneau)
