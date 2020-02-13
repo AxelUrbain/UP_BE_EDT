@@ -26,6 +26,12 @@ class HeuresSup
      */
     private $tauxHoraire;
 
+    public function __construct()
+    {
+        $date = new \DateTime();
+        $this->setAnneePaye((int) $date->format('Y'));
+    }
+
     public function getId(): ?int
     {
         return $this->id;

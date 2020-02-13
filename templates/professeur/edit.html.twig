@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Professeur{% endblock %}
+
+{% block body %}
+    <div class="container my-5">
+        <div class="card p-5">
+            <div class="card-body">
+                <h1 class="card-title text-center">Modifier professeur</h1>
+            </div>
+            <div class="row">
+                <div class="col"></div>
+                <div class="col">
+                    {{ include('professeur/_edit_form.html.twig', {'button_label': 'Update'}) }}
+                </div>
+                <div class="col"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

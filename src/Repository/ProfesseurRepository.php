@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Professeur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * @method Professeur|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,6 +20,33 @@ class ProfesseurRepository extends ServiceEntityRepository
         parent::__construct($registry, Professeur::class);
     }
 
+    public function findAllWithPaging(int $currentPage, int $nbPerPage)
+    {
+        $query = $this->createQueryBuilder('p')
+            ->leftJoin('p.statut', 's')
+            ->leftJoin('p.RFID', 'r')
+            ->addSelect('s')
+            ->addSelect('r')
+            ->setFirstResult(($currentPage - 1) * $nbPerPage)
+            ->setMaxResults($nbPerPage);
+
+        return new Paginator($query);
+    }
+
+    public function findProfessorById(int $id)
+    {
+        $query = $this->createQueryBuilder('p')
+            ->where('p.id = :id')
+            ->setParameter('id', $id)
+            ->join('p.statut', 's')
+            ->join('p.RFID', 'r')
+            ->join('p.specialite', 'spe')
+            ->addSelect('s')
+            ->addSelect('r')
+            ->addSelect('spe');
+
+        return $query->getQuery()->getSingleResult();
+    }
 
     public function findByRandomValue()
     {

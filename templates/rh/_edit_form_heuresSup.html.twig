@@ -1,0 +1,12 @@
+{{ form_start(form) }}
+<div class="container">
+    {{ form_row(form.anneePaye , {'label':'Année'}) }}
+    {{ form_row(form.tauxHoraire, {'label':'Taux horaire'}) }}
+</div>
+<div class="row">
+    <div class="col-12 text-center">
+        <a class="btn btn-outline-info mr-4" href="{{ path('rh_index') }}">retour</a>
+        <button class="btn btn-outline-primary">Modifier</button>
+    </div>
+</div>
+{{ form_end(form) }}

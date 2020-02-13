@@ -122,6 +122,4 @@ class Specialite
     {
         return $this->getSpecialite();
     }
-
-
 }
