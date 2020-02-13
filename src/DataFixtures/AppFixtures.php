@@ -109,6 +109,7 @@ class AppFixtures extends Fixture
 
         // RFIDs ADMIN
         $admin = new RFID();
+        $admin->setUsername('admin');
         $admin->setNom('admin');
         $admin->setPrenom('admin');
         $admin->setMotDePasse('admin');
@@ -118,6 +119,7 @@ class AppFixtures extends Fixture
 
         // RFIDs Scolarité
         $sco = new RFID();
+        $sco->setUsername('sco');
         $sco->setNom('sco');
         $sco->setPrenom('sco');
         $sco->setMotDePasse('admin');
@@ -127,6 +129,7 @@ class AppFixtures extends Fixture
 
         // RFIDs RH
         $sec = new RFID();
+        $sec->setUsername('RH');
         $sec->setNom('RH');
         $sec->setPrenom('RH');
         $sec->setMotDePasse('admin');
@@ -174,6 +177,7 @@ class AppFixtures extends Fixture
         // PROFs
         for ($i = 0; $i < 60; $i++) {
             $rfid = new RFID();
+            $rfid->setUsername($faker->userName);
             $rfid->setNom($faker->lastName);
             $rfid->setPrenom($faker->firstName);
             $rfid->setMotDePasse('admin');
@@ -190,6 +194,7 @@ class AppFixtures extends Fixture
         // ETUDIANTS
         for ($i = 0; $i < 1500; $i++) {
             $rfid = new RFID();
+            $rfid->setUsername($faker->userName);
             $rfid->setNom($faker->lastName);
             $rfid->setPrenom($faker->firstName);
             $rfid->setMotDePasse('admin');

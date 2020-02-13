@@ -5,11 +5,13 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RFIDRepository")
  */
-class RFID
+class RFID implements UserInterface
 {
     /**
      * @ORM\Id()
@@ -47,6 +49,12 @@ class RFID
      * @ORM\OneToOne(targetEntity="App\Entity\Etudiant", mappedBy="RFID", cascade={"persist", "remove"})
      */
     private $etudiant;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\Unique
+     */
+    private $username;
 
     public function __construct()
     {
@@ -142,6 +150,45 @@ class RFID
         if ($etudiant->getRFID() !== $newRFID) {
             $etudiant->setRFID($newRFID);
         }
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPassword()
+    {
+        return (string) $this->getMotDePasse();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getSalt()
+    {
+        // TODO: Implement getSalt() method.
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getUsername()
+    {
+        return (string) $this->username;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
         return $this;
     }
 }
