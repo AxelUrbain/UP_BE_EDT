@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\Professeur;
 use App\Form\ProfesseurType;
 use App\Repository\ProfesseurRepository;
+use http\Exception\UnexpectedValueException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -70,10 +72,10 @@ class ProfesseurController extends AbstractController
      */
     public function edit(int $id, Request $request, ProfesseurRepository $professeurRepository): Response
     {
-        $newProfesseur = new Professeur();
+        if ($id < 1) throw new Exception('Trop petit casse toi');
         $professeur = $professeurRepository->findProfessorById($id);
 
-        $form = $this->createForm(ProfesseurType::class, $newProfesseur);
+        $form = $this->createForm(ProfesseurType::class, $professeur);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

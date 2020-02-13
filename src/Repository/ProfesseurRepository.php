@@ -38,12 +38,14 @@ class ProfesseurRepository extends ServiceEntityRepository
         $query = $this->createQueryBuilder('p')
             ->where('p.id = :id')
             ->setParameter('id', $id)
-            ->leftJoin('p.statut', 's')
-            ->leftJoin('p.RFID', 'r')
+            ->join('p.statut', 's')
+            ->join('p.RFID', 'r')
+            ->join('p.specialite', 'spe')
             ->addSelect('s')
-            ->addSelect('r');
+            ->addSelect('r')
+            ->addSelect('spe');
 
-        return $query;
+        return $query->getQuery()->getSingleResult();
     }
 
     public function findByRandomValue()
