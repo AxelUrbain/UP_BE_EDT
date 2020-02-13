@@ -120,7 +120,14 @@ class Specialite
 
     public function __toString()
     {
+<<<<<<< HEAD
         // TODO: Implement __toString() method.
         return $this->getSpecialite();
     }
+=======
+        return $this->getSpecialite();
+    }
+
+
+>>>>>>> testBDD
 }
