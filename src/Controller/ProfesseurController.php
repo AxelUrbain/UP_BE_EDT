@@ -46,30 +46,7 @@ class ProfesseurController extends AbstractController
             'page' => $page
         ]);
     }
-
-    /**
-     * @Route("/new", name="professeur_new", methods={"GET","POST"})
-     */
-    public function new(Request $request): Response
-    {
-        $professeur = new Professeur();
-        $form = $this->createForm(ProfesseurType::class, $professeur);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($professeur);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('professeur_index');
-        }
-
-        return $this->render('professeur/new.html.twig', [
-            'professeur' => $professeur,
-            'form' => $form->createView(),
-        ]);
-    }
-
+    
     /**
      * @Route("/{id}", name="professeur_show", methods={"GET"})
      */
