@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Salle;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * @method Salle|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +18,17 @@ class SalleRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Salle::class);
+    }
+
+    public function findAllWithPaging(int $currentPage, int $nbPerPage)
+    {
+        $query = $this->createQueryBuilder('s')
+            ->leftJoin('s.equipement', 'e')
+            ->addSelect('e')
+            ->setFirstResult(($currentPage - 1) * $nbPerPage)
+            ->setMaxResults($nbPerPage);
+
+        return new Paginator($query);
     }
 
     // /**
