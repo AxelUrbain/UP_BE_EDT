@@ -24,11 +24,6 @@ class Etudiant
     private $RFID;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Promotion", mappedBy="etudiant")
-     */
-    private $promotions;
-
-    /**
      * @ORM\ManyToMany(targetEntity="App\Entity\UE", inversedBy="etudiants")
      */
     private $UE;
@@ -38,9 +33,13 @@ class Etudiant
      */
     private $cours;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Promotion", inversedBy="etudiants")
+     */
+    private $promotion;
+
     public function __construct()
     {
-        $this->promotions = new ArrayCollection();
         $this->UE = new ArrayCollection();
         $this->cours = new ArrayCollection();
     }
@@ -58,34 +57,6 @@ class Etudiant
     public function setRFID(?RFID $RFID): self
     {
         $this->RFID = $RFID;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Promotion[]
-     */
-    public function getPromotions(): Collection
-    {
-        return $this->promotions;
-    }
-
-    public function addPromotion(Promotion $promotion): self
-    {
-        if (!$this->promotions->contains($promotion)) {
-            $this->promotions[] = $promotion;
-            $promotion->addEtudiant($this);
-        }
-
-        return $this;
-    }
-
-    public function removePromotion(Promotion $promotion): self
-    {
-        if ($this->promotions->contains($promotion)) {
-            $this->promotions->removeElement($promotion);
-            $promotion->removeEtudiant($this);
-        }
 
         return $this;
     }
@@ -138,6 +109,18 @@ class Etudiant
         if ($this->cours->contains($cour)) {
             $this->cours->removeElement($cour);
         }
+
+        return $this;
+    }
+
+    public function getPromotion(): ?Promotion
+    {
+        return $this->promotion;
+    }
+
+    public function setPromotion(?Promotion $promotion): self
+    {
+        $this->promotion = $promotion;
 
         return $this;
     }

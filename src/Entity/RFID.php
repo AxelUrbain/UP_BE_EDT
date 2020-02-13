@@ -5,11 +5,13 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RFIDRepository")
  */
-class RFID
+class RFID implements UserInterface
 {
     /**
      * @ORM\Id()
@@ -29,14 +31,14 @@ class RFID
     private $prenom;
 
     /**
+     * @ORM\Column(type="json")
+     */
+    private $roles = [];
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $motDePasse;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Fonction", inversedBy="RFIDs")
-     */
-    private $fonction;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Professeur", mappedBy="RFID", cascade={"persist", "remove"})
@@ -48,6 +50,12 @@ class RFID
      */
     private $etudiant;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\Unique
+     */
+    private $username;
+
     public function __construct()
     {
         $this->fonction = new ArrayCollection();
@@ -56,6 +64,22 @@ class RFID
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+        return array_unique($roles);
+    }
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+        return $this;
     }
 
     public function getNom(): ?string
@@ -94,32 +118,6 @@ class RFID
         return $this;
     }
 
-    /**
-     * @return Collection|Fonction[]
-     */
-    public function getFonction(): Collection
-    {
-        return $this->fonction;
-    }
-
-    public function addFonction(Fonction $fonction): self
-    {
-        if (!$this->fonction->contains($fonction)) {
-            $this->fonction[] = $fonction;
-        }
-
-        return $this;
-    }
-
-    public function removeFonction(Fonction $fonction): self
-    {
-        if ($this->fonction->contains($fonction)) {
-            $this->fonction->removeElement($fonction);
-        }
-
-        return $this;
-    }
-
     public function getProfesseur(): ?Professeur
     {
         return $this->professeur;
@@ -152,6 +150,44 @@ class RFID
         if ($etudiant->getRFID() !== $newRFID) {
             $etudiant->setRFID($newRFID);
         }
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPassword()
+    {
+        return (string) $this->getMotDePasse();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getSalt()
+    {
+        // TODO: Implement getSalt() method.
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getUsername()
+    {
+        return (string) $this->username;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
 
         return $this;
     }

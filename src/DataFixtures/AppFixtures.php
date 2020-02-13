@@ -3,15 +3,20 @@
 namespace App\DataFixtures;
 
 use App\Entity\Annee;
+use App\Entity\Cours;
 use App\Entity\Equipement;
+use App\Entity\Etudiant;
 use App\Entity\Fonction;
+use App\Entity\Formation;
 use App\Entity\Professeur;
+use App\Entity\Promotion;
 use App\Entity\RFID;
 use App\Entity\Salle;
 use App\Entity\Specialite;
 use App\Entity\Statut;
 use App\Entity\UE;
 use App\Repository\FonctionRepository;
+use App\Repository\ProfesseurRepository;
 use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -81,11 +86,11 @@ class AppFixtures extends Fixture
         // SALLES
         for ($i = 0; $i < 150; $i++) {
             $salle = new Salle();
-            $salle->setNom('ha');
-            $random = rand(0,100);
+            $salle->setNom(300 + $i);
+            $random = rand(0, 100);
             if ($random <= 12) {
-               $equipement = $this->em->getRepository(Equipement::class)->findOneBy(['nomEquipement' => 'télévision']);
-               $salle->addEquipement($equipement);
+                $equipement = $this->em->getRepository(Equipement::class)->findOneBy(['nomEquipement' => 'télévision']);
+                $salle->addEquipement($equipement);
             }
             if ($random > 12 && $random <= 33) {
                 $equipement = $this->em->getRepository(Equipement::class)->findOneBy(['nomEquipement' => 'retroprojecteur']);
@@ -104,42 +109,33 @@ class AppFixtures extends Fixture
         }
         $manager->flush();
 
-        // FONCTIONS(ROLES)
-        $foncs = ['étudiant', 'professeur', 'administrateur', 'scolarité', 'secrétariat'];
-        for ($i = 0; $i < sizeof($foncs); $i++) {
-            $fonctions = new Fonction();
-            $fonctions->setNomFonction($foncs[$i]);
-            $manager->persist($fonctions);
-        }
-        $manager->flush();
-
         // RFIDs ADMIN
         $admin = new RFID();
+        $admin->setUsername('admin');
         $admin->setNom('admin');
         $admin->setPrenom('admin');
         $admin->setMotDePasse('admin');
-        $fonction = $this->em->getRepository(Fonction::class)->findOneBy(['nomFonction' => 'administrateur']);
-        $admin->addFonction($fonction);
+        $admin->setRoles( ['ROLE_ADMIN']);
         $manager->persist($admin);
         $manager->flush();
 
         // RFIDs Scolarité
         $sco = new RFID();
+        $sco->setUsername('sco');
         $sco->setNom('sco');
         $sco->setPrenom('sco');
         $sco->setMotDePasse('admin');
-        $fonction2 = $this->em->getRepository(Fonction::class)->findOneBy(['nomFonction' => 'scolarité']);
-        $sco->addFonction($fonction2);
+        $sco->setRoles(['ROLE_SECRETARIAT']);
         $manager->persist($sco);
         $manager->flush();
 
-        // RFIDs Sécrétariat
+        // RFIDs RH
         $sec = new RFID();
-        $sec->setNom('sec');
-        $sec->setPrenom('sec');
+        $sec->setUsername('RH');
+        $sec->setNom('RH');
+        $sec->setPrenom('RH');
         $sec->setMotDePasse('admin');
-        $fonction3 = $this->em->getRepository(Fonction::class)->findOneBy(['nomFonction' => 'secrétariat']);
-        $sec->addFonction($fonction3);
+        $sec->setRoles(['ROLE_RH']);
         $manager->persist($sec);
         $manager->flush();
 
@@ -183,10 +179,9 @@ class AppFixtures extends Fixture
         // PROFs
         for ($i = 0; $i < 60; $i++) {
             $rfid = new RFID();
+            $rfid->setUsername($faker->userName);
             $rfid->setNom($faker->lastName);
             $rfid->setPrenom($faker->firstName);
-            $fonction4 = $this->em->getRepository(Fonction::class)->findOneBy(['nomFonction' => 'professeur']);
-            $rfid->addFonction($fonction4);
             $rfid->setMotDePasse('admin');
             $manager->persist($rfid);
 
@@ -201,29 +196,87 @@ class AppFixtures extends Fixture
         // ETUDIANTS
         for ($i = 0; $i < 1500; $i++) {
             $rfid = new RFID();
+            $rfid->setUsername($faker->userName);
             $rfid->setNom($faker->lastName);
             $rfid->setPrenom($faker->firstName);
             $rfid->setMotDePasse('admin');
-            $fonction5 = $this->em->getRepository(Fonction::class)->findOneBy(['nomFonction' => 'étudiant']);
-            $rfid->addFonction($fonction5);
             $manager->persist($rfid);
+            $etudiant = new Etudiant();
+            $etudiant->setRFID($rfid);
+            $manager->persist($etudiant);
         }
         $manager->flush();
 
         // UEs
         $spes = ['biophysique', 'génie moléculaire', 'physique quantique', 'sociologie', 'psychologie', 'Lettres modernes', 'Latin', 'Grec', 'géologie', 'droit'];
         $array = [];
-        for ($i = 0 ; $i < sizeof($spes); $i++) {
+        for ($i = 0; $i < sizeof($spes); $i++) {
             $array[$i] = $this->em->getRepository(Specialite::class)->findOneBy(['specialite' => $spes[$i]]);
         };
 
         for ($i = 0; $i < 1500; $i++) {
             $ue = new UE();
-            $ue->setNomUE($faker->word . ' ' . $faker->word . ' ' . $faker->word );
+            $ue->setNomUE($faker->word . ' ' . $faker->word . ' ' . $faker->word);
             $ue->setCouleur($faker->colorName);
-            $ue->setVolumeHoraire($faker->numberBetween(50,150));
+            $ue->setVolumeHoraire($faker->numberBetween(50, 150));
             $ue->setSpecialite($array[rand(0, sizeof($array) - 1)]);
             $manager->persist($ue);
+        }
+        $manager->flush();
+
+        // COURS
+        for($i = 0; $i < 3000; $i++) {
+            $cours = new Cours();
+            $cours->setCreneau(rand(1,600));
+
+            $random = rand(0,100);
+            if ($random > 50) $cours->setIsValide(true);
+            else $cours->setIsValide(false);
+
+            //Ajout cours
+            $spe = $this->em->getRepository(Specialite::class)->findOneBy(['specialite' => $spes[rand(0, sizeof($spes) - 1)]]);
+            $ue = $this->em->getRepository(UE::class)->findOneBy(['specialite' => $spe->getId()]);
+            $cours->setUE($ue);
+
+            //Ajout salle
+            $salle = $this->em->getRepository(Salle::class)->findOneBy(['nom' => rand(300, 450)]);
+            $cours->setSalle($salle);
+
+            //Ajout prof
+            $prof = $this->em->getRepository(Professeur::class)->findByRandomValue();
+            $cours->setProfesseur($prof);
+
+            $manager->persist($cours);
+        }
+        $manager->flush();
+
+        $diplomes = ['Licence', 'Master', 'Licence professionelle', 'Doctorat'];
+
+        // Formation
+        for ($i = 0; $i < 50; $i++) {
+            $formation = new Formation();
+            $dip = $diplomes[rand(0, sizeof($diplomes) - 1)];
+            $formation->setDiplome($dip);
+            switch ($dip) {
+                case 'Licence':
+                    $formation->setNbAnnee(3);
+                    break;
+                case 'Master':
+                    $formation->setNbAnnee(2);
+                    break;
+                case 'Licence professionelle':
+                    $formation->setNbAnnee(1);
+                    break;
+                case 'Doctorat':
+                    $formation->setNbAnnee(2);
+                    break;
+            }
+            $prof = $this->em->getRepository(Professeur::class)->findByRandomValue();
+            $rfid = $this->em->getRepository(RFID::class)->findOneBy(['id' => $prof->getRFID()]);
+            $rfid->setRoles(['ROLE_RESPONSABLE']);
+            $formation->setProfesseurResponsable($prof);
+            $manager->persist($rfid);
+            $manager->persist($formation);
         }
         $manager->flush();
     }

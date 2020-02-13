@@ -1,0 +1,25 @@
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        {% for i in 1..nbPage %}
+            {% if loop.first %}
+                <li class="page-item {% if page == 1 %}disabled{% endif %}">
+                    <a class="page-link" href="{{ path(currentPath, {'page': page - 1 })}}">
+                        Précédent
+                    </a>
+                </li>
+            {% endif %}
+
+            <li class="page-item {% if i == page %}disabled{% endif %}">
+                <a class="page-link" href="{{ path(currentPath, {'page': i })}}">{{ i }}</a>
+            </li>
+
+            {% if loop.last %}
+                <li class="page-item {% if nbPage == page %}disabled{% endif %}">
+                    <a class="page-link" href="{{ path(currentPath, {'page': page + 1 })}}">
+                        Suivant
+                    </a>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</nav>

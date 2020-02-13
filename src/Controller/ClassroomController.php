@@ -16,9 +16,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class ClassroomController extends AbstractController
 {
     /**
-     * @Route("/", name="classroom_index", methods={"GET","POST"})
+     * @Route("/{page}", defaults={"page": 1}, name="classroom_index", methods={"GET","POST"})
      */
-    public function index(SalleRepository $classroomRepository, Request $request): Response
+    public function index(int $page, SalleRepository $classroomRepository, Request $request): Response
     {
         $classroom = new Salle();
         $form = $this->createForm(ClassroomType::class, $classroom);
@@ -32,8 +32,14 @@ class ClassroomController extends AbstractController
             return $this->redirectToRoute('classroom_index');
         }
 
+        $classrooms = $classroomRepository->findAllWithPaging($page, 10);
+
+        $nbPage = intval(ceil(count($classrooms) / 10));
+
         return $this->render('classroom/index.html.twig', [
-            'classrooms' => $classroomRepository->findAll(),
+            'page' => $page,
+            'nbPage' => $nbPage,
+            'classrooms' => $classrooms,
             'classroom' => $classroom,
             'form' => $form->createView()
         ]);

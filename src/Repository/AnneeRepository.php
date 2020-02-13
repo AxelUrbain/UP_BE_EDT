@@ -19,6 +19,22 @@ class AnneeRepository extends ServiceEntityRepository
         parent::__construct($registry, Annee::class);
     }
 
+    public function findByRandomValue()
+    {
+        $count = $this->createQueryBuilder('u')
+            ->select('COUNT(u)')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+
+        return $this->createQueryBuilder('u')
+            ->setFirstResult(rand(0, $count - 1))
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getSingleResult()
+            ;
+    }
+
     // /**
     //  * @return Annee[] Returns an array of Annee objects
     //  */
