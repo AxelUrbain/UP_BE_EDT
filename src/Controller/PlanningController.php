@@ -27,6 +27,7 @@ class PlanningController extends AbstractController
 
         $seances = [
             [
+                "id" => 1,
                 "creneau" => 1,
                 "ue" => "Algorithmie appliquée",
                 "couleur" => "#72a4dd",
@@ -34,6 +35,7 @@ class PlanningController extends AbstractController
                 "salle" => "A13-01128"
             ],
             [
+                "id" => 3,
                 "creneau" => 3,
                 "ue" => "Algorithmie appliquée",
                 "couleur" => "#72a4dd",
@@ -41,6 +43,7 @@ class PlanningController extends AbstractController
                 "salle" => "A13-01128"
             ],
             [
+                "id" => 2,
                 "creneau" => 9,
                 "ue" => "Algorithmie appliquée",
                 "couleur" => "#72a4dd",
@@ -48,6 +51,7 @@ class PlanningController extends AbstractController
                 "salle" => "A13-01128"
             ],
             [
+                "id" => 26,
                 "creneau" => 10,
                 "ue" => "Algorithmie appliquée",
                 "couleur" => "#72a4dd",
@@ -55,6 +59,7 @@ class PlanningController extends AbstractController
                 "salle" => "A13-01128"
             ],
             [
+                "id" => 48,
                 "creneau" => 10,
                 "ue" => "Algorithmie appliquée",
                 "couleur" => "#72a4dd",
@@ -62,6 +67,7 @@ class PlanningController extends AbstractController
                 "salle" => "A13-01128"
             ],
             [
+                "id" => 49,
                 "creneau" => 19,
                 "ue" => "Test",
                 "couleur" => "#ef8d31",
@@ -83,7 +89,7 @@ class PlanningController extends AbstractController
             for($jour = 0 ; $jour < 5 ; $jour++)  {
                 if(isset($creneaux[($jour * 4) + $heure])) {
                     $planning[$heure] .= <<<EOT
-<td style="background-color:{$creneaux[($jour * 4) + $heure]["couleur"]}">
+<td class="seance" style="background-color:{$creneaux[($jour * 4) + $heure]["couleur"]}" data-id="{$creneaux[($jour * 4) + $heure]["id"]}">
     <div class="course">
         <ul>
             <li>{$creneaux[($jour * 4) + $heure]["ue"]}</li>
@@ -118,7 +124,7 @@ EOT;
     }
 
     /**
-     * @Route("/ajouter", name="ajouter_seance", methods={"GET"})
+     * @Route("/ajouter", name="ajouter_seance", methods={"GET","POST"})
      */
     public function ajouterSeance(Request $request) {
         $cours = new Cours();
@@ -128,8 +134,8 @@ EOT;
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-
-            // TODO  traitement des données
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($cours);
             return $this->redirectToRoute('afficher_planning');
         }
 
@@ -141,15 +147,25 @@ EOT;
     /**
      * @Route("/editer/{id}",
      *     name="editer_seance",
-     *     methods={"GET"},
+     *     methods={"GET","POST"},
      *     requirements={"id": "\d+"}
      * )
      */
-    public function editerSeance() {
-        $cours = new Cours();
+    public function editerSeance(Request $request, Cours $cours, $id = -1) {
+
+        if( $id < 0) {
+            return $this->redirectToRoute('afficher_planning');
+        }
 
         $form = $this->createForm(CoursType::class, $cours);
-        $form->add('send', SubmitType::class, ['label' => 'Ajouter']);
+        $form->add('send', SubmitType::class, ['label' => 'Éditer']);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('afficher_planning');
+        }
 
         return $this->render('planning/_form.html.twig', [
             'form' => $form->createView()

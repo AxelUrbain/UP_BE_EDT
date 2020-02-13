@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <table class="planning h-75 mx-auto w-100 text-center mt-5">
+                <table class="planning mx-auto w-100 text-center mt-5">
                     <thead>
                     <tr>
                         <th colspan="6">Emploi du temps</th>
@@ -53,6 +53,7 @@
                 <div class="text-right mt-3">
                     <button type="button" class="btn btn-primary" id="ajouter">Ajouter</button>
                 </div>
+                <div id="modal"></div>
             </div>
         </div>
     </div>
@@ -65,15 +66,17 @@
     $(document).ready( function() {
         $('#ajouter').click( function() {
             $.get("{{ path('ajouter_seance') }}", function(data) {
-                $('.container')[0].append($(data)[0]);
-                $('#modal').modal('show');
+                $('#modal').html($(data)[0]);
+                $('#modal > .modal').modal('show');
             });
         });
 
-        $('.').click( function() {
-            $.get("{{ path('ajouter_seance') }}", function(data) {
-                $('.container')[0].append($(data)[0]);
-                $('#modal').modal('show');
+        $('.seance').click( function() {
+            var id = $(this).data("id");
+            var url = "{{ path('editer_seance') }}/" + $(this).data("id");
+            $.get(url , function(data) {
+                $('#modal').html($(data)[0]);
+                $('#modal > .modal').modal('show');
             });
         });
     });
