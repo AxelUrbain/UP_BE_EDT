@@ -34,7 +34,7 @@ class Statut
     private $coefficient;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Professeur", mappedBy="statut")
+     * @ORM\OneToMany(targetEntity="App\Entity\Professeur", mappedBy="statut", cascade={"persist", "remove"})
      */
     private $professeurs;
 
