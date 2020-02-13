@@ -202,6 +202,6 @@ class UE
 
     public function __toString()
     {
-        return $this->nomUE;
+        return $this->getNomUE();
     }
 }

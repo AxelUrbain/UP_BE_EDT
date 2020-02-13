@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20200212112944 extends AbstractMigration
+final class Version20200213075452 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -66,7 +66,7 @@ final class Version20200212112944 extends AbstractMigration
         $this->addSql('CREATE TABLE promotion (id NUMBER(10) NOT NULL, formation_id NUMBER(10) DEFAULT NULL NULL, annee_id NUMBER(10) DEFAULT NULL NULL, annee_formation NUMBER(10) DEFAULT NULL NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_C11D7DD15200282E ON promotion (formation_id)');
         $this->addSql('CREATE INDEX IDX_C11D7DD1543EC5F0 ON promotion (annee_id)');
-        $this->addSql('CREATE TABLE rfid (id NUMBER(10) NOT NULL, nom VARCHAR2(255) DEFAULT NULL NULL, prenom VARCHAR2(255) DEFAULT NULL NULL, roles CLOB NOT NULL, mot_de_passe VARCHAR2(255) DEFAULT NULL NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE rfid (id NUMBER(10) NOT NULL, nom VARCHAR2(255) DEFAULT NULL NULL, prenom VARCHAR2(255) DEFAULT NULL NULL, roles CLOB NOT NULL, mot_de_passe VARCHAR2(255) DEFAULT NULL NULL, username VARCHAR2(255) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('COMMENT ON COLUMN rfid.roles IS \'(DC2Type:json)\'');
         $this->addSql('CREATE TABLE salle (id NUMBER(10) NOT NULL, nom VARCHAR2(255) DEFAULT NULL NULL, capacite NUMBER(10) DEFAULT NULL NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE salle_equipement (salle_id NUMBER(10) NOT NULL, equipement_id NUMBER(10) NOT NULL, PRIMARY KEY(salle_id, equipement_id))');

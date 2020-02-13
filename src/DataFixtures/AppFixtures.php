@@ -214,9 +214,9 @@ class AppFixtures extends Fixture
             $array[$i] = $this->em->getRepository(Specialite::class)->findOneBy(['specialite' => $spes[$i]]);
         };
 
-        for ($i = 0; $i < 1500; $i++) {
+        for ($i = 0; $i < 150; $i++) {
             $ue = new UE();
-            $ue->setNomUE($faker->word . ' ' . $faker->word . ' ' . $faker->word);
+            $ue->setNomUE($array[rand(0, sizeof($array) - 1)]->getSpecialite() . ' UE-' . $i);
             $ue->setCouleur($faker->colorName);
             $ue->setVolumeHoraire($faker->numberBetween(50, 150));
             $ue->setSpecialite($array[rand(0, sizeof($array) - 1)]);
@@ -225,8 +225,9 @@ class AppFixtures extends Fixture
         $manager->flush();
 
         // COURS
-        $creneau = 1;
-        for($i = 0; $i < 3000; $i++) {
+        for($i = 0; $i < 300; $i++) {
+            $cours = new Cours();
+            $cours->setCreneau(rand(1,600));
 
             if(rand(0,3) <= 2) {
                 $cours = new Cours();
