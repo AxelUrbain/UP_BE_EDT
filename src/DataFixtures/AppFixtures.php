@@ -225,28 +225,34 @@ class AppFixtures extends Fixture
         $manager->flush();
 
         // COURS
+        $creneau = 1;
         for($i = 0; $i < 3000; $i++) {
-            $cours = new Cours();
-            $cours->setCreneau(rand(1,600));
 
-            $random = rand(0,100);
-            if ($random > 50) $cours->setIsValide(true);
-            else $cours->setIsValide(false);
+            if(rand(0,3) <= 2) {
+                $cours = new Cours();
+                $cours->setCreneau($creneau);
 
-            //Ajout cours
-            $spe = $this->em->getRepository(Specialite::class)->findOneBy(['specialite' => $spes[rand(0, sizeof($spes) - 1)]]);
-            $ue = $this->em->getRepository(UE::class)->findOneBy(['specialite' => $spe->getId()]);
-            $cours->setUE($ue);
+                $random = rand(0,100);
+                if ($random > 50) $cours->setIsValide(true);
+                else $cours->setIsValide(false);
 
-            //Ajout salle
-            $salle = $this->em->getRepository(Salle::class)->findOneBy(['nom' => rand(300, 450)]);
-            $cours->setSalle($salle);
+                //Ajout cours
+                $spe = $this->em->getRepository(Specialite::class)->findOneBy(['specialite' => $spes[rand(0, sizeof($spes) - 1)]]);
+                $ue = $this->em->getRepository(UE::class)->findOneBy(['specialite' => $spe->getId()]);
+                $cours->setUE($ue);
 
-            //Ajout prof
-            $prof = $this->em->getRepository(Professeur::class)->findByRandomValue();
-            $cours->setProfesseur($prof);
+                //Ajout salle
+                $salle = $this->em->getRepository(Salle::class)->findOneBy(['nom' => rand(300, 449)]);
+                $cours->setSalle($salle);
 
-            $manager->persist($cours);
+                //Ajout prof
+                $prof = $this->em->getRepository(Professeur::class)->findByRandomValue();
+                $cours->setProfesseur($prof);
+
+                $manager->persist($cours);
+            }
+
+            $creneau++;
         }
         $manager->flush();
 

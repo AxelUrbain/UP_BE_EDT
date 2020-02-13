@@ -19,6 +19,30 @@ class CoursRepository extends ServiceEntityRepository
         parent::__construct($registry, Cours::class);
     }
 
+    public function findByWeek($semaine) {
+        $minCreneau = (($semaine - 1) * 20) + 1;
+        $maxCreneau = (($semaine - 1) * 20) + 20;
+        dump($minCreneau);
+        dump($maxCreneau);
+        $qb = $this->createQueryBuilder('c')
+            ->where('c.creneau >= :minCreneau')
+            ->setParameter('minCreneau', $minCreneau)
+            ->andWhere('c.creneau <= :maxCreneau')
+            ->setParameter('maxCreneau', $maxCreneau)
+            ->leftJoin('c.UE', 'u')
+            ->addSelect('u.couleur as u_couleur')
+            ->addSelect('u.nomUE as u_nomUE')
+            ->leftJoin('c.professeur', 'p')
+            ->leftJoin('p.RFID', 'r')
+            ->addSelect('CONCAT(r.nom, \' \', r.prenom) as p_nom')
+            ->leftJoin('c.salle', 's')
+            ->addSelect('s.nom as s_nom')
+            ->orderBy('c.creneau', 'ASC')
+        ;
+
+        return $qb->getQuery()->getScalarResult();
+    }
+
     // /**
     //  * @return Cours[] Returns an array of Cours objects
     //  */

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Cours;
 use App\Form\CoursType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -21,67 +22,20 @@ class PlanningController extends AbstractController
      *     requirements={"semaine": "\d+"}
      * )
      */
-    public function afficherPlanning($semaine = 1)
+    public function afficherPlanning($semaine = 1, EntityManagerInterface $em)
     {
         // une semaine va du créneau ($semaine - 1 * 20) + 1 à ($semaine - 1 * 20) + 20 ($semaine 1 : 1-20 $semaine 3 : 41-60
 
-        $seances = [
-            [
-                "id" => 1,
-                "creneau" => 1,
-                "ue" => "Algorithmie appliquée",
-                "couleur" => "#72a4dd",
-                "professeur" => "Marcel Pagnol",
-                "salle" => "A13-01128"
-            ],
-            [
-                "id" => 3,
-                "creneau" => 3,
-                "ue" => "Algorithmie appliquée",
-                "couleur" => "#72a4dd",
-                "professeur" => "Marcel Pagnol",
-                "salle" => "A13-01128"
-            ],
-            [
-                "id" => 2,
-                "creneau" => 9,
-                "ue" => "Algorithmie appliquée",
-                "couleur" => "#72a4dd",
-                "professeur" => "Marcel Pagnol",
-                "salle" => "A13-01128"
-            ],
-            [
-                "id" => 26,
-                "creneau" => 10,
-                "ue" => "Algorithmie appliquée",
-                "couleur" => "#72a4dd",
-                "professeur" => "Marcel Pagnol",
-                "salle" => "A13-01128"
-            ],
-            [
-                "id" => 48,
-                "creneau" => 10,
-                "ue" => "Algorithmie appliquée",
-                "couleur" => "#72a4dd",
-                "professeur" => "Marcel Pagnol",
-                "salle" => "A13-01128"
-            ],
-            [
-                "id" => 49,
-                "creneau" => 19,
-                "ue" => "Test",
-                "couleur" => "#ef8d31",
-                "professeur" => "test",
-                "salle" => "test"
-            ]
-        ];
+        $seances = $em->getRepository('App\Entity\Cours')->findByWeek($semaine);
 
         $creneaux = array();
 
         foreach($seances as $seance) {
-            $creneaux[(($seance["creneau"] - 1) % 20)] = $seance;
+            $creneaux[(($seance["c_creneau"] - 1) % 20)] = $seance;
         }
         $planning = array();
+
+        dump($creneaux);
 
         for($heure = 0 ; $heure < 4 ; $heure++) {
             $planning[$heure] = "";
@@ -89,12 +43,12 @@ class PlanningController extends AbstractController
             for($jour = 0 ; $jour < 5 ; $jour++)  {
                 if(isset($creneaux[($jour * 4) + $heure])) {
                     $planning[$heure] .= <<<EOT
-<td class="seance" style="background-color:{$creneaux[($jour * 4) + $heure]["couleur"]}" data-id="{$creneaux[($jour * 4) + $heure]["id"]}">
+<td class="seance" style="background-color:{$creneaux[($jour * 4) + $heure]["u_couleur"]}" data-id="{$creneaux[($jour * 4) + $heure]["c_id"]}">
     <div class="course">
         <ul>
-            <li>{$creneaux[($jour * 4) + $heure]["ue"]}</li>
-            <li>{$creneaux[($jour * 4) + $heure]["professeur"]}</li>
-            <li>{$creneaux[($jour * 4) + $heure]["salle"]}</li>
+            <li>{$creneaux[($jour * 4) + $heure]["u_nomUE"]}</li>
+            <li>{$creneaux[($jour * 4) + $heure]["p_nom"]}</li>
+            <li>{$creneaux[($jour * 4) + $heure]["s_nom"]}</li>
         </ul>
     </div>
 </td>
