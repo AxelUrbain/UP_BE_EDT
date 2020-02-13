@@ -123,6 +123,4 @@ class Specialite
         // TODO: Implement __toString() method.
         return $this->getSpecialite();
     }
-
-
 }
