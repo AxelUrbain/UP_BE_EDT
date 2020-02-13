@@ -22,19 +22,16 @@ class ProfesseurType extends AbstractType
         $builder
             ->add('statut', EntityType::class, [
                 'class' => Statut::class,
-                'label' => 'Statut',
-                'multiple' => false
+                'label' => 'Statut'
             ])
             ->add('RFID', EntityType::class, [
                 'class' =>  RFID::class,
                 'label' => 'RFID',
-                'multiple' => false,
-                'disabled' => true
+                'multiple' => false
             ])
             ->add('specialite', EntityType::class, [
                 'class' => Specialite::class,
-                'label' => 'Specialité',
-                'multiple' => false
+                'label' => 'Specialité'
             ])
         ;
     }

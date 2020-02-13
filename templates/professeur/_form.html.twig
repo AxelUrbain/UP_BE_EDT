@@ -1,9 +1,3 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
-
-
 <div class="modal fade" id="newModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -16,8 +10,9 @@
             <div class="modal-body">
                 {{ form_start(form) }}
                 <div class="container">
-                    {{ form_row(form.statut , {'label':'Nom de la salle'}) }}
-                    {{ form_row(form.specialite, {'label':'Capacité'}) }}
+                    {{form_row(form.RFID)}}
+                    {{form_row(form.statut)}}
+                    {{form_row(form.specialite)}}
                 </div>
                 <button class="btn btn-outline-primary">Ajouter</button>
                 {{ form_end(form) }}
