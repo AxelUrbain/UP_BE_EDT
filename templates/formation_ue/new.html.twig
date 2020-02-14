@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New FormationUE{% endblock %}
+
+{% block body %}
+    <h1>Create new FormationUE</h1>
+
+    {{ include('formation_ue/_form.html.twig') }}
+
+    <a href="{{ path('formation_ue_index') }}">back to list</a>
+{% endblock %}

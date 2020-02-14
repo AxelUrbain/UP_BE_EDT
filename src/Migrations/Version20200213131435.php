@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20200213075452 extends AbstractMigration
+final class Version20200213131435 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -27,6 +27,7 @@ final class Version20200213075452 extends AbstractMigration
         $this->addSql('CREATE SEQUENCE equipement_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1');
         $this->addSql('CREATE SEQUENCE etudiant_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1');
         $this->addSql('CREATE SEQUENCE formation_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1');
+        $this->addSql('CREATE SEQUENCE formation_ue_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1');
         $this->addSql('CREATE SEQUENCE heures_sup_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1');
         $this->addSql('CREATE SEQUENCE professeur_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1');
         $this->addSql('CREATE SEQUENCE promotion_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1');
@@ -55,7 +56,7 @@ final class Version20200213075452 extends AbstractMigration
         $this->addSql('CREATE TABLE formation_cours (formation_id NUMBER(10) NOT NULL, cours_id NUMBER(10) NOT NULL, PRIMARY KEY(formation_id, cours_id))');
         $this->addSql('CREATE INDEX IDX_8B4112E95200282E ON formation_cours (formation_id)');
         $this->addSql('CREATE INDEX IDX_8B4112E97ECF78B0 ON formation_cours (cours_id)');
-        $this->addSql('CREATE TABLE formation_ue (formation_id NUMBER(10) NOT NULL, ue_id NUMBER(10) NOT NULL, PRIMARY KEY(formation_id, ue_id))');
+        $this->addSql('CREATE TABLE formation_ue (id NUMBER(10) NOT NULL, formation_id NUMBER(10) DEFAULT NULL NULL, ue_id NUMBER(10) DEFAULT NULL NULL, annee_formation NUMBER(10) DEFAULT NULL NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_C37045E55200282E ON formation_ue (formation_id)');
         $this->addSql('CREATE INDEX IDX_C37045E562E883B1 ON formation_ue (ue_id)');
         $this->addSql('CREATE TABLE heures_sup (id NUMBER(10) NOT NULL, annee_paye NUMBER(10) DEFAULT NULL NULL, taux_horaire DOUBLE PRECISION DEFAULT NULL NULL, PRIMARY KEY(id))');
@@ -88,8 +89,8 @@ final class Version20200213075452 extends AbstractMigration
         $this->addSql('ALTER TABLE formation ADD CONSTRAINT FK_404021BF43F56ED4 FOREIGN KEY (professeur_responsable_id) REFERENCES professeur (id)');
         $this->addSql('ALTER TABLE formation_cours ADD CONSTRAINT FK_8B4112E95200282E FOREIGN KEY (formation_id) REFERENCES formation (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE formation_cours ADD CONSTRAINT FK_8B4112E97ECF78B0 FOREIGN KEY (cours_id) REFERENCES cours (id) ON DELETE CASCADE');
-        $this->addSql('ALTER TABLE formation_ue ADD CONSTRAINT FK_C37045E55200282E FOREIGN KEY (formation_id) REFERENCES formation (id) ON DELETE CASCADE');
-        $this->addSql('ALTER TABLE formation_ue ADD CONSTRAINT FK_C37045E562E883B1 FOREIGN KEY (ue_id) REFERENCES ue (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE formation_ue ADD CONSTRAINT FK_C37045E55200282E FOREIGN KEY (formation_id) REFERENCES formation (id)');
+        $this->addSql('ALTER TABLE formation_ue ADD CONSTRAINT FK_C37045E562E883B1 FOREIGN KEY (ue_id) REFERENCES ue (id)');
         $this->addSql('ALTER TABLE professeur ADD CONSTRAINT FK_17A55299F6203804 FOREIGN KEY (statut_id) REFERENCES statut (id)');
         $this->addSql('ALTER TABLE professeur ADD CONSTRAINT FK_17A5529981509B71 FOREIGN KEY (rfid_id) REFERENCES rfid (id)');
         $this->addSql('ALTER TABLE professeur ADD CONSTRAINT FK_17A552992195E0F0 FOREIGN KEY (specialite_id) REFERENCES specialite (id)');
@@ -132,6 +133,7 @@ final class Version20200213075452 extends AbstractMigration
         $this->addSql('DROP SEQUENCE equipement_id_seq');
         $this->addSql('DROP SEQUENCE etudiant_id_seq');
         $this->addSql('DROP SEQUENCE formation_id_seq');
+        $this->addSql('DROP SEQUENCE formation_ue_id_seq');
         $this->addSql('DROP SEQUENCE heures_sup_id_seq');
         $this->addSql('DROP SEQUENCE professeur_id_seq');
         $this->addSql('DROP SEQUENCE promotion_id_seq');

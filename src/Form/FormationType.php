@@ -17,13 +17,6 @@ class FormationType extends AbstractType
             ->add('diplome')
             ->add('nbAnnee')
             ->add('professeurResponsable')
-            ->add('UE', EntityType::class, [
-                'class' => UE::class,
-                'multiple' => true,
-                'expanded' => true,
-                'by_reference' => false,
-                'label' => 'UEs de la formation'
-            ])
         ;
     }
 
