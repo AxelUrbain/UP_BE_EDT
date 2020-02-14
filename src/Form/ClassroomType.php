@@ -12,8 +12,9 @@ class ClassroomType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nomUE')
-            ->add('specialite')
+            ->add('nom')
+            ->add('capacite')
+            ->add('equipement')
         ;
     }
 
