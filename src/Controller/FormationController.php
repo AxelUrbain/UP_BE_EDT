@@ -3,10 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Formation;
+use App\Entity\UE;
 use App\Form\FormationType;
 use App\Repository\FormationRepository;
 use App\Repository\FormationUERepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,6 +20,39 @@ use Doctrine\Common\Collections\Collection;
  */
 class FormationController extends AbstractController
 {
+    /**
+     * @Route("/chooseUEs", name="choose_UE", methods={"GET", "POST", "DELETE"})
+     */
+    public function chooseUE(Request $request, FormationUERepository $fur, EntityManagerInterface $em): Response
+    {
+
+        $formationId = $request->query->get('id');
+
+        $checkedUes = $fur->findUEsByYear($request->query->get('annee'));
+        $checkedUesIds = [];
+
+        foreach ($checkedUes as $checkedUE) {
+            $checkedUesIds[] = $checkedUE['id'];
+        }
+
+        $uncheckedUes = [];
+
+        $allUes = $em->getRepository(UE::class)->findAll();
+        foreach ($allUes as $ue){
+            if (!in_array($ue->getId(), $checkedUesIds)) {
+                $uncheckedUes[] = $ue;
+            }
+        }
+
+        // dd($uncheckedUes);
+
+        return $this->render('formation_ue/choose_UE.html.twig', [
+            'checkedUes' => $checkedUes,
+            'uncheckedUes' => $uncheckedUes,
+            'formationId' => $formationId,
+        ]);
+    }
+
     /**
      * @Route("/{page}", defaults={"page": 1}, name="formation_index", methods={"GET","POST"})
      */
@@ -74,7 +109,7 @@ class FormationController extends AbstractController
     /**
      * @Route("/show/{id}", name="formation_show", methods={"GET"})
      */
-    public function show(Formation $formation, FormationUERepository $fur): Response
+    public function show(Formation $formation, FormationUERepository $fur, EntityManagerInterface $emi): Response
     {
         $annees = $formation->getNbAnnee();
         $uesByYear = new ArrayCollection();
@@ -123,19 +158,5 @@ class FormationController extends AbstractController
         }
 
         return $this->redirectToRoute('formation_index');
-    }
-
-    /**
-     * @Route("/{id}/{annee}/chooseUEs", name="choose_UE", methods={"GET","POST","DELETE"})
-     */
-    public function chooseUE(Request $request, Formation $formation, $annee): Response
-    {
-        var_dump($annee);
-        $ues = $request->query->get('ues');
-        dd($ues);
-
-        return $this->render('formation_ue/edit.html.twig', [
-            'formation' => $formation
-        ]);
     }
 }

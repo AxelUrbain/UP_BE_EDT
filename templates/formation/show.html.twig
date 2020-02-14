@@ -24,7 +24,7 @@
 
     {% for annee in uesByYear %}
         <h3 style="display:inline;">Année {{ loop.index }}    </h3>
-        <a class="btn btn-success btn-sm" href="{{ path('choose_UE', {'id': formation.id, 'annee': loop.index, 'ues': annee}) }}">Editer les UEs</a>
+        <a class="btn btn-success btn-sm" href="{{ path('choose_UE', {'id': formation.id, 'annee': loop.index}) }}">Editer les UEs</a>
         <hr>
         <ul>
             {% for ue in annee %}

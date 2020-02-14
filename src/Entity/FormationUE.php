@@ -17,12 +17,12 @@ class FormationUE
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Formation")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Formation", inversedBy="formationUEs")
      */
     private $formation;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\UE", inversedBy="nomUE")
+     * @ORM\ManyToOne(targetEntity="App\Entity\UE", inversedBy="formationUEs")
      */
     private $ue;
 

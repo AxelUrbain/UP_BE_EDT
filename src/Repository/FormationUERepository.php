@@ -30,6 +30,7 @@ class FormationUERepository extends ServiceEntityRepository
             ->setParameter('val', $year)
             ->orderBy('f.id', 'ASC')
             ->join('f.ue', 'u')
+            ->addSelect('u.id')
             ->addSelect('u.nomUE')
             ->getQuery()
             ->getResult()

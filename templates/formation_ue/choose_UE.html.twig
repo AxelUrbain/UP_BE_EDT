@@ -5,4 +5,20 @@
 {% block body %}
     <h1>Choose UE</h1>
 
+    <form action="" method="POST"></form>
+
+    <h3>checked</h3>
+    <ul>
+        {% for ue in checkedUes %}
+            <li>{{ ue.nomUE }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>unchecked</h3>
+    <ul>
+        {% for ue in uncheckedUes %}
+            <li>{{ ue.nomUE }}</li>
+        {% endfor %}
+    </ul>
+
 {% endblock %}

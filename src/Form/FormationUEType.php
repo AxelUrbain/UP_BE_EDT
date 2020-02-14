@@ -15,12 +15,14 @@ class FormationUEType extends AbstractType
     {
         $builder
             ->add('ue', EntityType::class, [
-                'class' => UE::class,
+                'type' => UE::class,
                 'multiple' => true,
                 'expanded' => true,
                 'by_reference' => false,
                 'label' => 'UEs de la formation'
             ])
+            ->add('anneeFormation')
+            ->add('formation')
         ;
     }
 

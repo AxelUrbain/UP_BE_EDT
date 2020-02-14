@@ -26,6 +26,14 @@ class FormationUEController extends AbstractController
     }
 
     /**
+     * @Route("/update_ues", name="update_ues", methods={"GET"})
+     */
+    public function updateUes(FormationUERepository $formationUERepository): Response
+    {
+        return $this->render('formation_ue/choose_UE.html.twig');
+    }
+
+    /**
      * @Route("/new", name="formation_ue_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
