@@ -15,7 +15,7 @@ class FormationUEType extends AbstractType
     {
         $builder
             ->add('ue', EntityType::class, [
-                'type' => UE::class,
+                'class' => UE::class,
                 'multiple' => true,
                 'expanded' => true,
                 'by_reference' => false,

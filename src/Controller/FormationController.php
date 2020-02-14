@@ -27,6 +27,7 @@ class FormationController extends AbstractController
     {
 
         $formationId = $request->query->get('id');
+        $annee = $request->query->get('annee');
 
         $checkedUes = $fur->findUEsByYear($request->query->get('annee'));
         $checkedUesIds = [];
@@ -50,6 +51,7 @@ class FormationController extends AbstractController
             'checkedUes' => $checkedUes,
             'uncheckedUes' => $uncheckedUes,
             'formationId' => $formationId,
+            'annee' => $annee,
         ]);
     }
 

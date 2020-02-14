@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\FormationUE;
 use App\Form\FormationUEType;
 use App\Repository\FormationUERepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,11 +27,24 @@ class FormationUEController extends AbstractController
     }
 
     /**
-     * @Route("/update_ues", name="update_ues", methods={"GET"})
+     * @Route("/update_ues", name="update_ues", methods={"GET","POST"})
      */
-    public function updateUes(FormationUERepository $formationUERepository): Response
+    public function updateUes(FormationUERepository $formationUERepository, Request $request, EntityManagerInterface $emi): Response
     {
-        return $this->render('formation_ue/choose_UE.html.twig');
+        $formationId = $request->query->get('formationId');
+        $annee = $request->query->get('annee');
+
+        $lines = $formationUERepository->findBy(['formation' => $formationId, 'anneeFormation'=>$annee]);
+
+        foreach($lines as $line) {
+            $emi->remove($line);
+        }
+
+        $emi->flush();
+
+        // dd($lines);
+
+        return $this->redirectToRoute('formation_show', ["id" => $formationId]);
     }
 
     /**

@@ -5,20 +5,23 @@
 {% block body %}
     <h1>Choose UE</h1>
 
-    <form action="" method="POST"></form>
+    <form action="{{ path('update_ues', {'formationId': formationId, 'annee': annee}) }}" method="POST" class="mb-5">
+        <ul>
+            {% for ue in checkedUes %}
+                <li>
+                    <label for="{{ ue.nomUE }}">{{ ue.nomUE }}</label>
+                    <input type="checkbox" name="{{ ue.nomUE }}" checked value="{{ ue.id }}">
+                </li>
+            {% endfor %}
+            {% for ue in uncheckedUes %}
+                <li>
+                    <label for="{{ ue.nomUE }}">{{ ue.nomUE }}</label>
+                    <input type="checkbox" name="{{ ue.nomUE }}" value="{{ ue.id }}">
+                </li>
+            {% endfor %}
+        </ul>
+        <input type="submit">
+    </form>
 
-    <h3>checked</h3>
-    <ul>
-        {% for ue in checkedUes %}
-            <li>{{ ue.nomUE }}</li>
-        {% endfor %}
-    </ul>
-
-    <h3>unchecked</h3>
-    <ul>
-        {% for ue in uncheckedUes %}
-            <li>{{ ue.nomUE }}</li>
-        {% endfor %}
-    </ul>
 
 {% endblock %}
