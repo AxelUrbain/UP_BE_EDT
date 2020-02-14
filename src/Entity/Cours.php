@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CoursRepository")
@@ -45,16 +46,21 @@ class Cours
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\UE", inversedBy="cours")
+     * @Assert\NotBlank(message="L'UE est obligatoire")
+     * @Assert\Valid()
+     *
      */
     private $UE;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Salle", inversedBy="cours")
+     * @Assert\NotNull(message="Aucune salle n'est disponible")
      */
     private $salle;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Professeur", inversedBy="cours", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Professeur", inversedBy="cours")
+     * @Assert\NotNull(message="Aucun professeur n'est disponible")
      */
     private $professeur;
 

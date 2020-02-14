@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @Route("/planning")
@@ -81,7 +82,7 @@ EOT;
     /**
      * @Route("/ajouter/{creneau}", name="ajouter_seance", methods={"GET","POST"})
      */
-    public function ajouterSeance(Request $request, EntityManagerInterface $em, $creneau = -1) {
+    public function ajouterSeance(Request $request, EntityManagerInterface $em, ValidatorInterface $validator, $creneau = -1) {
         if($creneau < 1) {
             return $this->redirectToRoute('afficher_planning');
         }
@@ -91,7 +92,8 @@ EOT;
         $form->add('sauvegarder', SubmitType::class, ['label' => 'Ajouter']);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()) {
+        if($form->isSubmitted()) {
+
             $specialite = $cours->getUE()->getSpecialite()->getId();
             $professeur = $em->getRepository('App\Entity\Professeur')->findProfesseurLibre((int)$creneau, $specialite);
             $salle = $em->getRepository('App\Entity\Salle')->findSalleLibre((int)$cours->getCreneau());
@@ -100,9 +102,17 @@ EOT;
             $cours->setProfesseur($professeur);
             $cours->setSalle($salle);
 
-            $em->persist($cours);
+            $errors = $validator->validate($cours);
 
-            $em->flush();
+            if(count($errors) == 0) {
+                $em->persist($cours);
+                $em->flush();
+            }
+            else {
+                foreach($errors as $error) {
+                    $this->addFlash('danger', $error->getMessage());
+                }
+            }
 
             return $this->redirectToRoute('afficher_planning');
         }

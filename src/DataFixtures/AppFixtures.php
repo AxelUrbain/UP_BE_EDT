@@ -225,6 +225,7 @@ class AppFixtures extends Fixture
         $manager->flush();
 
         // COURS
+        $creneau = 1;
         for($i = 0; $i < 300; $i++) {
             $cours = new Cours();
             $cours->setCreneau(rand(1,600));

@@ -4,6 +4,13 @@
     <div class="container">
         <div class="row">
             <div class="col">
+                {% for type, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ type }} mt-3 text-center">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
                 <table class="planning mx-auto w-100 text-center mt-5">
                     <thead>
                     <tr>
