@@ -29,7 +29,7 @@ class Specialite
     private $UEs;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Professeur", mappedBy="specialite")
+     * @ORM\OneToMany(targetEntity="App\Entity\Professeur", mappedBy="specialite", cascade={"persist", "remove"})
      */
     private $professeurs;
 
@@ -116,5 +116,11 @@ class Specialite
         }
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        // TODO: Implement __toString() method.
+        return $this->getSpecialite();
     }
 }

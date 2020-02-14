@@ -5,10 +5,13 @@ namespace App\Controller;
 use App\Entity\Formation;
 use App\Form\FormationType;
 use App\Repository\FormationRepository;
+use App\Repository\FormationUERepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * @Route("/formation")
@@ -69,12 +72,22 @@ class FormationController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="formation_show", methods={"GET"})
+     * @Route("/show/{id}", name="formation_show", methods={"GET"})
      */
-    public function show(Formation $formation): Response
+    public function show(Formation $formation, FormationUERepository $fur): Response
     {
+        $annees = $formation->getNbAnnee();
+        $uesByYear = new ArrayCollection();
+
+        for ($i = 0; $i < $annees; $i++){
+            $uesByYear->add($fur->findUEsByYear($i+1));
+        }
+
+        // dd($uesByYear);
+
         return $this->render('formation/show.html.twig', [
             'formation' => $formation,
+            'uesByYear' => $uesByYear
         ]);
     }
 
@@ -110,5 +123,19 @@ class FormationController extends AbstractController
         }
 
         return $this->redirectToRoute('formation_index');
+    }
+
+    /**
+     * @Route("/{id}/{annee}/chooseUEs", name="choose_UE", methods={"GET","POST","DELETE"})
+     */
+    public function chooseUE(Request $request, Formation $formation, $annee): Response
+    {
+        var_dump($annee);
+        $ues = $request->query->get('ues');
+        dd($ues);
+
+        return $this->render('formation_ue/edit.html.twig', [
+            'formation' => $formation
+        ]);
     }
 }

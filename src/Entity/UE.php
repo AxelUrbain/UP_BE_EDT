@@ -49,15 +49,15 @@ class UE
     private $etudiants;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Formation", mappedBy="UE")
+     * @ORM\OneToMany(targetEntity="App\Entity\FormationUE", mappedBy="ue")
      */
-    private $formations;
+    private $formationUEs;
 
     public function __construct()
     {
         $this->cours = new ArrayCollection();
         $this->etudiants = new ArrayCollection();
-        $this->formations = new ArrayCollection();
+        $this->formationUEs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -172,36 +172,39 @@ class UE
         return $this;
     }
 
-    /**
-     * @return Collection|Formation[]
-     */
-    public function getFormations(): Collection
-    {
-        return $this->formations;
-    }
-
-    public function addFormation(Formation $formation): self
-    {
-        if (!$this->formations->contains($formation)) {
-            $this->formations[] = $formation;
-            $formation->addUE($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFormation(Formation $formation): self
-    {
-        if ($this->formations->contains($formation)) {
-            $this->formations->removeElement($formation);
-            $formation->removeUE($this);
-        }
-
-        return $this;
-    }
-
     public function __toString()
     {
         return $this->getNomUE();
+    }
+
+    /**
+     * @return Collection|FormationUE[]
+     */
+    public function getFormationUEs(): Collection
+    {
+        return $this->formationUEs;
+    }
+
+    public function addFormationUE(FormationUE $formationUE): self
+    {
+        if (!$this->formationUEs->contains($formationUE)) {
+            $this->formationUEs[] = $formationUE;
+            $formationUE->setUe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFormationUE(FormationUE $formationUE): self
+    {
+        if ($this->formationUEs->contains($formationUE)) {
+            $this->formationUEs->removeElement($formationUE);
+            // set the owning side to null (unless already changed)
+            if ($formationUE->getUe() === $this) {
+                $formationUE->setUe(null);
+            }
+        }
+
+        return $this;
     }
 }

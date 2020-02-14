@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="card p-5">
+            <div class="card-body">
+                <h1 class="card-title text-center">Modifier le taux horaire {{ heureSup.anneePaye }}</h1>
+            </div>
+            <div class="row">
+                <div class="col"></div>
+                <div class="col">
+                    {{ include('rh/_edit_form_heuresSup.html.twig', {'button_label': 'Enregistrer'}) }}
+                </div>
+                <div class="col"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

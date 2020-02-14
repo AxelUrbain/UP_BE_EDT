@@ -34,7 +34,7 @@ class Statut
     private $coefficient;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Professeur", mappedBy="statut")
+     * @ORM\OneToMany(targetEntity="App\Entity\Professeur", mappedBy="statut", cascade={"persist", "remove"})
      */
     private $professeurs;
 
@@ -113,5 +113,11 @@ class Statut
         }
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        // TODO: Implement __toString() method.
+        return $this->getNomStatut();
     }
 }

@@ -8,6 +8,7 @@
                 <div class="card p-5">
                     <div class="card-body">
                         <h1 class="card-title text-center">Gestion des formations</h1>
+                        <p class="text-center">Bienvenue sur la liste des formations</p>
 
                         <table class="table table-hover">
                             <thead>
@@ -25,6 +26,7 @@
                                     <td>{{ formation.diplome }}</td>
                                     <td>{{ formation.nbAnnee }}</td>
                                     <td>
+                                        <a class="btn btn-success" href="{{ path('formation_show', {'id': formation.id}) }}">Voir / Editer les UEs</a>
                                         <a class="btn btn-primary" href="{{ path('formation_edit', {'id': formation.id}) }}">Modifier</a>
                                         <form style="display: inline-block" method="post" action="{{ path('formation_delete', {'id': formation.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');">
                                             <input type="hidden" name="_method" value="DELETE">
