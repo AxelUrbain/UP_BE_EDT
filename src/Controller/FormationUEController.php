@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Formation;
 use App\Entity\FormationUE;
+use App\Entity\UE;
 use App\Form\FormationUEType;
 use App\Repository\FormationUERepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -34,15 +36,24 @@ class FormationUEController extends AbstractController
         $formationId = $request->query->get('formationId');
         $annee = $request->query->get('annee');
 
-        $lines = $formationUERepository->findBy(['formation' => $formationId, 'anneeFormation'=>$annee]);
+        $dbLinesToDrop = $formationUERepository->findBy(['formation' => $formationId, 'anneeFormation'=>$annee]);
 
-        foreach($lines as $line) {
+        foreach($dbLinesToDrop as $line) {
             $emi->remove($line);
         }
 
-        $emi->flush();
+        $dbLinesToAdd = $request->request;
+        foreach($dbLinesToAdd as $line => $ueId) {
+            $formation = $emi->getRepository(Formation::class)->find($formationId);
+            $ue = $emi->getRepository(UE::class)->find($ueId);
+            $tmpFormationUe = new FormationUE();
+            $tmpFormationUe->setFormation($formation);
+            $tmpFormationUe->setAnneeFormation($annee);
+            $tmpFormationUe->setUe($ue);
+            $emi->persist($tmpFormationUe);
+        }
 
-        // dd($lines);
+        $emi->flush();
 
         return $this->redirectToRoute('formation_show', ["id" => $formationId]);
     }
