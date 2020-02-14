@@ -10,6 +10,8 @@
 /vendor/
 /.idea/
 /.php-version
+/src/Migrations
+/config/services.yaml
 ###< symfony/framework-bundle ###
 
 ###> symfony/phpunit-bridge ###
