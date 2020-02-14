@@ -41,7 +41,7 @@ class ClassroomController extends AbstractController
             'nbPage' => $nbPage,
             'classrooms' => $classrooms,
             'classroom' => $classroom,
-            'form' => $form->createView(),
+            'form' => $form->createView()
         ]);
     }
 
@@ -50,7 +50,7 @@ class ClassroomController extends AbstractController
      */
     public function show(Salle $classroom): Response
     {
-        return $this->render('classroom/show.html.twig', [
+        return $this->render('classroom/afficher.html.twig', [
             'classroom' => $classroom,
         ]);
     }

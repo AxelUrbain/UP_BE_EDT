@@ -1,6 +1,6 @@
 .planning {
     border: 1px solid black;
-    min-height: 600px;
+    height: 60vh;
 }
 
 .planning ul {
@@ -14,6 +14,7 @@
 
 .planning td, .planning th {
     border: 1px solid black;
+    border-collapse: collapse;
     height: 22.5%;
     width: 19%;
 }
@@ -28,4 +29,21 @@
 
 .planning > tbody > tr:last-child td {
     height: 5%;
+}
+
+.planning > tbody > tr:last-child td.active {
+    background-color: #cecece;
+    cursor: auto;
+}
+
+.planning > tbody > tr > .creneau {
+    cursor: pointer;
+}
+
+.planning > tbody > tr > .creneau:hover {
+    font-weight: bold;
+}
+
+.planning > tbody > tr > .creneau:active {
+    opacity: 0.85;
 }

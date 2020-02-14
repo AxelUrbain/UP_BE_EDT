@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <table class="planning h-75 mx-auto w-100 text-center mt-5">
+                <table class="planning mx-auto w-100 text-center mt-5">
                     <thead>
                     <tr>
                         <th colspan="6">Emploi du temps</th>
@@ -33,26 +33,78 @@
                         </tr>
                         <tr>
                             <th></th>
-                            <td >
+                            <td>
                                 {% if semaine - 2 >= 1 %}<a href=" {{ path('afficher_planning', {semaine: semaine - 2}) }} ">Semaine {{ semaine - 2 }}</a>{% endif %}
                             </td>
-                            <td >
+                            <td>
                                 {% if semaine - 1 >= 1 %}<a href=" {{ path('afficher_planning', {semaine: semaine - 1}) }} ">Semaine {{ semaine - 1 }}</a>{% endif %}
                             </td>
                             <td class="active">
                                 <a href=" {{ path('afficher_planning', {semaine: semaine}) }} ">Semaine {{ semaine  }}</a></td>
-                            <td >
+                            <td>
                                 {% if semaine + 1 <= 30 %}<a href=" {{ path('afficher_planning', {semaine: semaine + 1}) }} ">Semaine {{ semaine + 1 }}</a>{% endif %}
                             </td>
-                            <td >
+                            <td>
                                 {% if semaine + 2 <= 30 %}<a href=" {{ path('afficher_planning', {semaine: semaine + 2}) }} ">Semaine {{ semaine + 2 }}</a>{% endif %}
                             </td>
                         </tr>
                     </tbody>
                 </table>
+                <div id="modal"></div>
             </div>
         </div>
     </div>
 {% endblock %}
 
 {% block stylesheets %}<link rel="stylesheet" href="{{ asset('assets/css/planning.css') }}">{% endblock %}
+
+{% block javascripts %}
+<script>
+    $(document).ready( function() {
+
+        function initEventListeners() {
+            $('.seance').click( function() {
+                $('.vide').off('click');
+                $('.seance').off('click');
+
+                var url = "{{ path('editer_seance') }}/" + $(this).data("id"),
+                    creneau = parseInt($(this).data('creneau'), 0),
+                    supprUrl = "{{ path('supprimer_seance') }}/" + $(this).data("id")
+                ;
+
+                $.get(url , function(data) {
+                    afficherForm(data, url, creneau);
+                    $('#supprimer-btn').attr('href', supprUrl);
+                });
+            });
+
+            $('.vide').click( function() {
+                $('.vide').off('click');
+                $('.seance').off('click');
+
+                var url = "{{ path('ajouter_seance') }}/" + $(this).data("creneau"),
+                    creneau = parseInt($(this).data('creneau'), 0)
+                ;
+
+                $.get(url , function(data) {
+                    afficherForm(data, url, creneau);
+                });
+            });
+        }
+
+        function afficherForm(data, url, creneau = 0) {
+                $('#modal').html($(data)[0]);
+                $('#modal form').attr('action', url);
+                $('#modal > .modal').modal('show');
+                $('#modal > .modal').on('hidden.bs.modal', function() {
+                    initEventListeners();
+                });
+                if(creneau > 0) {
+                    $('#cours_creneau').val(creneau);
+                }
+        }
+
+        initEventListeners();
+    });
+</script>
+{% endblock %}
