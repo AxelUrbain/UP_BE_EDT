@@ -114,7 +114,7 @@ class AppFixtures extends Fixture
         $admin->setUsername('admin');
         $admin->setNom('admin');
         $admin->setPrenom('admin');
-        $admin->setMotDePasse('admin');
+        $admin->setMotDePasse('$argon2id$v=19$m=65536,t=4,p=1$0TzLvwFlAKPNE0lP8QfcoA$Y+KaDA+YXApgi1JjOWYZmGbCI5w9ZyPRXggOl87I7xw');
         $admin->setRoles( ['ROLE_ADMIN']);
         $manager->persist($admin);
         $manager->flush();
@@ -124,7 +124,7 @@ class AppFixtures extends Fixture
         $sco->setUsername('sco');
         $sco->setNom('sco');
         $sco->setPrenom('sco');
-        $sco->setMotDePasse('admin');
+        $sco->setMotDePasse('$argon2id$v=19$m=65536,t=4,p=1$0TzLvwFlAKPNE0lP8QfcoA$Y+KaDA+YXApgi1JjOWYZmGbCI5w9ZyPRXggOl87I7xw');
         $sco->setRoles(['ROLE_SECRETARIAT']);
         $manager->persist($sco);
         $manager->flush();
@@ -134,7 +134,7 @@ class AppFixtures extends Fixture
         $sec->setUsername('RH');
         $sec->setNom('RH');
         $sec->setPrenom('RH');
-        $sec->setMotDePasse('admin');
+        $sec->setMotDePasse('$argon2id$v=19$m=65536,t=4,p=1$0TzLvwFlAKPNE0lP8QfcoA$Y+KaDA+YXApgi1JjOWYZmGbCI5w9ZyPRXggOl87I7xw');
         $sec->setRoles(['ROLE_RH']);
         $manager->persist($sec);
         $manager->flush();
@@ -182,7 +182,7 @@ class AppFixtures extends Fixture
             $rfid->setUsername($faker->userName);
             $rfid->setNom($faker->lastName);
             $rfid->setPrenom($faker->firstName);
-            $rfid->setMotDePasse('admin');
+            $rfid->setMotDePasse('$argon2id$v=19$m=65536,t=4,p=1$0TzLvwFlAKPNE0lP8QfcoA$Y+KaDA+YXApgi1JjOWYZmGbCI5w9ZyPRXggOl87I7xw');
             $manager->persist($rfid);
 
             $prof = new Professeur();
@@ -199,7 +199,7 @@ class AppFixtures extends Fixture
             $rfid->setUsername($faker->userName);
             $rfid->setNom($faker->lastName);
             $rfid->setPrenom($faker->firstName);
-            $rfid->setMotDePasse('admin');
+            $rfid->setMotDePasse('$argon2id$v=19$m=65536,t=4,p=1$0TzLvwFlAKPNE0lP8QfcoA$Y+KaDA+YXApgi1JjOWYZmGbCI5w9ZyPRXggOl87I7xw');
             $manager->persist($rfid);
             $etudiant = new Etudiant();
             $etudiant->setRFID($rfid);

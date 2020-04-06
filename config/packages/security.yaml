@@ -1,13 +1,13 @@
 security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     encoders:
-        App\Entity\RFID: plaintext
+        App\Entity\RFID: auto
 
     providers:
         user:
             entity:
                 class: App\Entity\RFID
-                property: username
+                property: id
 
         my_provider_in_memory:
             memory:
@@ -28,8 +28,8 @@ security:
                 login_path: login
 
             logout:
-                path: app_logout
-                target: home
+                path: logout
+                target: login
 
             anonymous: lazy
 
@@ -44,9 +44,12 @@ security:
         ROLE_RESPONSABLE: ROLE_PROF
         ROLE_PROF: [ROLE_USER, ROLE_ETU]
         ROLE_ETU: ROLE_USER
-        ROLE_SECRETERIAT: ROLE_USER
+        ROLE_SECRETARIAT: ROLE_USER
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/administration, roles: ROLE_ADMIN }
+        - { path: ^/secretariat, roles: ROLE_SECRETARIAT }
+        - { path: ^/rh , roles: ROLE_RH}
+
+

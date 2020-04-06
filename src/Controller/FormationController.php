@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Common\Collections\Collection;
 
 /**
- * @Route("/formation")
+ * @Route("/secretariat/formation")
  */
 class FormationController extends AbstractController
 {
