@@ -51,5 +51,9 @@ security:
         - { path: ^/administration, roles: ROLE_ADMIN }
         - { path: ^/secretariat, roles: ROLE_SECRETARIAT }
         - { path: ^/rh , roles: ROLE_RH}
+        - { path: ^/planning, roles: [ROLE_ADMIN, ROLE_SECRETARIAT, ROLE_RESPONSABLE, ROLE_PROF, ROLE_ETU] }
+
+
+
 
 
