@@ -64,6 +64,18 @@ class ProfesseurRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findProfesseurLibre(int $creneau, int $specialite) {
+        $qb = $this->createQueryBuilder('p')
+            ->where('p.specialite = :specialite')
+            ->setParameter('specialite', $specialite)
+            ->andWhere('p.id NOT IN (SELECT IDENTITY(c.professeur) FROM App:Cours c WHERE c.creneau = :creneau)')
+            ->setParameter('creneau', $creneau)
+            ->setMaxResults(1);
+        ;
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
     /*
     public function findOneBySomeField($value): ?Professeur
     {

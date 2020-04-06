@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit FormationUE{% endblock %}
+
+{% block body %}
+    <h1>Edit FormationUE</h1>
+
+    {{ include('formation_ue/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('formation_ue_index') }}">back to list</a>
+
+    {{ include('formation_ue/_delete_form.html.twig') }}
+{% endblock %}

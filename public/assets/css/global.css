@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 html, body {
     height: 100%;
 }
@@ -26,4 +30,11 @@ html, body {
 .left-menu-div a:hover {
     color: #0a6ebd;
     text-decoration: none;
+}
+
+.color {
+    border: 1px solid black;
+    border-radius: 5px;
+    height: 30px;
+    width: 30px;
 }

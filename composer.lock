@@ -5516,16 +5516,16 @@
         },
         {
             "name": "symfony/validator",
-            "version": "v5.0.2",
+            "version": "v5.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/validator.git",
-                "reference": "ff51ce51b3fc4c312039de2cb302e01c17843899"
+                "reference": "dcde9e9116f0b0ee8623dafafea0eb7d57954b2e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/validator/zipball/ff51ce51b3fc4c312039de2cb302e01c17843899",
-                "reference": "ff51ce51b3fc4c312039de2cb302e01c17843899",
+                "url": "https://api.github.com/repos/symfony/validator/zipball/dcde9e9116f0b0ee8623dafafea0eb7d57954b2e",
+                "reference": "dcde9e9116f0b0ee8623dafafea0eb7d57954b2e",
                 "shasum": ""
             },
             "require": {
@@ -5604,7 +5604,7 @@
             ],
             "description": "Symfony Validator Component",
             "homepage": "https://symfony.com",
-            "time": "2019-12-17T10:33:13+00:00"
+            "time": "2020-01-31T09:13:47+00:00"
         },
         {
             "name": "symfony/var-dumper",

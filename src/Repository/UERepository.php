@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\UE;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * @method UE|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,22 +20,15 @@ class UERepository extends ServiceEntityRepository
         parent::__construct($registry, UE::class);
     }
 
-    // /**
-    //  * @return UE[] Returns an array of UE objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findAllWithPaging(int $currentPage, int $nbPerPage)
     {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $query = $this->createQueryBuilder('s')
+            ->setFirstResult(($currentPage - 1) * $nbPerPage)
+            ->setMaxResults($nbPerPage);
+
+        return new Paginator($query);
     }
-    */
+
 
     /*
     public function findOneBySomeField($value): ?UE

@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Formation{% endblock %}
+
+{% block body %}
+    <h1>Formation</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ formation.id }}</td>
+            </tr>
+            <tr>
+                <th>Diplome</th>
+                <td>{{ formation.diplome }}</td>
+            </tr>
+            <tr>
+                <th>NbAnnee</th>
+                <td>{{ formation.nbAnnee }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    {% for annee in uesByYear %}
+        <h3 style="display:inline;">Année {{ loop.index }}    </h3>
+        <a class="btn btn-success btn-sm" href="{{ path('choose_UE', {'id': formation.id, 'annee': loop.index}) }}">Editer les UEs</a>
+        <hr>
+        <ul>
+            {% for ue in annee %}
+                <li>
+                    {{ ue.nomUE }}
+                </li>
+            {% endfor %}
+        </ul>
+        <hr>
+    {% endfor %}
+    <hr>
+
+    <a href="{{ path('formation_index') }}">back to list</a>
+
+    <a href="{{ path('formation_edit', {'id': formation.id}) }}">edit</a>
+
+    {{ include('formation/_delete_form.html.twig') }}
+{% endblock %}

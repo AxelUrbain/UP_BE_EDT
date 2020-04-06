@@ -1,0 +1,11 @@
+{{ form_start(form) }}
+<div class="container">
+    {{ form_row(form.diplome , {'label':'Diplôme'}) }}
+    {{ form_row(form.nbAnnee, {'label':"Nombre d'années"}) }}
+    {{ form_row(form.professeurResponsable, {'label':'Professeur responsable'}) }}
+</div>
+<div class="row">
+    <a class="btn btn-outline-info" href="{{ path('formation_index') }}">retour</a>
+    <button class="btn btn-outline-primary">Modifier</button>
+</div>
+{{ form_end(form) }}

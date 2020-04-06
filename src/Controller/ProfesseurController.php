@@ -20,28 +20,15 @@ class ProfesseurController extends AbstractController
     /**
      *  @Route("/{page}", defaults={"page": 1}, name="professeur_index", methods={"GET","POST"})
      */
-    public function index(int $page, ProfesseurRepository $professeurRepository): Response
+    public function index(int $page, Request $request, ProfesseurRepository $professeurRepository): Response
     {
         $professeur = new Professeur();
-        $professeurs = $professeurRepository->findAllWithPaging($page, 10);
 
-        $nbPage = intval(ceil(count($professeurs) / 10));
-
-        return $this->render('professeur/index.html.twig', [
-            'professeurs' => $professeurs,
-            'nbPage' => $nbPage,
-            'page' => $page
-        ]);
-    }
-
-    /**
-     * @Route("/new", name="professeur_new", methods={"GET","POST"})
-     */
-    public function new(Request $request): Response
-    {
-        $professeur = new Professeur();
         $form = $this->createForm(ProfesseurType::class, $professeur);
         $form->handleRequest($request);
+
+        $professeurs = $professeurRepository->findAllWithPaging($page, 10);
+        $nbPage = intval(ceil(count($professeurs) / 10));
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
@@ -51,12 +38,15 @@ class ProfesseurController extends AbstractController
             return $this->redirectToRoute('professeur_index');
         }
 
-        return $this->render('professeur/new.html.twig', [
-            'professeur' => $professeur,
+        return $this->render('professeur/index.html.twig', [
+            'professeurs' => $professeurs,
+            'professuer' => $professeur,
             'form' => $form->createView(),
+            'nbPage' => $nbPage,
+            'page' => $page
         ]);
     }
-
+    
     /**
      * @Route("/{id}", name="professeur_show", methods={"GET"})
      */

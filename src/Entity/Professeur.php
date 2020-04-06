@@ -29,7 +29,7 @@ class Professeur
     private $RFID;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Cours", mappedBy="professeur")
+     * @ORM\OneToMany(targetEntity="App\Entity\Cours", mappedBy="professeur", cascade={"persist", "remove"})
      */
     private $cours;
 
@@ -39,7 +39,7 @@ class Professeur
     private $specialite;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Formation", mappedBy="professeurResponsable")
+     * @ORM\OneToMany(targetEntity="App\Entity\Formation", mappedBy="professeurResponsable", cascade={"persist", "remove"})
      */
     private $formations;
 
@@ -150,5 +150,10 @@ class Professeur
         }
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getRFID()->getNom();
     }
 }

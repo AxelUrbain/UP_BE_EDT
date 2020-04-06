@@ -44,15 +44,15 @@ class Formation
     private $cours;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\UE", inversedBy="formations")
+     * @ORM\OneToMany(targetEntity="App\Entity\FormationUE", mappedBy="formation")
      */
-    private $UE;
+    private $formationUEs;
 
     public function __construct()
     {
         $this->promotions = new ArrayCollection();
         $this->cours = new ArrayCollection();
-        $this->UE = new ArrayCollection();
+        $this->formationUEs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -153,27 +153,37 @@ class Formation
         return $this;
     }
 
-    /**
-     * @return Collection|UE[]
-     */
-    public function getUE(): Collection
+    public function __toString()
     {
-        return $this->UE;
+        return $this->getDiplome();
     }
 
-    public function addUE(UE $uE): self
+    /**
+     * @return ArrayCollection|FormationUE[]
+     */
+    public function getFormationUEs(): ArrayCollection
     {
-        if (!$this->UE->contains($uE)) {
-            $this->UE[] = $uE;
+        return $this->formationUEs;
+    }
+
+    public function addFormationUE(FormationUE $formationUE): self
+    {
+        if (!$this->formationUEs->contains($formationUE)) {
+            $this->formationUEs[] = $formationUE;
+            $formationUE->setFormation($this);
         }
 
         return $this;
     }
 
-    public function removeUE(UE $uE): self
+    public function removeFormationUE(FormationUE $formationUE): self
     {
-        if ($this->UE->contains($uE)) {
-            $this->UE->removeElement($uE);
+        if ($this->formationUEs->contains($formationUE)) {
+            $this->formationUEs->removeElement($formationUE);
+            // set the owning side to null (unless already changed)
+            if ($formationUE->getFormation() === $this) {
+                $formationUE->setFormation(null);
+            }
         }
 
         return $this;

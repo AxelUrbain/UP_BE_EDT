@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}FormationUE index{% endblock %}
+
+{% block body %}
+    <h1>FormationUE index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>AnneeFormation</th>
+                <th>Formation</th>
+                <th>UE</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for formation_ue in formation_ues %}
+            <tr>
+                <td>{{ formation_ue.id }}</td>
+                <td>{{ formation_ue.anneeFormation }}</td>
+                <td>{{ formation_ue.formation }}</td>
+                <td>{{ formation_ue.ue }}</td>
+                <td>
+                    <a href="{{ path('formation_ue_show', {'id': formation_ue.id}) }}">show</a>
+                    <a href="{{ path('formation_ue_edit', {'id': formation_ue.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('formation_ue_new') }}">Create new</a>
+{% endblock %}

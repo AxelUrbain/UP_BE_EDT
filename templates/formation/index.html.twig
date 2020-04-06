@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <div class="container my-5">
+        <div class="row">
+            <div class="col">
+                <div class="card p-5">
+                    <div class="card-body">
+                        <h1 class="card-title text-center">Gestion des formations</h1>
+                        <p class="text-center">Bienvenue sur la liste des formations</p>
+
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Diplôme</th>
+                                <th>Nombre d'années</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for formation in formations %}
+                                <tr>
+                                    <td>{{ formation.id }}</td>
+                                    <td>{{ formation.diplome }}</td>
+                                    <td>{{ formation.nbAnnee }}</td>
+                                    <td>
+                                        <a class="btn btn-success" href="{{ path('formation_show', {'id': formation.id}) }}">Voir / Editer les UEs</a>
+                                        <a class="btn btn-primary" href="{{ path('formation_edit', {'id': formation.id}) }}">Modifier</a>
+                                        <form style="display: inline-block" method="post" action="{{ path('formation_delete', {'id': formation.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');">
+                                            <input type="hidden" name="_method" value="DELETE">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ formation.id) }}">
+                                            <button class="btn btn-danger">Supprimer</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="4">Aucune formation enregistrée..</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <button class="btn btn-outline-primary" data-toggle="modal" data-target="#newModal">Ajouter une formation</button>
+                        {{ include('formation/_form.html.twig') }}
+                    </div>
+                    {{ include('_pagination.html.twig', {'currentPath': 'formation_index', 'page': page, 'nbPage': nbPage}) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
