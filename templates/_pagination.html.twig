@@ -1,25 +1,72 @@
-<nav aria-label="Page navigation example">
-    <ul class="pagination justify-content-center">
-        {% for i in 1..nbPage %}
-            {% if loop.first %}
-                <li class="page-item {% if page == 1 %}disabled{% endif %}">
-                    <a class="page-link" href="{{ path(currentPath, {'page': page - 1 })}}">
-                        Précédent
-                    </a>
-                </li>
-            {% endif %}
-
-            <li class="page-item {% if i == page %}disabled{% endif %}">
-                <a class="page-link" href="{{ path(currentPath, {'page': i })}}">{{ i }}</a>
+{% if nbPage > 20 %}
+    {% if page < 10 %}
+        {% set startPage = 1 %}
+    {% else %}
+        {% set startPage = page - 10 %}
+    {% endif %}
+    {% set endPage = startPage + 20 %}
+    {% if endPage > nbPage %}
+        {% set endPage = nbPage %}
+    {% endif %}
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            <li class="page-item {% if page == 1 %}disabled{% endif %}">
+                <a class="page-link" href="{{ path(currentPath, {'page': page - 1 })}}">
+                    Précédent
+                </a>
             </li>
+            {% for i in startPage..endPage %}
+                {% if loop.first and startPage != 1 %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">
+                            ...
+                        </a>
+                    </li>
+                {% endif %}
 
-            {% if loop.last %}
-                <li class="page-item {% if nbPage == page %}disabled{% endif %}">
-                    <a class="page-link" href="{{ path(currentPath, {'page': page + 1 })}}">
-                        Suivant
-                    </a>
+                <li class="page-item {% if i == page %}disabled{% endif %}">
+                    <a class="page-link" href="{{ path(currentPath, {'page': i })}}">{{ i }}</a>
                 </li>
-            {% endif %}
-        {% endfor %}
-    </ul>
-</nav>
+
+                {% if loop.last and startPage <= nbPage - 20 %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">
+                            ...
+                        </a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+            <li class="page-item {% if nbPage == page %}disabled{% endif %}">
+                <a class="page-link" href="{{ path(currentPath, {'page': page + 1 })}}">
+                    Suivant
+                </a>
+            </li>
+        </ul>
+    </nav>
+{% else %}
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            {% for i in 1..nbPage %}
+                {% if loop.first %}
+                    <li class="page-item {% if page == 1 %}disabled{% endif %}">
+                        <a class="page-link" href="{{ path(currentPath, {'page': page - 1 })}}">
+                            Précédent
+                        </a>
+                    </li>
+                {% endif %}
+
+                <li class="page-item {% if i == page %}disabled{% endif %}">
+                    <a class="page-link" href="{{ path(currentPath, {'page': i })}}">{{ i }}</a>
+                </li>
+
+                {% if loop.last %}
+                    <li class="page-item {% if nbPage == page %}disabled{% endif %}">
+                        <a class="page-link" href="{{ path(currentPath, {'page': page + 1 })}}">
+                            Suivant
+                        </a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </nav>
+{% endif %}
