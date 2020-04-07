@@ -56,6 +56,6 @@ class HomeController extends AbstractController
      */
     public function logout()
     {
-        return $this->render('home/login.html.twig');
+        return $this->render('base.html.twig');
     }
 }

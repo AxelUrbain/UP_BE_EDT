@@ -1,21 +1,29 @@
-<div style="text-align: center" class="left-menu-div">
-    <h1>Administration</h1>
+<div class="left-menu-div">
+    {% if app.user %}
+    <a class="menu-link" href="{{ path('afficher_planning') }}"><i class="fa fa-calendar fa-1x"></i> Mon planning</a>
     <hr>
-    <a href="{{ path('classroom_index') }}"><h3 class="menu-link">Salles</h3><i class="fa fa-chalkboard fa-2x"></i></a>
-    <hr>
-    <a href="{{ path('equipments_index') }}"><h3 class="menu-link">Equipements</h3><i class="fa fa-desktop fa-2x"></i></a>
-    <hr>
-    <a href="{{ path('professeur_index') }}"><h3 class="menu-link">Professeurs</h3><i class="fa fa-chalkboard-teacher fa-2x"></i></a>
-    <hr>
-    <h1>Scolarité</h1>
-    <hr>
-    <a href="{{ path('formation_index') }}"><h3 class="menu-link">Formations</h3><i class="fa fa-graduation-cap fa-2x"></i></a>
-    <hr>
-    <a href="{{ path('ue_index') }}"><h3 class="menu-link">UEs</h3><i class="fa fa-th-list fa-2x"></i></a>
-    <hr>
-    <a href="{{ path('professeur_index') }}"><h3 class="menu-link">Professeurs</h3><i class="fa fa-chalkboard-teacher fa-2x"></i></a>
-    <hr>
-    <a href="{{ path('afficher_planning') }}"><h3 class="menu-link">Mon planning</h3><i class="fa fa-calendar fa-2x"></i></a>
-    <hr>
-    <a href="{{ path('rh_index') }}"><h3 class="menu-link">Service RH</h3><i class="fas fa-user-clock fa-2x"></i></a>
+        {% if is_granted('ROLE_ADMIN') %}
+        <h3 class="menu-subtitle">Administration</h3>
+        <hr>
+        <a class="menu-link" href="{{ path('classroom_index') }}"><i class="fa fa-chalkboard fa-1x"></i> Salles</a>
+        <hr>
+        <a class="menu-link" href="{{ path('equipments_index') }}"><i class="fa fa-desktop fa-1x"></i> Equipements</a>
+        <hr>
+        <a class="menu-link" href="{{ path('professeur_index') }}"><i class="fa fa-chalkboard-teacher fa-1x"></i> Professeurs</a>
+        <hr>
+        {% endif %}
+        {% if is_granted('ROLE_SECRETARIAT') %}
+        <h3 class="menu-subtitle">Scolarité</h3>
+        <hr>
+        <a class="menu-link" href="{{ path('formation_index') }}"><i class="fa fa-graduation-cap fa-1x"></i> Formations</a>
+        <hr>
+        <a class="menu-link" href="{{ path('ue_index') }}"><i class="fa fa-th-list fa-1x"></i> UEs</a>
+        <hr>
+        {% endif %}
+        {% if is_granted('ROLE_RH') %}
+        <h3 class="menu-subtitle">Service RH</h3>
+        <hr>
+        <a class="menu-link" href="{{ path('rh_index') }}"><i class="fas fa-user-clock fa-1x"></i> Service RH</a>
+        {% endif %}
+    {% endif %}
 </div>

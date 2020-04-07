@@ -1,3 +1,15 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <a class="navbar-brand" href="#">BE UP Planning</a>
+    <ul class="navbar-nav ml-auto">
+        {% if not app.user %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('login') }}">{{'Connexion' | trans}}</a>
+            </li>
+        {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('logout') }}">{{ 'Déconnexion' | trans }}</a>
+            </li>
+        {% endif %}
+    </ul>
+
 </nav>
