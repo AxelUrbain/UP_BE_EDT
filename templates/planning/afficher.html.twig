@@ -13,9 +13,9 @@
                 {% endfor %}
                 <table class="planning mx-auto w-100 text-center mt-5">
                     <thead>
-                    <tr>
-                        <th colspan="6">Emploi du temps</th>
-                    </tr>
+                        <tr>
+                            <th colspan="6">Emploi du temps</th>
+                        </tr>
                     </thead>
                     <tbody>
                         <tr>
@@ -66,6 +66,7 @@
 {% block stylesheets %}<link rel="stylesheet" href="{{ asset('assets/css/planning.css') }}">{% endblock %}
 
 {% block javascripts %}
+{% if is_granted('ROLE_RESPONSABLE') %}
 <script>
     $(document).ready( function() {
 
@@ -114,4 +115,5 @@
         initEventListeners();
     });
 </script>
+{% endif %}
 {% endblock %}

@@ -3,6 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\RFID;
+use App\Entity\Etudiant;
+use App\Entity\Promotion;
+use App\Entity\Formation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -17,6 +20,20 @@ class RFIDRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, RFID::class);
+    }
+
+    public function findFormations($rfid)
+    {
+        $qb = $this->createQueryBuilder('u')
+            ->where('u.id = :rfid')
+            ->setParameter('rfid', $rfid)
+            ->join('App:Etudiant', 'e')
+            ->join('e.promotion', 'p')
+            ->join('p.formation', 'f')
+            ->select('f.id')
+        ;
+
+        return $qb->getQuery()->getResult();
     }
 
     // /**

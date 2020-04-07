@@ -19,16 +19,38 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class PlanningController extends AbstractController
 {
     /**
-     * @Route("/{semaine}",
+     * @Route("/{formationId}/{semaine}",
      *     name="afficher_planning",
-     *     requirements={"semaine": "\d+"}
+     *     requirements={
+     *         "semaine": "\d+",
+     *         "formationId": "-?\d+"
+     *     }
      * )
      */
-    public function afficherPlanning($semaine = 1, EntityManagerInterface $em)
+    public function afficherPlanning($semaine = 1, $formationId = -1, EntityManagerInterface $em)
     {
         // une semaine va du créneau ($semaine - 1 * 20) + 1 à ($semaine - 1 * 20) + 20 ($semaine 1 : 1-20 $semaine 3 : 41-60
 
-        $seances = $em->getRepository('App\Entity\Cours')->findByWeek($semaine);
+        $utilisateur = $this->getUser();
+
+        $formations = $em->getRepository('App\Entity\RFID')->findFormations($utilisateur->getId());
+
+        $isFormation = false;
+
+        foreach($formations as $formation) {
+            if($formation['id'] == $formationId) {
+                $isFormation = true;
+            }
+        }
+
+        if(!$isFormation && isset($formations[0]["id"])) {
+            return $this->redirectToRoute("afficher_planning", [
+                        'formationId' => $formations[0]["id"],
+                        'semaine' => 1
+                    ]);
+        }
+
+        $seances = $em->getRepository('App\Entity\Cours')->findBySemaineEtFormation($semaine, $formationId);
 
         $creneaux = array();
 
@@ -75,7 +97,8 @@ EOT;
         return $this->render('planning/afficher.html.twig', [
             'controller_name' => 'PlanningController',
             'planning' => $planning,
-            'semaine' => $semaine
+            'semaine' => $semaine,
+            'user' => $utilisateur
         ]);
     }
 

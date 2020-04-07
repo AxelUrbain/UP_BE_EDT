@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Cours;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManager;
 
 /**
  * @method Cours|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,16 +20,32 @@ class CoursRepository extends ServiceEntityRepository
         parent::__construct($registry, Cours::class);
     }
 
-    public function findByWeek($semaine) {
+    public function findBySemaineEtFormation($semaine, $formationId) {
         $minCreneau = (($semaine - 1) * 20) + 1;
         $maxCreneau = (($semaine - 1) * 20) + 20;
 
+        $expr = $this->_em->getExpressionBuilder();
+
         $qb = $this->createQueryBuilder('c')
-            ->where('c.creneau >= :minCreneau')
+            ->andWhere('c.creneau >= :minCreneau')
             ->setParameter('minCreneau', $minCreneau)
             ->andWhere('c.creneau <= :maxCreneau')
             ->setParameter('maxCreneau', $maxCreneau)
+            ->andWhere('c.isValide = true')
             ->leftJoin('c.UE', 'u')
+            ->andWhere(
+                $expr->in(
+                    'u.id',
+                    $this->_em->createQueryBuilder()
+                        ->select('u2.id')
+                        ->from('App:Formation', 'f')
+                        ->where('f.id = :formationId')
+                        ->join('f.formationUEs', 'fu')
+                        ->join('fu.ue', 'u2')
+                        ->getDQL()
+                )
+            )
+            ->setParameter('formationId', $formationId)
             ->addSelect('u.couleur as u_couleur')
             ->addSelect('u.nomUE as u_nomUE')
             ->leftJoin('c.professeur', 'p')
