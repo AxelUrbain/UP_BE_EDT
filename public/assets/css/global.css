@@ -21,6 +21,8 @@ html, body {
 .menu-link {
     display: inline;
     padding: 5px;
+    font-size: 24px;
+    font-weight: bold;
 }
 
 .left-menu-div a {
@@ -28,7 +30,7 @@ html, body {
 }
 
 .left-menu-div a:hover {
-    color: #0a6ebd;
+    color: #dcdde1;
     text-decoration: none;
 }
 
@@ -37,4 +39,10 @@ html, body {
     border-radius: 5px;
     height: 30px;
     width: 30px;
+}
+
+.menu-subtitle{
+    text-transform: uppercase;
+    font-weight: bold;
+    text-align: center;
 }
