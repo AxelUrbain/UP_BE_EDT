@@ -35,6 +35,16 @@ class PlanningController extends AbstractController
 
         $formations = $em->getRepository('App\Entity\RFID')->findFormations($utilisateur->getId());
 
+        $isResponsable = false;
+        if($this->container->get('security.authorization_checker')->isGranted('ROLE_RESPONSABLE')) {
+            $formationsResp = $em->getRepository('App\Entity\Professeur')->findFormation($utilisateur->getId());
+            foreach($formationsResp as $formationResp) {
+                if(in_array($formationId, $formationResp)) {
+                    $isResponsable = true;
+                }
+            }
+        }
+
         $isFormation = false;
 
         foreach($formations as $formation) {
@@ -99,6 +109,7 @@ EOT;
             'planning' => $planning,
             'semaine' => $semaine,
             'formation' => $formationId,
+            'isResponsable' => $isResponsable,
             'user' => $utilisateur
         ]);
     }

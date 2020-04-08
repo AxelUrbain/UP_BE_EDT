@@ -64,6 +64,19 @@ class ProfesseurRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findFormation($id)
+    {
+        $query = $this->createQueryBuilder('p')
+            ->from('App:Formation', 'f')
+            ->join('f.professeurResponsable', 'pr')
+            ->where('pr.RFID = :id')
+            ->setParameter('id', $id)
+            ->distinct('f.id')
+            ->select('f.id');
+
+        return $query->getQuery()->getResult();
+    }
+
     public function findProfesseurLibre(int $creneau, int $specialite) {
         $qb = $this->createQueryBuilder('p')
             ->where('p.specialite = :specialite')

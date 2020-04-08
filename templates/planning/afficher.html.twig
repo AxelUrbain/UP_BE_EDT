@@ -47,7 +47,7 @@
                                 {% if semaine - 1 >= 1 %}<a href=" {{ path('afficher_planning', {formationId: formation, semaine: semaine - 1}) }} ">Semaine {{ semaine - 1 }}</a>{% endif %}
                             </td>
                             <td class="active">
-                                <a href=" {{ path('afficher_planning', {formationId: formation, semaine: semaine}) }} ">Semaine {{ semaine  }}</a></td>
+                                <span>Semaine {{ semaine  }}</span></td>
                             <td>
                                 {% if semaine + 1 <= 30 %}<a href=" {{ path('afficher_planning', {formationId: formation, semaine: semaine + 1}) }} ">Semaine {{ semaine + 1 }}</a>{% endif %}
                             </td>
@@ -66,7 +66,7 @@
 {% block stylesheets %}<link rel="stylesheet" href="{{ asset('assets/css/planning.css') }}">{% endblock %}
 
 {% block javascripts %}
-{% if is_granted('ROLE_RESPONSABLE') and responsable %}
+{% if is_granted('ROLE_RESPONSABLE') and isResponsable %}
 <script>
     $(document).ready( function() {
 
