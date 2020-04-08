@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Promotion;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * @method Promotion|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,6 +20,16 @@ class PromotionRepository extends ServiceEntityRepository
         parent::__construct($registry, Promotion::class);
     }
 
+    public function findAllOrderedByYearWithPaging(int $currentPage, int $nbPerPage)
+    {
+        $query = $this->createQueryBuilder('promo')
+            ->leftJoin('promo.annee', 'annee')
+            ->orderBy('annee.anneePromotion', 'DESC')
+            ->setFirstResult(($currentPage - 1) * $nbPerPage)
+            ->setMaxResults($nbPerPage);
+
+        return new Paginator($query);
+    }
 
     public function findAllOrderedByYear()
     {
@@ -36,7 +47,6 @@ class PromotionRepository extends ServiceEntityRepository
             ->select('COUNT(u)')
             ->getQuery()
             ->getSingleScalarResult();
-
 
         return $this->createQueryBuilder('u')
             ->setFirstResult(rand(0, $count - 1))

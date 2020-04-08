@@ -35,22 +35,15 @@ class EtudiantRepository extends ServiceEntityRepository
             ;
     }
 
-    // /**
-    //  * @return Etudiant[] Returns an array of Etudiant objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findByPromotionId($value)
     {
         return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = :val')
+            ->andWhere('i.promotion = :val')
             ->setParameter('val', $value)
-            ->orderBy('i.id', 'ASC')
-            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?Etudiant

@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Etudiant;
 use App\Entity\Promotion;
+use App\Form\EtudiantPromotionType;
 use App\Form\PromotionType;
 use App\Repository\PromotionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,12 +18,21 @@ use Symfony\Component\Routing\Annotation\Route;
 class PromotionController extends AbstractController
 {
     /**
-     * @Route("/", name="promotion_index", methods={"GET"})
+     * @Route("/page/{page}", defaults={"page": 1}, name="promotion_index", methods={"GET"})
+     * @param int $page
+     * @param PromotionRepository $promotionRepository
+     * @return Response
      */
-    public function index(PromotionRepository $promotionRepository): Response
+    public function index(int $page,PromotionRepository $promotionRepository): Response
     {
+        $promotions = $promotionRepository->findAllOrderedByYearWithPaging($page, 10);
+
+        $nbPage = intval(ceil(count($promotions) / 10));
+
         return $this->render('promotion/index.html.twig', [
-            'promotions' => $promotionRepository->findAllOrderedByYear()  ,
+            'promotions' => $promotions,
+            'page' => $page,
+            'nbPage' => $nbPage,
         ]);
     }
 
@@ -50,11 +61,16 @@ class PromotionController extends AbstractController
 
     /**
      * @Route("/{id}", name="promotion_show", methods={"GET"})
+     * @param Promotion $promotion
+     * @return Response
      */
     public function show(Promotion $promotion): Response
     {
+        $students = $this->getDoctrine()->getRepository(Etudiant::class)->findByPromotionId($promotion);
+
         return $this->render('promotion/show.html.twig', [
             'promotion' => $promotion,
+            'students' => $students,
         ]);
     }
 
@@ -64,6 +80,26 @@ class PromotionController extends AbstractController
     public function edit(Request $request, Promotion $promotion): Response
     {
         $form = $this->createForm(PromotionType::class, $promotion);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('promotion_index');
+        }
+
+        return $this->render('promotion/edit.html.twig', [
+            'promotion' => $promotion,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/students/{id}/edit", name="add_student_to_promotion", methods={"GET","POST"})
+     */
+    public function addStudentToPromotion(Request $request, Promotion $promotion): Response
+    {
+        $form = $this->createForm(EtudiantPromotionType::class, $promotion);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
