@@ -228,7 +228,7 @@ class AppFixtures extends Fixture
 
         // COURS
         $creneau = 1;
-        for($i = 0; $i < 1200; $i++) {
+        for($i = 0; $i < 4000; $i++) {
             $cours = new Cours();
             $cours->setCreneau(rand(1,600));
 
@@ -263,7 +263,7 @@ class AppFixtures extends Fixture
         $diplomes = ['Licence', 'Master', 'Licence professionelle', 'Doctorat'];
 
         // Formation
-        for ($i = 0; $i < 50; $i++) {
+        for ($i = 0; $i < 20; $i++) {
             $formation = new Formation();
             $dip = $diplomes[rand(0, sizeof($diplomes) - 1)];
             $formation->setDiplome($dip);
@@ -293,7 +293,7 @@ class AppFixtures extends Fixture
         // Formation UE
         $formations = $this->em->getRepository(Formation::class)->findAll();
         foreach($formations as $formation) {
-            $randUe = rand(0,5);
+            $randUe = rand(10, count($this->em->getRepository(UE::class)->findAll()));
             for($i = 0; $i < $randUe; $i++) {
                 $formationUE = new FormationUE();
                 $ue = $this->em->getRepository(UE::class)->findByRandomValue();
@@ -311,7 +311,7 @@ class AppFixtures extends Fixture
             $promotion->setAnneeFormation(rand(1, $formation->getNbAnnee()));
             $promotion->setFormation($formation);
             $promotion->setAnnee($this->em->getRepository(Annee::class)->findByRandomValue());
-            $randEtudiant = rand(0,30);
+            $randEtudiant = rand(0,60);
             for($i = 0; $i < $randEtudiant; $i++) {
                 $promotion->addEtudiant($this->em->getRepository(Etudiant::class)->findByRandomValue());
             }
