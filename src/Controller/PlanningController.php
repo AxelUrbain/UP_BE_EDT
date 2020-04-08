@@ -98,6 +98,7 @@ EOT;
             'controller_name' => 'PlanningController',
             'planning' => $planning,
             'semaine' => $semaine,
+            'formation' => $formationId,
             'user' => $utilisateur
         ]);
     }

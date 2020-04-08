@@ -41,18 +41,18 @@
                         <tr>
                             <th></th>
                             <td>
-                                {% if semaine - 2 >= 1 %}<a href=" {{ path('afficher_planning', {semaine: semaine - 2}) }} ">Semaine {{ semaine - 2 }}</a>{% endif %}
+                                {% if semaine - 2 >= 1 %}<a href=" {{ path('afficher_planning', {formationId: formation, semaine: semaine - 2}) }} ">Semaine {{ semaine - 2 }}</a>{% endif %}
                             </td>
                             <td>
-                                {% if semaine - 1 >= 1 %}<a href=" {{ path('afficher_planning', {semaine: semaine - 1}) }} ">Semaine {{ semaine - 1 }}</a>{% endif %}
+                                {% if semaine - 1 >= 1 %}<a href=" {{ path('afficher_planning', {formationId: formation, semaine: semaine - 1}) }} ">Semaine {{ semaine - 1 }}</a>{% endif %}
                             </td>
                             <td class="active">
-                                <a href=" {{ path('afficher_planning', {semaine: semaine}) }} ">Semaine {{ semaine  }}</a></td>
+                                <a href=" {{ path('afficher_planning', {formationId: formation, semaine: semaine}) }} ">Semaine {{ semaine  }}</a></td>
                             <td>
-                                {% if semaine + 1 <= 30 %}<a href=" {{ path('afficher_planning', {semaine: semaine + 1}) }} ">Semaine {{ semaine + 1 }}</a>{% endif %}
+                                {% if semaine + 1 <= 30 %}<a href=" {{ path('afficher_planning', {formationId: formation, semaine: semaine + 1}) }} ">Semaine {{ semaine + 1 }}</a>{% endif %}
                             </td>
                             <td>
-                                {% if semaine + 2 <= 30 %}<a href=" {{ path('afficher_planning', {semaine: semaine + 2}) }} ">Semaine {{ semaine + 2 }}</a>{% endif %}
+                                {% if semaine + 2 <= 30 %}<a href=" {{ path('afficher_planning', {formationId: formation, semaine: semaine + 2}) }} ">Semaine {{ semaine + 2 }}</a>{% endif %}
                             </td>
                         </tr>
                     </tbody>
@@ -66,7 +66,7 @@
 {% block stylesheets %}<link rel="stylesheet" href="{{ asset('assets/css/planning.css') }}">{% endblock %}
 
 {% block javascripts %}
-{% if is_granted('ROLE_RESPONSABLE') %}
+{% if is_granted('ROLE_RESPONSABLE') and responsable %}
 <script>
     $(document).ready( function() {
 
