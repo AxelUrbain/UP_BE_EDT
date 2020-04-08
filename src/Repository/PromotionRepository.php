@@ -19,22 +19,32 @@ class PromotionRepository extends ServiceEntityRepository
         parent::__construct($registry, Promotion::class);
     }
 
-    // /**
-    //  * @return Promotion[] Returns an array of Promotion objects
-    //  */
-    /*
-    public function findByExampleField($value)
+
+    public function findAllOrderedByYear()
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
+        return $this->createQueryBuilder('promo')
+            ->leftJoin('promo.annee', 'annee')
+            ->orderBy('annee.anneePromotion', 'DESC')
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+
+    public function findByRandomValue()
+    {
+        $count = $this->createQueryBuilder('u')
+            ->select('COUNT(u)')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+
+        return $this->createQueryBuilder('u')
+            ->setFirstResult(rand(0, $count - 1))
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getSingleResult()
+            ;
+    }
 
     /*
     public function findOneBySomeField($value): ?Promotion

@@ -263,10 +263,10 @@ class AppFixtures extends Fixture
         $diplomes = ['Licence', 'Master', 'Licence professionelle', 'Doctorat'];
 
         // Formation
-        for ($i = 0; $i < 50; $i++) {
+        for ($i = 0; $i < 25; $i++) {
             $formation = new Formation();
             $dip = $diplomes[rand(0, sizeof($diplomes) - 1)];
-            $formation->setDiplome($dip);
+            $formation->setDiplome($dip . ' ' . $i);
             switch ($dip) {
                 case 'Licence':
                     $formation->setNbAnnee(3);
@@ -307,15 +307,29 @@ class AppFixtures extends Fixture
 
         // Promotion
         foreach($formations as $formation) {
-            $promotion = new Promotion();
-            $promotion->setAnneeFormation(rand(1, $formation->getNbAnnee()));
-            $promotion->setFormation($formation);
-            $promotion->setAnnee($this->em->getRepository(Annee::class)->findByRandomValue());
-            $randEtudiant = rand(0,30);
-            for($i = 0; $i < $randEtudiant; $i++) {
-                $promotion->addEtudiant($this->em->getRepository(Etudiant::class)->findByRandomValue());
+            $a = $this->em->getRepository(Annee::class)->findByRandomValue();
+            $annee = $this->em->getRepository(Annee::class)->find($a->getId() - 3);
+
+                if ($annee === null) {
+                    $annee = $this->em->getRepository(Annee::class)->find($a->getId());
+                }
+            for ($i = 0; $i < $formation->getNbAnnee() ; $i++) {
+                $promotion = new Promotion();
+                $promotion->setAnneeFormation($i + 1);
+                $promotion->setFormation($formation);
+                $promotion->setAnnee($this->em->getRepository(Annee::class)->find($annee->getID() + $i));
+                $manager->persist($promotion);
+                $manager->flush();
             }
-            $manager->persist($promotion);
+        }
+        $manager->flush();
+
+        // Etudiants
+        $students = $this->em->getRepository(Etudiant::class)->findAll();
+        foreach ($students as $student) {
+            $prom = $this->em->getRepository(Promotion::class)->findByRandomValue();
+            $student->setPromotion($prom);
+            $manager->persist($student);
         }
         $manager->flush();
     }
