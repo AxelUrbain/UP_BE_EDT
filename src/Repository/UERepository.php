@@ -29,6 +29,22 @@ class UERepository extends ServiceEntityRepository
         return new Paginator($query);
     }
 
+    
+    public function findByRandomValue()
+    {
+        $count = $this->createQueryBuilder('ue')
+            ->select('COUNT(ue)')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+
+        return $this->createQueryBuilder('ue')
+            ->setFirstResult(rand(0, $count - 1))
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getSingleResult()
+            ;
+    }
 
     /*
     public function findOneBySomeField($value): ?UE

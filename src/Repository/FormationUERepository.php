@@ -37,7 +37,6 @@ class FormationUERepository extends ServiceEntityRepository
         ;
     }
 
-
     /*
     public function findOneBySomeField($value): ?FormationUE
     {

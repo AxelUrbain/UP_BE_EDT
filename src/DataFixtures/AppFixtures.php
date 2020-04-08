@@ -15,6 +15,7 @@ use App\Entity\Salle;
 use App\Entity\Specialite;
 use App\Entity\Statut;
 use App\Entity\UE;
+use App\Entity\FormationUE;
 use App\Repository\FonctionRepository;
 use App\Repository\ProfesseurRepository;
 use DateTime;
@@ -200,6 +201,7 @@ class AppFixtures extends Fixture
             $rfid->setNom($faker->lastName);
             $rfid->setPrenom($faker->firstName);
             $rfid->setMotDePasse('$argon2id$v=19$m=65536,t=4,p=1$0TzLvwFlAKPNE0lP8QfcoA$Y+KaDA+YXApgi1JjOWYZmGbCI5w9ZyPRXggOl87I7xw');
+            $rfid->setRoles(['ROLE_ETU']);
             $manager->persist($rfid);
             $etudiant = new Etudiant();
             $etudiant->setRFID($rfid);
@@ -226,7 +228,7 @@ class AppFixtures extends Fixture
 
         // COURS
         $creneau = 1;
-        for($i = 0; $i < 300; $i++) {
+        for($i = 0; $i < 1200; $i++) {
             $cours = new Cours();
             $cours->setCreneau(rand(1,600));
 
@@ -285,6 +287,35 @@ class AppFixtures extends Fixture
             $formation->setProfesseurResponsable($prof);
             $manager->persist($rfid);
             $manager->persist($formation);
+        }
+        $manager->flush();
+
+        // Formation UE
+        $formations = $this->em->getRepository(Formation::class)->findAll();
+        foreach($formations as $formation) {
+            $randUe = rand(0,5);
+            for($i = 0; $i < $randUe; $i++) {
+                $formationUE = new FormationUE();
+                $ue = $this->em->getRepository(UE::class)->findByRandomValue();
+                $formationUE->setUe($ue);
+                $formationUE->setAnneeFormation(rand(1,$formation->getNbAnnee()));
+                $formation->addFormationUE($formationUE);
+                $manager->persist($formationUE);
+            }
+        }
+        $manager->flush();
+
+        // Promotion
+        foreach($formations as $formation) {
+            $promotion = new Promotion();
+            $promotion->setAnneeFormation(rand(1, $formation->getNbAnnee()));
+            $promotion->setFormation($formation);
+            $promotion->setAnnee($this->em->getRepository(Annee::class)->findByRandomValue());
+            $randEtudiant = rand(0,30);
+            for($i = 0; $i < $randEtudiant; $i++) {
+                $promotion->addEtudiant($this->em->getRepository(Etudiant::class)->findByRandomValue());
+            }
+            $manager->persist($promotion);
         }
         $manager->flush();
     }
