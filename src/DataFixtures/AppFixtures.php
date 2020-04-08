@@ -307,15 +307,28 @@ class AppFixtures extends Fixture
 
         // Promotion
         foreach($formations as $formation) {
-            $promotion = new Promotion();
-            $promotion->setAnneeFormation(rand(1, $formation->getNbAnnee()));
-            $promotion->setFormation($formation);
-            $promotion->setAnnee($this->em->getRepository(Annee::class)->findByRandomValue());
-            $randEtudiant = rand(0,60);
-            for($i = 0; $i < $randEtudiant; $i++) {
-                $promotion->addEtudiant($this->em->getRepository(Etudiant::class)->findByRandomValue());
+            $a = $this->em->getRepository(Annee::class)->findByRandomValue();
+            $annee = $this->em->getRepository(Annee::class)->find($a->getId() - 3);
+
+            if ($annee === null) {
+                $annee = $this->em->getRepository(Annee::class)->find($a->getId());
             }
-            $manager->persist($promotion);
+            for ($i = 0; $i < $formation->getNbAnnee() ; $i++) {
+                $promotion = new Promotion();
+                $promotion->setAnneeFormation($i + 1);
+                $promotion->setFormation($formation);
+                $promotion->setAnnee($this->em->getRepository(Annee::class)->find($annee->getID() + $i));
+                $manager->persist($promotion);
+            }
+        }
+        $manager->flush();
+
+        // Etudiants
+        $students = $this->em->getRepository(Etudiant::class)->findAll();
+        foreach ($students as $student) {
+            $prom = $this->em->getRepository(Promotion::class)->findByRandomValue();
+            $student->setPromotion($prom);
+            $manager->persist($student);
         }
         $manager->flush();
     }
