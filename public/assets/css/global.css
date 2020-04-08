@@ -46,3 +46,8 @@ html, body {
     font-weight: bold;
     text-align: center;
 }
+
+.p-bold
+{
+    font-weight: bold;
+}

@@ -35,9 +35,82 @@
         {% if app.user %}
             <div class="card w-150 mx-auto mt-5 bg-light shadow-lg">
                 <div class="card-header">
-                    <h2 class="card-title">Bienvenue : </h2>
+                    <h2 class="card-title">Bienvenue : {{ app.user.prenom }}  {{ app.user.nom }}</h2>
+                    <div class="row">
+                        <div class="col-2">
+                            <p class="p-bold">Numéro RFID : </p>
+                        </div>
+                        <div class="col-2">
+                            <p>{{ app.user.id }}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
+            {% if is_granted('ROLE_ADMIN') %}
+            <div class="row">
+                <div class="col-4">
+                    <div class="card bg-light mb-3 mt-5" style="max-width: 20rem;">
+                        <div class="card-body">
+                            <h4 class="card-title">Gestion des salles</h4>
+                            <p class="card-text">Ajouter, modifier et supprimer des salles</p>
+                            <a class="btn btn-success" href="{{ path('classroom_index') }}">Gérer les salles</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="card bg-light mb-3 mt-5" style="max-width: 20rem;">
+                        <div class="card-body">
+                            <h4 class="card-title">Gestion des équipements</h4>
+                            <p class="card-text">Ajouter, modifier et supprimer des équipements</p>
+                            <a class="btn btn-success" href="{{ path('equipments_index') }}">Gérer les équipements</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="card bg-light mb-3 mt-5" style="max-width: 20rem;">
+                        <div class="card-body">
+                            <h4 class="card-title">Gestion des professeurs</h4>
+                            <p class="card-text">Ajouter, modifier et supprimer des professeurs</p>
+                            <a class="btn btn-success" href="{{ path('professeur_index') }}">Gérer les professeurs</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% if is_granted('ROLE_SECRETARIAT') %}
+            <div class="row">
+                <div class="col-4">
+                    <div class="card bg-light mb-3 mt-5" style="max-width: 20rem;">
+                        <div class="card-body">
+                            <h4 class="card-title">Gestion des formations</h4>
+                            <p class="card-text">Ajouter, modifier et supprimer des formations</p>
+                            <a class="btn btn-success" href="{{ path('formation_index') }}">Gérer les formations</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="card bg-light mb-3 mt-5" style="max-width: 20rem;">
+                        <div class="card-body">
+                            <h4 class="card-title">Gestion des UEs</h4>
+                            <p class="card-text">Ajouter, modifier et supprimer des UEs</p>
+                            <a class="btn btn-success" href="{{ path('ue_index') }}">Gérer les UEs</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% if is_granted('ROLE_RH') %}
+            <div class="row">
+                <div class="col-4">
+                    <div class="card bg-light mb-3 mt-5" style="max-width: 20rem;">
+                        <div class="card-body">
+                            <h4 class="card-title">Ressources humaines</h4>
+                            <a class="btn btn-success" href="{{ path('rh_index') }}">Gestion rh</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
         {% endif %}
     </div>
 {% endblock %}
