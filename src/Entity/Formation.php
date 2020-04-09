@@ -159,10 +159,11 @@ class Formation
     }
 
     /**
-     * @return ArrayCollection|FormationUE[]
+     * @return Collection|FormationUE[]
      */
-    public function getFormationUEs(): ArrayCollection
+    public function getFormationUEs(): Collection
     {
+        dump($this->formationUEs);
         return $this->formationUEs;
     }
 
