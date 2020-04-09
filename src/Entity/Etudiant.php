@@ -124,4 +124,9 @@ class Etudiant
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return $this->getRFID()->getNom() . ' ' . $this->getRFID()->getPrenom();
+    }
 }

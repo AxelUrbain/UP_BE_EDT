@@ -114,4 +114,9 @@ class Promotion
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return strval($this->getFormation()->getDiplome() . ' (' . $this->getAnnee()->getAnneePromotion() . ') année ' . $this->getAnneeFormation());
+    }
 }

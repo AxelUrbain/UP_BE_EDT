@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Promotion{% endblock %}
+
+{% block body %}
+    <div class="container my-5">
+        <div class="row">
+            <div class="col">
+                <div class="card p-5">
+                    <div class="card-body">
+                        <h1 class="card-title text-center">Gestion de la promotion de l'année {{ promotion.anneeFormation }} du diplôme  {{ promotion.formation.diplome }}</h1>
+                        <div class="d-flex flex-row justify-content-center align-items-center">
+                            <div class="p-5">
+                                <a class="btn btn-primary btn-success" href="{{ path('add_student_to_promotion', {'id': promotion.id}) }}">Modifier les étudiants de la formation</a>
+                            </div>
+                        </div>
+
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for student in students %}
+                                <tr>
+                                    <td>{{ student.RFID.nom }}</td>
+                                    <td>{{ student.RFID.prenom }}</td>
+                                    <td><a class="btn btn-primary" href="{{ path('etudiant_edit', {'id': student.id, 'promotionId': promotion.id}) }}">Changer de promotion</a></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
