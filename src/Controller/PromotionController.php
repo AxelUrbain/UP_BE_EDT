@@ -99,10 +99,24 @@ class PromotionController extends AbstractController
      */
     public function addStudentToPromotion(Request $request, Promotion $promotion): Response
     {
+        $studentsToRemove = $this->getDoctrine()->getRepository(Etudiant::class)->findBy(['promotion' => $promotion->getId()]);
         $form = $this->createForm(EtudiantPromotionType::class, $promotion);
         $form->handleRequest($request);
 
+        foreach ($studentsToRemove as $student){
+            $student->setPromotion(null);
+        }
+
         if ($form->isSubmitted() && $form->isValid()) {
+            $newStudentsIds = $request->request->get('etudiant_promotion')['etudiants'];
+
+            $er = $this->getDoctrine()->getRepository(Etudiant::class);
+
+            foreach ($newStudentsIds as $studentId){
+                $student = $er->find($studentId);
+                $student->setPromotion($promotion);
+            }
+
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('promotion_index');

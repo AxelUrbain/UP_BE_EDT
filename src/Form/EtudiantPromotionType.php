@@ -24,6 +24,7 @@ class EtudiantPromotionType extends AbstractType
                         ->orderBy('rfid.nom', 'ASC');
                 },
                 'multiple' => true,
+                'expanded' => true,
             ])
         ;
     }
