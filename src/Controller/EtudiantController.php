@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Etudiant;
 use App\Form\EtudiantType;
+use App\Form\PromotionEtudiantType;
 use App\Repository\EtudiantRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -64,7 +65,7 @@ class EtudiantController extends AbstractController
     public function edit(Request $request, int $id): Response
     {
         $student = $this->getDoctrine()->getRepository(Etudiant::class)->find($id);
-        $form = $this->createForm(EtudiantType::class, $student);
+        $form = $this->createForm(PromotionEtudiantType::class, $student);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

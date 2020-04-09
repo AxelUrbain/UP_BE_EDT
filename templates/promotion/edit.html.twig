@@ -3,11 +3,23 @@
 {% block title %}Edit Promotion{% endblock %}
 
 {% block body %}
-    <h1>Edit Promotion</h1>
+    <div class="container my-5">
+        <div class="row">
+            <div class="col">
+                <div class="card p-5">
+                    <div class="card-body">
+                        <h1>Modifier la promotion</h1>
 
-    {{ include('promotion/_form.html.twig', {'button_label': 'Update'}) }}
+                        <div>
+                            {{ include('promotion/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+                            <button class="btn bnt-primary "><a href="{{ path('promotion_index') }}">Retour</a></button>
+                            {{ include('promotion/_delete_form.html.twig') }}
+                        </div>
 
-    <a href="{{ path('promotion_index') }}">back to list</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    {{ include('promotion/_delete_form.html.twig') }}
 {% endblock %}

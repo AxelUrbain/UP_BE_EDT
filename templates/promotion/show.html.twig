@@ -9,8 +9,10 @@
                 <div class="card p-5">
                     <div class="card-body">
                         <h1 class="card-title text-center">Gestion de la promotion de l'année {{ promotion.anneeFormation }} du diplôme  {{ promotion.formation.diplome }}</h1>
-                        <div>
-                            <a class="btn btn-primary" href="{{ path('add_student_to_promotion', {'id': promotion.id}) }}">Modifier</a>
+                        <div class="d-flex flex-row justify-content-center align-items-center">
+                            <div class="p-5">
+                                <a class="btn btn-primary btn-success" href="{{ path('add_student_to_promotion', {'id': promotion.id}) }}">Modifier les étudiants de la formation</a>
+                            </div>
                         </div>
 
                         <table class="table table-hover">
@@ -26,7 +28,7 @@
                                 <tr>
                                     <td>{{ student.RFID.nom }}</td>
                                     <td>{{ student.RFID.prenom }}</td>
-                                    <td><a class="btn btn-primary" href="{{ path('etudiant_edit', {'id': student.id, 'promotionId': promotion.id}) }}">Modifier</a></td>
+                                    <td><a class="btn btn-primary" href="{{ path('etudiant_edit', {'id': student.id, 'promotionId': promotion.id}) }}">Changer de promotion</a></td>
                                 </tr>
                             {% endfor %}
                             </tbody>

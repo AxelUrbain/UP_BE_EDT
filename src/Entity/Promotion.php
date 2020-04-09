@@ -117,6 +117,6 @@ class Promotion
 
     public function __toString()
     {
-        return strval($this->getId());
+        return strval($this->getFormation()->getDiplome() . ' (' . $this->getAnnee()->getAnneePromotion() . ') année ' . $this->getAnneeFormation());
     }
 }
