@@ -47,7 +47,7 @@ class AppFixtures extends Fixture
             $annee = new Annee();
             $annee->setAnneePromotion($year + $i);
             $annee->setDebutPromotion(new DateTime(($year + $i) . '-09-09'));
-            $annee->setFinPromotion(new DateTime(($year + ($i + 1)) . '-09-09'));
+            $annee->setFinPromotion(new DateTime(($year + ($i + 1)) . '-09-08'));
             $manager->persist($annee);
         }
         $manager->flush();
@@ -228,7 +228,7 @@ class AppFixtures extends Fixture
 
         // COURS
         $creneau = 1;
-        for($i = 0; $i < 4000; $i++) {
+        for($i = 0; $i < 24000; $i++) {
             $cours = new Cours();
             $cours->setCreneau(rand(1,600));
 

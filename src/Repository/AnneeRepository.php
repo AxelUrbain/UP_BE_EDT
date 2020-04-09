@@ -35,6 +35,20 @@ class AnneeRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findByDate($datetime)
+    {
+        $date = new DateTime();
+    }
+
+    public function findByTimestamp($date) {
+        $qb = $this->createQueryBuilder('a')
+            ->select('a')
+            ->where(':date BETWEEN a.debutPromotion AND a.finPromotion')
+            ->setParameter('date', $date);
+        
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
     // /**
     //  * @return Annee[] Returns an array of Annee objects
     //  */

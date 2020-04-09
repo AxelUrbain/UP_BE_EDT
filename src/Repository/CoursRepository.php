@@ -20,11 +20,25 @@ class CoursRepository extends ServiceEntityRepository
         parent::__construct($registry, Cours::class);
     }
 
-    public function findBySemaineEtFormation($semaine, $formationId) {
+    public function findBySemaineEtFormationEtUtilisateur($semaine, $formationId, $utilisateur) {
         $minCreneau = (($semaine - 1) * 20) + 1;
         $maxCreneau = (($semaine - 1) * 20) + 20;
 
         $expr = $this->_em->getExpressionBuilder();
+
+        $ues = $this->_em->createQueryBuilder()
+        ->select('u2.id')
+        ->from('App:Formation', 'f')
+        ->where('f.id = :formationId')
+        ->join('f.formationUEs', 'fu')
+        ->join('fu.ue', 'u2');
+
+        if(in_array('ROLE_ETU', $utilisateur->getRoles())) {
+            $ues->join('App:Etudiant', 'e')
+                ->andWhere('e.id = :id')
+                ->join('e.promotion', 'pr')
+                ->andWhere('pr.anneeFormation = fu.anneeFormation');
+        }
 
         $qb = $this->createQueryBuilder('c')
             ->andWhere('c.creneau >= :minCreneau')
@@ -36,13 +50,7 @@ class CoursRepository extends ServiceEntityRepository
             ->andWhere(
                 $expr->in(
                     'u.id',
-                    $this->_em->createQueryBuilder()
-                        ->select('u2.id')
-                        ->from('App:Formation', 'f')
-                        ->where('f.id = :formationId')
-                        ->join('f.formationUEs', 'fu')
-                        ->join('fu.ue', 'u2')
-                        ->getDQL()
+                    $ues->getDQL()
                 )
             )
             ->setParameter('formationId', $formationId)
@@ -55,6 +63,10 @@ class CoursRepository extends ServiceEntityRepository
             ->addSelect('s.nom as s_nom')
             ->orderBy('c.creneau', 'ASC')
         ;
+
+        if(in_array('ROLE_ETU', $utilisateur->getRoles())) {
+            $qb->setParameter('id', $utilisateur->getId());
+        }
 
         return $qb->getQuery()->getScalarResult();
     }

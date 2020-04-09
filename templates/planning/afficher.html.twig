@@ -47,12 +47,12 @@
                                 {% if semaine - 1 >= 1 %}<a href=" {{ path('afficher_planning', {formationId: formation, semaine: semaine - 1}) }} ">Semaine {{ semaine - 1 }}</a>{% endif %}
                             </td>
                             <td class="active">
-                                <span>Semaine {{ semaine  }}</span></td>
+                                <span>Semaine {{ semaine  }}</span>
                             <td>
-                                {% if semaine + 1 <= 30 %}<a href=" {{ path('afficher_planning', {formationId: formation, semaine: semaine + 1}) }} ">Semaine {{ semaine + 1 }}</a>{% endif %}
+                                {% if semaine + 1 <= 52 %}<a href=" {{ path('afficher_planning', {formationId: formation, semaine: semaine + 1}) }} ">Semaine {{ semaine + 1 }}</a>{% endif %}
                             </td>
                             <td>
-                                {% if semaine + 2 <= 30 %}<a href=" {{ path('afficher_planning', {formationId: formation, semaine: semaine + 2}) }} ">Semaine {{ semaine + 2 }}</a>{% endif %}
+                                {% if semaine + 2 <= 52 %}<a href=" {{ path('afficher_planning', {formationId: formation, semaine: semaine + 2}) }} ">Semaine {{ semaine + 2 }}</a>{% endif %}
                             </td>
                         </tr>
                     </tbody>
