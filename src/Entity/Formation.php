@@ -163,7 +163,6 @@ class Formation
      */
     public function getFormationUEs(): Collection
     {
-        dump($this->formationUEs);
         return $this->formationUEs;
     }
 
