@@ -40,6 +40,8 @@ class EtudiantRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('i')
             ->andWhere('i.promotion = :val')
             ->setParameter('val', $value)
+            ->leftJoin('i.RFID', 'rfid')
+            ->orderBy('rfid.nom', 'ASC')
             ->getQuery()
             ->getResult()
         ;
