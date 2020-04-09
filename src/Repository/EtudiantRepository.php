@@ -45,6 +45,16 @@ class EtudiantRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findAllOrderedByName()
+    {
+        return $this->createQueryBuilder('e')
+            ->leftJoin('e.RFID', 'rfid')
+            ->orderBy('rfid.nom', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     /*
     public function findOneBySomeField($value): ?Etudiant
     {
