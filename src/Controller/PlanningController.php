@@ -24,7 +24,9 @@ class PlanningController extends AbstractController
     public function ajouterSeance(Request $request, EntityManagerInterface $em, ValidatorInterface $validator, $creneau = -1)
     {
         if ($creneau < 1) {
-            return $this->redirectToRoute('afficher_planning');
+            return $this->redirectToRoute("afficher_planning", [
+                'role' => "resp"
+            ]);
         }
         $cours = new Cours();
 
@@ -54,7 +56,9 @@ class PlanningController extends AbstractController
                 }
             }
 
-            return $this->redirectToRoute('afficher_planning');
+            return $this->redirectToRoute("afficher_planning", [
+                'role' => "resp"
+            ]);
         }
 
         return $this->render('planning/_form.html.twig', [
@@ -72,7 +76,9 @@ class PlanningController extends AbstractController
     public function editerSeance(Request $request, EntityManagerInterface $em, $id = -1)
     {
         if ($id < 0) {
-            return $this->redirectToRoute('afficher_planning');
+            return $this->redirectToRoute("afficher_planning", [
+                'role' => "resp"
+            ]);
         }
         $cours = $em->getRepository('App\Entity\Cours')->find($id);
 
@@ -90,7 +96,9 @@ class PlanningController extends AbstractController
 
             $em->flush();
 
-            return $this->redirectToRoute('afficher_planning');
+            return $this->redirectToRoute("afficher_planning", [
+                'role' => "resp"
+            ]);
         }
 
         return $this->render('planning/_form.html.twig', [
@@ -109,14 +117,18 @@ class PlanningController extends AbstractController
     public function supprimerSeance(Request $request, EntityManagerInterface $em, $id = -1)
     {
         if ($id < 0) {
-            return $this->redirectToRoute('afficher_planning');
+            return $this->redirectToRoute("afficher_planning", [
+                'role' => "resp"
+            ]);
         }
         $cours = $em->getRepository('App\Entity\Cours')->find($id);
 
         $em->remove($cours);
         $em->flush();
 
-        return $this->redirectToRoute('afficher_planning');
+        return $this->redirectToRoute("afficher_planning", [
+            'role' => "resp"
+        ]);
     }
 
         /**
@@ -147,7 +159,9 @@ class PlanningController extends AbstractController
                 }
             }
 
-            $formationId = $formationsResp[0]->getId();
+            if(count($formationsResp) > 0) {
+                $formationId = $formationsResp[0]->getId();
+            }
         }
 
         if($utilisateur->getProfesseur() != null) {
@@ -214,7 +228,6 @@ class PlanningController extends AbstractController
                     }
                 }
             }
-
             $seances = $em->getRepository('App\Entity\Cours')->findBySemaineUEs($semaine, $ues);
         } else if($role == "prof" && $estProfesseur) {
             $seances = $em->getRepository('App\Entity\Cours')->findByProfesseur($semaine, $utilisateur->getProfesseur()->getId());

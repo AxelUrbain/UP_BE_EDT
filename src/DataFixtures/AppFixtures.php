@@ -228,33 +228,29 @@ class AppFixtures extends Fixture
 
         // COURS
         $creneau = 1;
-        for($i = 0; $i < 4000; $i++) {
+        for($i = 0; $i < 600; $i++) {
             $cours = new Cours();
-            $cours->setCreneau(rand(1,600));
 
-            if(rand(0,3) <= 2) {
-                $cours = new Cours();
-                $cours->setCreneau($creneau);
+            $cours->setCreneau($creneau);
 
-                $random = rand(0,100);
-                if ($random > 50) $cours->setIsValide(true);
-                else $cours->setIsValide(false);
+            $random = rand(0,100);
+            if ($random > 50) $cours->setIsValide(true);
+            else $cours->setIsValide(false);
 
-                //Ajout cours
-                $spe = $this->em->getRepository(Specialite::class)->findOneBy(['specialite' => $spes[rand(0, sizeof($spes) - 1)]]);
-                $ue = $this->em->getRepository(UE::class)->findOneBy(['specialite' => $spe->getId()]);
-                $cours->setUE($ue);
+            //Ajout cours
+            $spe = $this->em->getRepository(Specialite::class)->findOneBy(['specialite' => $spes[rand(0, sizeof($spes) - 1)]]);
+            $ue = $this->em->getRepository(UE::class)->findOneBy(['specialite' => $spe->getId()]);
+            $cours->setUE($ue);
 
-                //Ajout salle
-                $salle = $this->em->getRepository(Salle::class)->findOneBy(['nom' => rand(300, 449)]);
-                $cours->setSalle($salle);
+            //Ajout salle
+            $salle = $this->em->getRepository(Salle::class)->findOneBy(['nom' => rand(300, 449)]);
+            $cours->setSalle($salle);
 
-                //Ajout prof
-                $prof = $this->em->getRepository(Professeur::class)->findByRandomValue();
-                $cours->setProfesseur($prof);
+            //Ajout prof
+            $prof = $this->em->getRepository(Professeur::class)->findByRandomValue();
+            $cours->setProfesseur($prof);
 
-                $manager->persist($cours);
-            }
+            $manager->persist($cours);
 
             $creneau++;
         }

@@ -74,6 +74,8 @@ class CoursRepository extends ServiceEntityRepository
             ->addSelect('u.nomUE as u_nomUE')
             ->leftJoin('p.RFID', 'r')
             ->addSelect('CONCAT(r.nom, \' \', r.prenom) as p_nom')
+            ->leftJoin('c.salle', 's')
+            ->addSelect('s.nom as s_nom')
             ->orderBy('c.creneau', 'ASC')
         ;
 
