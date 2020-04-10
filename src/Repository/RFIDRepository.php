@@ -36,6 +36,13 @@ class RFIDRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function findAllOrderedByName()
+    {
+        return $this->createQueryBuilder('r')
+            ->orderBy('r.nom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
     // /**
     //  * @return RFID[] Returns an array of RFID objects
     //  */

@@ -195,6 +195,6 @@ class RFID implements UserInterface
     public function __toString()
     {
         // TODO: Implement __toString() method.
-        return $this->getUsername();
+        return $this->getNom() . ' ' . $this->getPrenom();
     }
 }
