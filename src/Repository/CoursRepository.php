@@ -20,24 +20,15 @@ class CoursRepository extends ServiceEntityRepository
         parent::__construct($registry, Cours::class);
     }
 
-    public function findBySemaineEtFormationEtUtilisateur($semaine, $formationId, $utilisateur) {
+    public function findBySemaineUEs($semaine, $ues) {
         $minCreneau = (($semaine - 1) * 20) + 1;
         $maxCreneau = (($semaine - 1) * 20) + 20;
 
         $expr = $this->_em->getExpressionBuilder();
 
-        $ues = $this->_em->createQueryBuilder()
-        ->select('u2.id')
-        ->from('App:Formation', 'f')
-        ->where('f.id = :formationId')
-        ->join('f.formationUEs', 'fu')
-        ->join('fu.ue', 'u2');
-
-        if(in_array('ROLE_ETU', $utilisateur->getRoles())) {
-            $ues->join('App:Etudiant', 'e')
-                ->andWhere('e.id = :id')
-                ->join('e.promotion', 'pr')
-                ->andWhere('pr.anneeFormation = fu.anneeFormation');
+        $uesId = array();
+        foreach($ues as $ue) {
+            $uesId[] = $ue->getId();
         }
 
         $qb = $this->createQueryBuilder('c')
@@ -50,10 +41,9 @@ class CoursRepository extends ServiceEntityRepository
             ->andWhere(
                 $expr->in(
                     'u.id',
-                    $ues->getDQL()
+                    $uesId
                 )
             )
-            ->setParameter('formationId', $formationId)
             ->addSelect('u.couleur as u_couleur')
             ->addSelect('u.nomUE as u_nomUE')
             ->leftJoin('c.professeur', 'p')
@@ -64,9 +54,28 @@ class CoursRepository extends ServiceEntityRepository
             ->orderBy('c.creneau', 'ASC')
         ;
 
-        if(in_array('ROLE_ETU', $utilisateur->getRoles())) {
-            $qb->setParameter('id', $utilisateur->getId());
-        }
+        return $qb->getQuery()->getScalarResult();
+    }
+
+    public function findByProfesseur($semaine, $profId) {
+        $minCreneau = (($semaine - 1) * 20) + 1;
+        $maxCreneau = (($semaine - 1) * 20) + 20;
+
+        $qb = $this->createQueryBuilder('c')
+            ->where('c.creneau >= :minCreneau')
+            ->setParameter('minCreneau', $minCreneau)
+            ->andWhere('c.creneau <= :maxCreneau')
+            ->setParameter('maxCreneau', $maxCreneau)
+            ->leftJoin('c.professeur', 'p')
+            ->andWhere('p.id = :id')
+            ->setParameter('id', $profId)
+            ->leftJoin('c.UE', 'u')
+            ->addSelect('u.couleur as u_couleur')
+            ->addSelect('u.nomUE as u_nomUE')
+            ->leftJoin('p.RFID', 'r')
+            ->addSelect('CONCAT(r.nom, \' \', r.prenom) as p_nom')
+            ->orderBy('c.creneau', 'ASC')
+        ;
 
         return $qb->getQuery()->getScalarResult();
     }

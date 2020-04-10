@@ -11,7 +11,20 @@
                         </div>
                     {% endfor %}
                 {% endfor %}
-                <table class="planning mx-auto w-100 text-center mt-5">
+                <div class="row mt-2">
+                    <div class="col">
+                    {% if estEtudiant %}
+                    <a class="btn  {% if role == "etud" %}btn-secondary disabled{% else %}btn-primary{% endif %} mr-2" href="{{ path('afficher_planning', {role: "etud", semaine: semaine}) }}">Emploi du temps étudiant</a>
+                    {% endif %}
+                    {% if estProfesseur %}
+                    <a class="btn  {% if role == "prof" %}btn-secondary disabled{% else %}btn-primary{% endif %} mr-2" href="{{ path('afficher_planning', {role: "prof", semaine: semaine}) }}">Emploi du temps professeur</a>
+                    {% endif %}
+                    {% if estResponsable %}
+                    <a class="btn  {% if role == "resp" %}btn-secondary disabled{% else %}btn-primary{% endif %}" href="{{ path('afficher_planning', {role: "resp", semaine: semaine}) }}">Emploi du temps responsable</a>
+                    {% endif %}
+                    </div>
+                </div>
+                <table class="planning mx-auto w-100 text-center mt-2">
                     <thead>
                         <tr>
                             <th colspan="6">Emploi du temps</th>
@@ -41,18 +54,18 @@
                         <tr>
                             <th></th>
                             <td>
-                                {% if semaine - 2 >= 1 %}<a href=" {{ path('afficher_planning', {formationId: formation, semaine: semaine - 2}) }} ">Semaine {{ semaine - 2 }}</a>{% endif %}
+                                {% if semaine - 2 >= 1 %}<a href=" {{ path('afficher_planning', {role: role, semaine: semaine - 2}) }} ">Semaine {{ semaine - 2 }}</a>{% endif %}
                             </td>
                             <td>
-                                {% if semaine - 1 >= 1 %}<a href=" {{ path('afficher_planning', {formationId: formation, semaine: semaine - 1}) }} ">Semaine {{ semaine - 1 }}</a>{% endif %}
+                                {% if semaine - 1 >= 1 %}<a href=" {{ path('afficher_planning', {role: role, semaine: semaine - 1}) }} ">Semaine {{ semaine - 1 }}</a>{% endif %}
                             </td>
                             <td class="active">
                                 <span>Semaine {{ semaine  }}</span>
                             <td>
-                                {% if semaine + 1 <= 52 %}<a href=" {{ path('afficher_planning', {formationId: formation, semaine: semaine + 1}) }} ">Semaine {{ semaine + 1 }}</a>{% endif %}
+                                {% if semaine + 1 <= 52 %}<a href=" {{ path('afficher_planning', {role: role, semaine: semaine + 1}) }} ">Semaine {{ semaine + 1 }}</a>{% endif %}
                             </td>
                             <td>
-                                {% if semaine + 2 <= 52 %}<a href=" {{ path('afficher_planning', {formationId: formation, semaine: semaine + 2}) }} ">Semaine {{ semaine + 2 }}</a>{% endif %}
+                                {% if semaine + 2 <= 52 %}<a href=" {{ path('afficher_planning', {role: role, semaine: semaine + 2}) }} ">Semaine {{ semaine + 2 }}</a>{% endif %}
                             </td>
                         </tr>
                     </tbody>
@@ -66,10 +79,9 @@
 {% block stylesheets %}<link rel="stylesheet" href="{{ asset('assets/css/planning.css') }}">{% endblock %}
 
 {% block javascripts %}
-{% if is_granted('ROLE_RESPONSABLE') and isResponsable %}
+
 <script>
     $(document).ready( function() {
-
         function initEventListeners() {
             $('.seance').click( function() {
                 $('.vide').off('click');
@@ -115,5 +127,5 @@
         initEventListeners();
     });
 </script>
-{% endif %}
+
 {% endblock %}

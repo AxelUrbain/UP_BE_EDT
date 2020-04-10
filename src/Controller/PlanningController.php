@@ -19,34 +19,62 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class PlanningController extends AbstractController
 {
     /**
-     * @Route("/{formationId}/{formationAnnee}/{semaine}",
+     * @Route("/{role}/{semaine}",
      *     name="afficher_planning",
      *     requirements={
-     *         "formationId": "-?\d+",
-     *         "formationAnnee": "-?\d+",
      *         "semaine": "-?\d+"
      *     }
      * )
      */
-    public function afficherPlanning($formationId = -1, $formationAnnee = -1, $semaine = -1, EntityManagerInterface $em)
+    public function afficherPlanning($role = -1, $semaine = -1, EntityManagerInterface $em)
     {
         // une semaine va du créneau ($semaine - 1 * 20) + 1 à ($semaine - 1 * 20) + 20 ($semaine 1 : 1-20 $semaine 3 : 41-60
 
         $utilisateur = $this->getUser();
 
-        if ($formationId < 0 || $formationAnnee < 0 || $semaine < 0) {
-            $nFormationId = $formationId;
-            $nFormationAnnee = $formationAnnee;
+        $estEtudiant = false;
+        $estProfesseur = false;
+        $estResponsable = false;
+
+        if($utilisateur->getProfesseur() != null) {
+            $formations = $em->getRepository('App\Entity\Formation')->findByProfesseurResponsable($utilisateur->getProfesseur()->getId());
+            $formationsResp = array();
+            foreach($formations as $formation) {
+                if($formation->getProfesseurResponsable()->getId() == $utilisateur->getProfesseur()->getId()) {
+                    $estResponsable = true;
+                    $formationsResp[] = $formation;
+                }
+            }
+
+            $formationId = $formationsResp[0]->getId();
+        }
+
+        if($utilisateur->getProfesseur() != null) {
+            $estProfesseur = true;
+        }
+
+        if($utilisateur->getEtudiant() != null) {
+            $estEtudiant = true;
+            $formationId = $utilisateur->getEtudiant()->getPromotion()->getFormation()->getId();
+        }
+
+        if($utilisateur->getEtudiant() == null && $utilisateur->getProfesseur() == null) {
+            return $this->redirectToRoute("login");
+        }
+
+        // si l'url n'est pas complète alors compléter l'url
+        if (($role != "etud" && $role != "prof" && $role != "resp") || $semaine < 1 || $semaine > 52) {
             $nSemaine = $semaine;
-            if ($formationId < 0) {
-                $nFormationId = $utilisateur->getEtudiant()->getPromotion()->getFormation()->getId();
+
+            if($role != "etud" && $role != "prof") {
+                if($estEtudiant) {
+                    $role = "etud";
+                } else {
+                    $role = "prof";
+                }
             }
 
-            if ($formationAnnee < 0) {
-                $nFormationAnnee = $utilisateur->getEtudiant()->getPromotion()->getAnneeFormation();
-            }
-
-            if ($semaine < 0) {
+            if ($semaine < 0 || $semaine > 52) {
                 $dt = new \DateTime();
 
                 $annee = $em->getRepository('App\Entity\Annee')->findByTimestamp($dt->format('Y-m-d'));
@@ -61,25 +89,43 @@ class PlanningController extends AbstractController
             }
 
             return $this->redirectToRoute("afficher_planning", [
-                'formationId' => $nFormationId,
-                'formationAnnee' => $nFormationAnnee,
+                'role' => $role,
                 'semaine' => $nSemaine
             ]);
         }
 
-        $formations = $em->getRepository('App\Entity\RFID')->findFormations($utilisateur->getId());
+        $autoriserEdition = false;
 
-        $isResponsable = false;
-        if ($this->container->get('security.authorization_checker')->isGranted('ROLE_RESPONSABLE')) {
-            $formationsResp = $em->getRepository('App\Entity\Professeur')->findFormation($utilisateur->getId());
-            foreach ($formationsResp as $formationResp) {
-                if (in_array($formationId, $formationResp)) {
-                    $isResponsable = true;
+        if($role == "etud" && $estEtudiant) {
+            $formationUes = $utilisateur->getEtudiant()->getPromotion()->getFormation()->getFormationUEs()->toArray();
+            $ues = array();
+            foreach($formationUes as $formationUe) {
+                $ues[] = $formationUe->getUe();
+            }
+            $uesValides = $utilisateur->getEtudiant()->getUE()->toArray();
+
+            $anneeFormation = $utilisateur->getEtudiant()->getPromotion()->getAnneeFormation();
+
+            for($i = 0; $i < count($ues); $i++) {
+                foreach($uesValides as $ueValide) {
+                    if($ues[$i]->getAnneeFormation() != $anneeFormation || $ueValide->getId() == $ues[$i]->getId()) {
+                        array_splice($ues, $i, 1);
+                    }
                 }
             }
-        }
 
-        $seances = $em->getRepository('App\Entity\Cours')->findBySemaineEtFormationEtUtilisateur($semaine, $formationId, $utilisateur);
+            $seances = $em->getRepository('App\Entity\Cours')->findBySemaineUEs($semaine, $ues);
+        } else if($role == "prof" && $estProfesseur) {
+            $seances = $em->getRepository('App\Entity\Cours')->findByProfesseur($semaine, $utilisateur->getProfesseur()->getId());
+        } else if($role == "resp" && $estResponsable) {
+            $formationUes = $utilisateur->getEtudiant()->getPromotion()->getFormation()->getFormationUEs()->toArray();
+            $ues = array();
+            foreach($formationUes as $formationUe) {
+                $ues[] = $formationUe->getUe();
+            }
+            $seances = $em->getRepository('App\Entity\Cours')->findBySemaineUEs($semaine, $ues);
+            $autoriserEdition = true;
+        }
 
         $creneaux = array();
 
@@ -127,8 +173,12 @@ EOT;
             'planning' => $planning,
             'semaine' => $semaine,
             'formation' => $formationId,
-            'isResponsable' => $isResponsable,
-            'user' => $utilisateur
+            'estResponsable' => $estResponsable,
+            'user' => $utilisateur,
+            'role' => $role,
+            'estProfesseur' => $estProfesseur,
+            'estEtudiant' => $estEtudiant,
+            'autoriserEdition' => $autoriserEdition
         ]);
     }
 
