@@ -35,7 +35,7 @@
                             {% endfor %}
                             </tbody>
                         </table>
-                        <a class="btn btn-primary" href="{{ path('promotion_new') }}">Ajouter une promotion</a>
+                        <a class="btn btn-outline-primary" href="{{ path('promotion_new') }}">Ajouter une promotion</a>
                     </div>
                     {{ include('_pagination.html.twig', {'currentPath': 'promotion_index', 'page': page, 'nbPage': nbPage}) }}
                 </div>

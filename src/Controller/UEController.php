@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class UEController extends AbstractController
 {
     /**
-     * @Route("/{page}", defaults={"page": 1}, name="ue_index", methods={"GET","POST"})
+     * @Route("/page/{page}", defaults={"page": 1}, name="ue_index", methods={"GET","POST"})
      */
     public function index(int $page, UERepository $ueRepository, Request $request): Response
     {

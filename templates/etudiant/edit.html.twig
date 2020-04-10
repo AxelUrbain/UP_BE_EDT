@@ -8,13 +8,14 @@
             <div class="col">
                 <div class="card p-5">
                     <div class="card-body">
-                        <h1>Changer la promotion de l'étudiant</h1>
-
-                        {{ include('etudiant/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
-
-                        <a href="{{ path('promotion_show', { 'id' : promotionId}) }}">Retour à la liste</a>
-
-                        {{ include('etudiant/_delete_form.html.twig') }}
+                        <h1 class="card-title text-center">Modifier un étudiant {{ etudiant.RFID.nom }}  {{ etudiant.RFID.prenom }}</h1>
+                    </div>
+                    <div class="row">
+                        <div class="col"></div>
+                        <div class="col">
+                            {{ include('etudiant/_form.html.twig', {'button_label': 'Update'}) }}
+                        </div>
+                        <div class="col"></div>
                     </div>
                 </div>
             </div>

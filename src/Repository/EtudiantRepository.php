@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Etudiant;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * @method Etudiant|null find($id, $lockMode = null, $lockVersion = null)
@@ -55,6 +56,17 @@ class EtudiantRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
             ;
+    }
+
+    public function findAllOrderedByNameWithPaging(int $currentPage, int $nbPerPage)
+    {
+        $query = $this->createQueryBuilder('e')
+            ->leftJoin('e.RFID', 'rfid')
+            ->orderBy('rfid.nom', 'ASC')
+            ->setFirstResult(($currentPage - 1) * $nbPerPage)
+            ->setMaxResults($nbPerPage);
+
+        return new Paginator($query);
     }
 
     /*

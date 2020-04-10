@@ -56,7 +56,7 @@ class FormationController extends AbstractController
     }
 
     /**
-     * @Route("/{page}", defaults={"page": 1}, name="formation_index", methods={"GET","POST"})
+     * @Route("/page/{page}", defaults={"page": 1}, name="formation_index", methods={"GET","POST"})
      */
     public function index(int $page, FormationRepository $formationRepository, Request $request): Response
     {

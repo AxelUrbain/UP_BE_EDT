@@ -17,12 +17,21 @@ use Symfony\Component\Routing\Annotation\Route;
 class EtudiantController extends AbstractController
 {
     /**
-     * @Route("/", name="etudiant_index", methods={"GET"})
+     * @Route("/page/{page}", defaults={"page": 1}, name="etudiant_index", methods={"GET"})
+     * @param int $page
+     * @param EtudiantRepository $etudiantRepository
+     * @return Response
      */
-    public function index(EtudiantRepository $etudiantRepository): Response
+    public function index(int $page, EtudiantRepository $etudiantRepository): Response
     {
+        $etudiants = $etudiantRepository->findAllOrderedByNameWithPaging($page, 10);
+
+        $nbPage = intval(ceil(count($etudiants) / 10));
+
         return $this->render('etudiant/index.html.twig', [
-            'etudiants' => $etudiantRepository->findAll(),
+            'etudiants' => $etudiants,
+            'page' => $page,
+            'nbPage' => $nbPage,
         ]);
     }
 
@@ -61,8 +70,31 @@ class EtudiantController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="etudiant_edit", methods={"GET","POST"})
+     * @param Request $request
+     * @param Etudiant $etudiant
+     * @return Response
      */
-    public function edit(Request $request, int $id): Response
+    public function edit(Request $request, Etudiant $etudiant): Response
+    {
+        $form = $this->createForm(EtudiantType::class, $etudiant);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('etudiant_index');
+        }
+
+        return $this->render('etudiant/edit.html.twig', [
+            'etudiant' => $etudiant,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/editByPromotion", name="etudiant_edit_by_formation", methods={"GET","POST"})
+     */
+    public function editByFormation(Request $request, int $id): Response
     {
         $student = $this->getDoctrine()->getRepository(Etudiant::class)->find($id);
         $form = $this->createForm(PromotionEtudiantType::class, $student);

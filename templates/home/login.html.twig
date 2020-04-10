@@ -97,6 +97,15 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-4">
+                    <div class="card bg-light mb-3 mt-5" style="max-width: 20rem;">
+                        <div class="card-body">
+                            <h4 class="card-title">Gestion des Promotions</h4>
+                            <p class="card-text">Ajouter, modifier et supprimer des Promotions</p>
+                            <a class="btn btn-success" href="{{ path('promotion_index') }}">Gérer les Promotions</a>
+                        </div>
+                    </div>
+                </div>
             </div>
             {% endif %}
             {% if is_granted('ROLE_RH') %}

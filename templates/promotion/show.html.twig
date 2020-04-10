@@ -28,7 +28,7 @@
                                 <tr>
                                     <td>{{ student.RFID.nom }}</td>
                                     <td>{{ student.RFID.prenom }}</td>
-                                    <td><a class="btn btn-primary" href="{{ path('etudiant_edit', {'id': student.id, 'promotionId': promotion.id}) }}">Changer de promotion</a></td>
+                                    <td><a class="btn btn-primary" href="{{ path('etudiant_edit_by_formation', {'id': student.id, 'promotionId': promotion.id}) }}">Changer de promotion</a></td>
                                 </tr>
                             {% endfor %}
                             </tbody>

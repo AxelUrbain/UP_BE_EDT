@@ -26,6 +26,9 @@
             <a class="menu-link" href="{{ path('promotion_index') }}"><i class="fa fa-chalkboard-teacher fa-1x"></i>
                 Promotions</a>
             <hr>
+            <a class="menu-link" href="{{ path('etudiant_index') }}"><i class="fa fa-chalkboard-teacher fa-1x"></i>
+                Etudiants</a>
+            <hr>
         {% endif %}
         {% if is_granted('ROLE_RH') %}
             <h3 class="menu-subtitle">Service RH</h3>

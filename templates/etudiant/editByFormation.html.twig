@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Etudiant{% endblock %}
+
+{% block body %}
+    <div class="container my-5">
+        <div class="row">
+            <div class="col">
+                <div class="card p-5">
+                    <div class="card-body">
+                        <h1>Changer la promotion de l'étudiant</h1>
+
+                        {{ include('etudiant/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+
+                        <a href="{{ path('promotion_show', { 'id' : promotionId}) }}">Retour à la liste</a>
+
+                        {{ include('etudiant/_delete_form.html.twig') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
