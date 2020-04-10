@@ -79,7 +79,7 @@
 {% block stylesheets %}<link rel="stylesheet" href="{{ asset('assets/css/planning.css') }}">{% endblock %}
 
 {% block javascripts %}
-
+{% if autoriserEdition %}
 <script>
     $(document).ready( function() {
         function initEventListeners() {
@@ -127,5 +127,5 @@
         initEventListeners();
     });
 </script>
-
+{% endif %}
 {% endblock %}

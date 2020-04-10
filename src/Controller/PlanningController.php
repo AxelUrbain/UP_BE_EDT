@@ -19,6 +19,107 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class PlanningController extends AbstractController
 {
     /**
+     * @Route("/ajouter/{creneau}", name="ajouter_seance", methods={"GET","POST"})
+     */
+    public function ajouterSeance(Request $request, EntityManagerInterface $em, ValidatorInterface $validator, $creneau = -1)
+    {
+        if ($creneau < 1) {
+            return $this->redirectToRoute('afficher_planning');
+        }
+        $cours = new Cours();
+
+        $form = $this->createForm(CoursType::class, $cours);
+        $form->add('sauvegarder', SubmitType::class, ['label' => 'Ajouter']);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+
+            $specialite = $cours->getUE()->getSpecialite()->getId();
+            $professeur = $em->getRepository('App\Entity\Professeur')->findProfesseurLibre((int) $creneau, $specialite);
+            $salle = $em->getRepository('App\Entity\Salle')->findSalleLibre((int) $cours->getCreneau());
+
+            $cours->setCreneau($creneau);
+            $cours->setProfesseur($professeur);
+            $cours->setSalle($salle);
+            $cours->setIsValide(1);
+
+            $errors = $validator->validate($cours);
+
+            if (count($errors) == 0) {
+                $em->persist($cours);
+                $em->flush();
+            } else {
+                foreach ($errors as $error) {
+                    $this->addFlash('danger', $error->getMessage());
+                }
+            }
+
+            return $this->redirectToRoute('afficher_planning');
+        }
+
+        return $this->render('planning/_form.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/editer/{id}",
+     *     name="editer_seance",
+     *     methods={"GET","POST"},
+     *     requirements={"id": "\d+"}
+     * )
+     */
+    public function editerSeance(Request $request, EntityManagerInterface $em, $id = -1)
+    {
+        if ($id < 0) {
+            return $this->redirectToRoute('afficher_planning');
+        }
+        $cours = $em->getRepository('App\Entity\Cours')->find($id);
+
+        $form = $this->createForm(CoursType::class, $cours);
+        $form->add('sauvegarder', SubmitType::class, ['label' => 'Éditer']);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $specialite = $cours->getUE()->getSpecialite()->getId();
+            $professeur = $em->getRepository('App\Entity\Professeur')->findProfesseurLibre((int) $cours->getCreneau(), $specialite);
+            $salle = $em->getRepository('App\Entity\Salle')->findSalleLibre((int) $cours->getCreneau());
+
+            $cours->setProfesseur($professeur);
+            $cours->setSalle($salle);
+
+            $em->flush();
+
+            return $this->redirectToRoute('afficher_planning');
+        }
+
+        return $this->render('planning/_form.html.twig', [
+            'form' => $form->createView(),
+            'edition' => true
+        ]);
+    }
+
+    /**
+     * @Route("/supprimer/{id}",
+     *     name="supprimer_seance",
+     *     methods={"GET"},
+     *     requirements={"id": "\d+"}
+     * )
+     */
+    public function supprimerSeance(Request $request, EntityManagerInterface $em, $id = -1)
+    {
+        if ($id < 0) {
+            return $this->redirectToRoute('afficher_planning');
+        }
+        $cours = $em->getRepository('App\Entity\Cours')->find($id);
+
+        $em->remove($cours);
+        $em->flush();
+
+        return $this->redirectToRoute('afficher_planning');
+    }
+
+        /**
      * @Route("/{role}/{semaine}",
      *     name="afficher_planning",
      *     requirements={
@@ -180,105 +281,5 @@ EOT;
             'estEtudiant' => $estEtudiant,
             'autoriserEdition' => $autoriserEdition
         ]);
-    }
-
-    /**
-     * @Route("/ajouter/{creneau}", name="ajouter_seance", methods={"GET","POST"})
-     */
-    public function ajouterSeance(Request $request, EntityManagerInterface $em, ValidatorInterface $validator, $creneau = -1)
-    {
-        if ($creneau < 1) {
-            return $this->redirectToRoute('afficher_planning');
-        }
-        $cours = new Cours();
-
-        $form = $this->createForm(CoursType::class, $cours);
-        $form->add('sauvegarder', SubmitType::class, ['label' => 'Ajouter']);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted()) {
-
-            $specialite = $cours->getUE()->getSpecialite()->getId();
-            $professeur = $em->getRepository('App\Entity\Professeur')->findProfesseurLibre((int) $creneau, $specialite);
-            $salle = $em->getRepository('App\Entity\Salle')->findSalleLibre((int) $cours->getCreneau());
-
-            $cours->setCreneau($creneau);
-            $cours->setProfesseur($professeur);
-            $cours->setSalle($salle);
-
-            $errors = $validator->validate($cours);
-
-            if (count($errors) == 0) {
-                $em->persist($cours);
-                $em->flush();
-            } else {
-                foreach ($errors as $error) {
-                    $this->addFlash('danger', $error->getMessage());
-                }
-            }
-
-            return $this->redirectToRoute('afficher_planning');
-        }
-
-        return $this->render('planning/_form.html.twig', [
-            'form' => $form->createView()
-        ]);
-    }
-
-    /**
-     * @Route("/editer/{id}",
-     *     name="editer_seance",
-     *     methods={"GET","POST"},
-     *     requirements={"id": "\d+"}
-     * )
-     */
-    public function editerSeance(Request $request, EntityManagerInterface $em, $id = -1)
-    {
-        if ($id < 0) {
-            return $this->redirectToRoute('afficher_planning');
-        }
-        $cours = $em->getRepository('App\Entity\Cours')->find($id);
-
-        $form = $this->createForm(CoursType::class, $cours);
-        $form->add('sauvegarder', SubmitType::class, ['label' => 'Éditer']);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $specialite = $cours->getUE()->getSpecialite()->getId();
-            $professeur = $em->getRepository('App\Entity\Professeur')->findProfesseurLibre((int) $cours->getCreneau(), $specialite);
-            $salle = $em->getRepository('App\Entity\Salle')->findSalleLibre((int) $cours->getCreneau());
-
-            $cours->setProfesseur($professeur);
-            $cours->setSalle($salle);
-
-            $em->flush();
-
-            return $this->redirectToRoute('afficher_planning');
-        }
-
-        return $this->render('planning/_form.html.twig', [
-            'form' => $form->createView(),
-            'edition' => true
-        ]);
-    }
-
-    /**
-     * @Route("/supprimer/{id}",
-     *     name="supprimer_seance",
-     *     methods={"GET"},
-     *     requirements={"id": "\d+"}
-     * )
-     */
-    public function supprimerSeance(Request $request, EntityManagerInterface $em, $id = -1)
-    {
-        if ($id < 0) {
-            return $this->redirectToRoute('afficher_planning');
-        }
-        $cours = $em->getRepository('App\Entity\Cours')->find($id);
-
-        $em->remove($cours);
-        $em->flush();
-
-        return $this->redirectToRoute('afficher_planning');
     }
 }
